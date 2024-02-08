@@ -1,25 +1,27 @@
-//? Creating the server
-//importing express module
+// import express from 'express';
+// import fs from 'fs';
+// import path from 'path';
+const path = require('path');
+const fs = require('fs');
+const express = require('express');
 
-import express from 'express';
-
-//creates web server
 const app = express();
+const PORT = process.env.PORT || 8080;
 
-function handleGetRequest(request, response){
-    //sends the text Hello Sam to the user's browser
-    response.send('Hello Sam');
+app.use(express.static('images'));
+function handleGetRequest(request,response){
+    const filePath = path.join(__dirname,'index.html')
+    fs.readFile(filePath,'utf8',(error,data) => {
+        if(error){
+            throw error;
+            // response.status(500).send('Error reading this html file!');
+            // return;
+        }
+
+        response.send(data);
+    });
 }
 
-//defining a route for GET requests to the path /kitty
-//when a user visits http://localhost:8080/kitty, the code within the function gets executed
-app.get('/M00934333/', handleGetRequest);
+app.get('/',handleGetRequest);
 
-//defines a route for POST request to path /kitty
-app.post('/kitty',(request,response)=>{
-    //post requests are used to submit data to the server, often forms
-    response.send('Bye Sam');
-});
-
-app.listen(8080);
-console.log("Express listening on port 8080.");
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
