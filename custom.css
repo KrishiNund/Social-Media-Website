@@ -1,0 +1,58 @@
+body{
+    background-color: #424874;
+}
+
+.navigation_bar{
+    background-color:#F2F4FF !important;
+}
+
+.font{
+    font-family: "Protest Riot", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.search_bar{
+    position: relative;
+    right: 5em;
+    bottom: 1em;
+    width: 38em;
+    height: 50px;
+}
+
+.search_bar i{
+    position: relative;
+    top: 30px ;
+    left: 36em;
+    z-index: 1;
+}
+
+.go_to_signup_page{
+    position: relative;
+    left: 7em;
+    font-size:25px;
+    color: #424874;
+}
+
+.go_to_login_page{
+    position: relative;
+    left: 8em;
+    font-size:25px;
+    color: #424874;
+}
+
+.user_profile_button{
+    position: relative;
+    left: 19em;
+}
+
+.user_profile_button button{
+    border:none;
+}
+
+.settings_button{
+    position: relative;
+    left: 9em;
+    border: none;
+}
+
