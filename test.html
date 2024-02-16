@@ -7,7 +7,7 @@
     <!--Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="custom.css">
+    <link rel="stylesheet" href="home.css">
     <!--Google fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,7 +42,7 @@
                     <div class="d-flex align-items-center flex-grow-1">
                         <!--Sign Up-->
                         <div class="flex-grow-1">
-                            <button type="button" class="btn go_to_signup_page">Sign Up</button>
+                            <a href="/M00934333/signup" class="go_to_signup_page">Sign Up</a>
                         </div>
                         <!--login-->
                         <div class="flex-grow-1">
@@ -62,7 +62,7 @@
                         <!--Settings-->
                         <div class="flex-grow-1">
                             <!--Settings button-->
-                            <button type="button" class="btn settings_button">
+                            <button type="button" class="btn settings_button" onclick="ClickSettingsButton()">
                                 <img src="images/icons8-settings-40.png" alt="settings button" class="img-fluid">
                             </button>
                         </div>
@@ -239,6 +239,21 @@
                 </span>
             </div>
         </div>
+    </div>
+
+    <div class="container settings_box mx-auto text-center">
+
+        <div class="settings_header">
+            <h2>Settings Box<hr></h2>   
+        </div>
+
+        <p>Account Creation Date:XX-XX-XXXX</p>
+
+        <div class="d-flex flex-row mx-auto">
+            <button type="button" class="btn">Log Out</button>
+            <button type="button" class="btn">Delete account</button>
+        </div>
+    
     </div>
     
 </body>

@@ -1,15 +1,18 @@
 //after webpage has loaded, execuet the awaiting javascript
 document.addEventListener("DOMContentLoaded", () => {
-  goTo(window.location.pathname);
+    goTo(window.location.hash);
 });
 
-function goTo(path) {
-  switch (path) {
-    case "/M00934333/signup":
+window.addEventListener("hashchange", () => {
+    goTo(window.location.hash);
+});
+function goTo(hash) {
+  switch (hash) {
+    case "#/signup": 
       loadSignUpPage();
       break;
 
-    case "/M00934333/login":
+    case "#/login":
       loadLoginPage();
       break;
 
@@ -20,9 +23,11 @@ function goTo(path) {
 }
 
 function loadPageContent(content,type) {
-  if (type == "homepage"){
     const app = document.getElementById("app");
+  if (type == "homepage"){
     app.innerHTML = createHeader() + content;
+  } else {
+    app.innerHTML = content + createFooter();
   }
 }
 
@@ -50,11 +55,11 @@ function createHeader() {
           <div class="d-flex align-items-center flex-grow-1">
               <!--Sign Up-->
               <div class="flex-grow-1">
-                  <button type="button" class="btn go_to_signup_page">Sign Up</button>
+                <a href="#/signup" class="go_to_signup_page">Sign Up</a>
               </div>
               <!--login-->
               <div class="flex-grow-1">
-                  <button type="button" class="btn go_to_login_page">Login</button>
+              <a href="#/login" class="go_to_login_page">Login</a>
               </div>
               <!--User profile-->
 
@@ -70,7 +75,7 @@ function createHeader() {
               <!--Settings-->
               <div class="flex-grow-1">
                   <!--Settings button-->
-                  <button type="button" class="btn settings_button">
+                  <button type="button" class="btn settings_button" onclick="ClickSettingsButton()">
                       <img src="images/icons8-settings-40.png" alt="settings button" class="img-fluid">
                   </button>
               </div>
@@ -80,7 +85,15 @@ function createHeader() {
 </nav>`;
 }
 
-function createFooter() {}
+function createFooter() {
+
+    return `<footer class="footer">
+        <div class="container-fluid text-center">
+            <small>&copy; 2024 Trailblazers' Hangout. All Rights Reserved.</small>
+        </div>
+    </footer>`
+
+}
 
 function loadHomePage() {
   const homePageContent = `<div class="container-fluid d-flex flex-row align-items-center justify-content-between">
@@ -251,7 +264,130 @@ function loadHomePage() {
       </div>
 
   </div>
-</div>`;
+</div>
+
+<div class="container settings_box mx-auto text-center">
+
+        <div class="settings_header">
+            <h2>Settings Box<hr></h2>   
+        </div>
+
+        <p>Account Creation Date:XX-XX-XXXX</p>
+
+        <div class="d-flex flex-row mx-auto">
+            <button type="button" class="btn">Log Out</button>
+            <button type="button" class="btn">Delete account</button>
+        </div>
+    
+    </div>`;
 
   loadPageContent(homePageContent,"homepage");
+}
+
+function loadSignUpPage(){
+    const content =`<link rel="stylesheet" href="forms.css">
+    <div class="container d-flex flex-column">
+    <div class="back_button">
+        <a href="/M00934333/#">
+            <img src="images/icons8-back-button-64.png" alt="go_back">
+        </a>
+    </div>
+
+    <form class="mx-auto text-center d-flex flex-column">
+        <div class="form_header">
+            <h4>Sign up<hr></h4>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" class="form-input form-control mx-auto entry_field" placeholder="Full Name" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" class="form-input form-control entry_field mx-auto" placeholder="Username" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" class="form-input form-control entry_field mx-auto" placeholder="Email" required>
+        </div>
+
+        <div class="form-group">
+            <input type="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
+            <i class="fa fa-eye-slash show_hide_password"></i>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label for="gender">Gender: </label>
+
+            <input type="radio" class="radio" name="gender" value="male">
+            <label for="fullName" class="label">Male</label>
+
+            <input type="radio" class="radio" name="gender" value="female">
+            <label for="fullName" class="label">Female</label>
+
+            <input type="radio" class="radio" name="gender" value="other">
+            <label for="fullName" class="label">Rather not disclose</label>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="dob">Date of Birth: </label>
+            <input type="date" style="border-radius: 20px; border: 2px solid black" id="dob" name="dob" required>
+        </div>
+
+        <button type="submit" class="btn submit_button mx-auto">Submit</button>
+        
+    </form>
+
+    <div class="mx-auto login_box text-center">
+        <p class="mt-3">Have an account? <a href="/M00934333/#/login" style="text-decoration: none;">Log in</a></p>
+    </div>
+
+</div>`;
+    loadPageContent(content,"signup");
+}
+
+function loadLoginPage(){
+    const content=`<link rel="stylesheet" href="forms.css">
+    <div class="container d-flex flex-column">
+    <div class="back_button">
+        <a href="/M00934333/#">
+            <img src="images/icons8-back-button-64.png" alt="go_back">
+        </a>
+    </div>
+
+    <form class="mx-auto text-center d-flex flex-column">
+        <div class="form_header">
+            <h4>Login<hr></h4>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" class="form-input form-control entry_field mx-auto" placeholder="Username" required>
+        </div>
+
+        <div class="form-group">
+            <input type="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
+            <i class="fa fa-eye-slash show_hide_password"></i>
+        </div>
+        
+
+        <button type="submit" class="btn submit_button mx-auto">Confirm</button>
+        
+    </form>
+
+    <div class="mx-auto login_box text-center">
+        <p class="mt-3">Don't have an account? <a href="/M00934333/#/signup" style="text-decoration: none;">Sign Up</a></p>
+    </div>
+
+</div>`;
+    loadPageContent(content,"login");
+}
+
+function ClickSettingsButton(){
+    settingsBox = document.querySelector('.settings_box');
+    console.log(settingsBox.style.display);
+    if (settingsBox.style.display == 'block'){
+        settingsBox.style.display = 'none';
+    } else {
+        settingsBox.style.display = 'block';
+    }
+    
 }
