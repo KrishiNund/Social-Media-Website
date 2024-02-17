@@ -233,15 +233,15 @@ function loadHomePage() {
 
           <div class="d-flex flex-row post_options">
               <button type="button" class="btn" style="border: none;">
-                  <i class="fa fa-camera fa-2x"></i>
+                  <i class="fa fa-camera fa-2x" onclick="showPostBox()" ></i>
               </button>
 
               <button type="button" class="btn" style="border: none;">
-                  <i class="fa fa-video-camera fa-2x"></i>
+                  <i class="fa fa-video-camera fa-2x" onclick="showPostBox()"></i>
               </button>
 
               <button type="button" class="btn" style="border: none;">
-                  <i class="fa fa-pencil-square-o fa-2x"></i>
+                  <i class="fa fa-pencil-square-o fa-2x" onclick="showPostBox()"></i>
               </button>
 
           </div>
@@ -279,7 +279,32 @@ function loadHomePage() {
             <button type="button" class="btn">Delete account</button>
         </div>
     
-    </div>`;
+</div>
+
+<div class="container post_box mx-auto">
+    <div class="post_box_header d-flex flex-row">
+        <h2>Post Box</h2>
+        <i class="fa fa-times-circle-o fa-2x" onclick="closePostBox()"></i>
+    </div>
+    <textarea id="post_text" placeholder="Write something here..."></textarea>
+
+    <div class="media_upload d-flex flex-column">
+        <span class="d-flex flex-row media_upload_button mb-3">
+            <p>Add </p>
+            <i class="fa fa-camera"></i>
+            <p>:</p>
+            <input type="file" accept="image/*">
+        </span>
+
+        <span class="d-flex flex-row media_upload_button">
+            <p>Add</p>
+            <i class="fa fa-video-camera"></i>
+            <p>:</p>
+            <input type="file" accept="video/*">
+        </span>
+    </div>
+    <button type="button" class="btn post_button">Post</button> 
+</div>`;
 
   loadPageContent(homePageContent,"homepage");
 }
@@ -392,6 +417,20 @@ function ClickSettingsButton(){
     
 }
 
+function closePostBox(){
+    postBox = document.querySelector('.post_box');
+    if(postBox.style.display == 'block'){
+        postBox.style.display = 'none';
+    }
+}
 
+function showPostBox(){
+    postBox = document.querySelector('.post_box');
+    if (postBox.style.display == 'block'){
+        postBox.style.display = 'none';
+    } else {
+        postBox.style.display = 'block';
+    }
+}
 
 
