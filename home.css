@@ -201,6 +201,7 @@ body{
     position: relative;
     top: 1em;
     width: 4em;
+    border: none;
 }
 
 .contact_box{

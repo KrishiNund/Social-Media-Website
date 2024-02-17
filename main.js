@@ -232,15 +232,15 @@ function loadHomePage() {
           <div class="widget_header"><h4>Post Now~~</h4></div>
 
           <div class="d-flex flex-row post_options">
-              <button type="button" class="btn">
+              <button type="button" class="btn" style="border: none;">
                   <i class="fa fa-camera fa-2x"></i>
               </button>
 
-              <button type="button" class="btn">
+              <button type="button" class="btn" style="border: none;">
                   <i class="fa fa-video-camera fa-2x"></i>
               </button>
 
-              <button type="button" class="btn">
+              <button type="button" class="btn" style="border: none;">
                   <i class="fa fa-pencil-square-o fa-2x"></i>
               </button>
 
@@ -288,7 +288,7 @@ function loadSignUpPage(){
     const content =`<link rel="stylesheet" href="forms.css">
     <div class="container d-flex flex-column">
     <div class="back_button">
-        <a href="/M00934333/#">
+        <a href="/">
             <img src="images/icons8-back-button-64.png" alt="go_back">
         </a>
     </div>
@@ -338,7 +338,7 @@ function loadSignUpPage(){
     </form>
 
     <div class="mx-auto login_box text-center">
-        <p class="mt-3">Have an account? <a href="/M00934333/#/login" style="text-decoration: none;">Log in</a></p>
+        <p class="mt-3">Have an account? <a href="/#/login" style="text-decoration: none;">Log in</a></p>
     </div>
 
 </div>`;
@@ -349,7 +349,7 @@ function loadLoginPage(){
     const content=`<link rel="stylesheet" href="forms.css">
     <div class="container d-flex flex-column">
     <div class="back_button">
-        <a href="/M00934333/#">
+        <a href="/#">
             <img src="images/icons8-back-button-64.png" alt="go_back">
         </a>
     </div>
@@ -374,7 +374,7 @@ function loadLoginPage(){
     </form>
 
     <div class="mx-auto login_box text-center">
-        <p class="mt-3">Don't have an account? <a href="/M00934333/#/signup" style="text-decoration: none;">Sign Up</a></p>
+        <p class="mt-3">Don't have an account? <a href="/#/signup" style="text-decoration: none;">Sign Up</a></p>
     </div>
 
 </div>`;
@@ -391,3 +391,7 @@ function ClickSettingsButton(){
     }
     
 }
+
+
+
+
