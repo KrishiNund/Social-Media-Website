@@ -1,8 +1,10 @@
+//importing necessary modules
 const path = require('path');
 const express = require('express');
 const mongodb = require('mongodb');
 const bodyParser = require('body-parser');
 
+//creating express application
 const app = express();
 const PORT = process.env.PORT || 8080;
 app.use(bodyParser.json());
@@ -18,7 +20,6 @@ const encodedPassword = encodeURIComponent(password);
 
 //creating mongodb connection uri
 const uri = `mongodb+srv://${encodedUsername}:${encodedPassword}@${server}/?retryWrites=true&w=majority`;
-// console.log(uri);
 
 //creating client instance
 const client =new mongodb.MongoClient(uri,{ 
@@ -50,16 +51,15 @@ app.use('/',express.static(path.join(__dirname)));
 
 
 const database = client.db("Social_Media_Website");
-const collection = database.collection("Users");
+const collection = database.collection("Example_Users");
 
 app.post('/M00934333',async(req,res)=>{
     const userData = {
+        ID: 'M00934333',
         firstName: 'Omkaar Krishi',
         lastName: 'Nund',
-        username: 'K.Nund',
-        password: '1234',
-        birthday: '11-02-2003',
-        gender: 'Male'
+        email: 'ON144@live.mdx.ac.uk'
+        
     };
 
     const result = await collection.insertOne(userData);
