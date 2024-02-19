@@ -1,4 +1,4 @@
-//after webpage has loaded, execuet the awaiting javascript
+//after webpage has loaded, execute the awaiting javascript
 document.addEventListener("DOMContentLoaded", () => {
     goTo(window.location.hash);
 });
@@ -22,6 +22,7 @@ function goTo(hash) {
   }
 }
 
+//? load page content according to its type
 function loadPageContent(content,type) {
     const app = document.getElementById("app");
   if (type == "homepage"){
@@ -31,63 +32,64 @@ function loadPageContent(content,type) {
   }
 }
 
+//returns html code for header and navigation bar
 function createHeader() {
-  return `<nav class="navigation_bar navbar navbar-expand-sm bg-warning navbar-dark fixed-top">
-  <div class="container-fluid">
-      <div class="d-flex flex-row align-items-center justify-content-between">
-          <div class="flex-grow-1">
-              <!--Logo and Title-->
-              <a class="navbar-brand ms-left" href="#">
-                  <img src="images/icons8-honkai-star-rail-logo-50.png" class="img-fluid" alt="Logo">
-                  <span class="navbar-text" style="color: #B8BBD6;">Trailblazers' Hangout</span>
-              </a>
-          </div>
-
-          <div class="flex-grow-1">
-              <!--Search Bar-->
-              <div class="form search_bar">
-                  <i class="fa fa-search"></i>
-                  <input type="text" class="form-control form-input" placeholder="Search Anything...">
-              </div>
-          </div>
-
-          <!--Menu-->
-          <div class="d-flex align-items-center flex-grow-1">
-              <!--Sign Up-->
+  return `<!--Creating our navigation bar-->
+  <nav class="navigation_bar navbar navbar-expand-sm bg-warning navbar-dark fixed-top">
+      <div class="container-fluid">
+          <div class="d-flex flex-row align-items-center justify-content-between">
               <div class="flex-grow-1">
-                <a href="#/signup" class="go_to_signup_page">Sign Up</a>
-              </div>
-              <!--login-->
-              <div class="flex-grow-1">
-              <a href="#/login" class="go_to_login_page">Login</a>
-              </div>
-              <!--User profile-->
-
-              <div class="dropdown user_profile_button flex-grow-1">
-                  <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
-                     <img src="images/icons8-user-profile-48.png" alt="User Profile" class="rounded-circle">
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                      <li><span class="dropdown-item-text">Status:Logged In/ Logged Out</span></li>
-                  </ul>
+                  <!--Logo and Title-->
+                  <a class="navbar-brand ms-left" href="#">
+                      <img src="images/icons8-honkai-star-rail-logo-50.png" class="img-fluid" alt="Logo">
+                      <span class="navbar-text" style="color: #B8BBD6;">Trailblazers' Hangout</span>
+                  </a>
               </div>
 
-              <!--Settings-->
               <div class="flex-grow-1">
-                  <!--Settings button-->
-                  <button type="button" class="btn settings_button" onclick="ClickSettingsButton()">
-                      <img src="images/icons8-settings-40.png" alt="settings button" class="img-fluid">
-                  </button>
+                  <!--Search Bar-->
+                  <div class="form search_bar">
+                      <i class="fa fa-search"></i>
+                      <input type="text" class="form-control form-input" placeholder="Search Anything...">
+                  </div>
+              </div>
+
+              <div class="d-flex align-items-center flex-grow-1">
+                  <!--Sign Up-->
+                  <div class="flex-grow-1">
+                      <a href="#/signup" class="go_to_signup_page">Sign Up</a>
+                  </div>
+                  <!--Login-->
+                  <div class="flex-grow-1">
+                      <a href="#/login" class="go_to_login_page">Login</a>
+                  </div>
+
+                  <!--User profile button/dropdown-->
+                  <div class="dropdown user_profile_button flex-grow-1">
+                      <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                         <img src="images/icons8-user-profile-48.png" alt="User Profile" class="rounded-circle">
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end">
+                          <li><span class="dropdown-item-text">Status:Logged In/ Logged Out</span></li>
+                      </ul>
+                  </div>
+
+                  <!--Settings Button-->
+                  <div class="flex-grow-1">
+                      <button type="button" class="btn settings_button" onclick="ClickSettingsButton()">
+                          <img src="images/icons8-settings-40.png" alt="settings button" class="img-fluid">
+                      </button>
+                  </div>
               </div>
           </div>
       </div>
-  </div>
-</nav>`;
+  </nav>`;
 }
 
+//returns html code for footer 
 function createFooter() {
-
-    return `<footer class="footer">
+    return `<!--Footer with copyright text-->
+    <footer class="footer">
         <div class="container-fluid text-center">
             <small>&copy; 2024 Trailblazers' Hangout. All Rights Reserved.</small>
         </div>
@@ -95,21 +97,21 @@ function createFooter() {
 
 }
 
+//loads home page's main content/html
 function loadHomePage() {
   const homePageContent = `<div class="container-fluid d-flex flex-row align-items-center justify-content-between">
   <!--Main Content-->
   <div>
-      <!--Feed menu-->
+      <!--Feed menu showcasing the different kinds of feed-->
       <div class="feed_options d-flex flex-row align-items-center justify-content-between rounded fixed-top">
-          <button type="button" class="btn">Following</button>
-          <button type="button" class="btn">Explore</button>
-          <button type="button" class="btn">Events</button>
+          <button type="button" class="btn" style="text-decoration:underline;" id="explorePostsButton" onclick="showExplorePosts()">Explore</button>
+          <button type="button" class="btn" id="followingPostsButton"  onclick="showFollowingPosts()">Following</button>
+          <button type="button" class="btn" id="eventPostsButton" onclick="showEventPosts()">Events</button>
       </div>
 
-      <!--Posts-->
+      <!--Posts Sections-->
       <div class="post_area">
-
-          <!--First Post-->
+          <!--First Post Example-->
           <div class="post">
               <!--Post related buttons-->
               <div class="user_info d-flex align-items-center">
@@ -144,7 +146,7 @@ function loadHomePage() {
               </div>
           </div>
 
-          <!--Second Post-->
+          <!--Second Post Example-->
           <div class="post">
               <!--Post related buttons-->
               <div class="user_info d-flex align-items-center">
@@ -179,7 +181,7 @@ function loadHomePage() {
               </div>
           </div>
 
-          <!--Third Post-->
+          <!--Third Post Example-->
           <div class="post">
               <!--Post related buttons-->
               <div class="user_info d-flex align-items-center">
@@ -220,6 +222,7 @@ function loadHomePage() {
   <!--Right sidebar-->
   <div class="d-flex flex-column position-fixed sidebar">
 
+      <!--Trending Hashtags Widget-->
       <div class="trending_hashtags text-center">
           <div class="widget_header"><h4>Trending</h4></div>
           <span>#PenaconyUpdate <hr></span>
@@ -228,12 +231,13 @@ function loadHomePage() {
           <span>#HSR</span>
       </div>
 
+      <!--Post Panel: Post Text, Images and Videos-->
       <div class="post_panel text-center">
           <div class="widget_header"><h4>Post Now~~</h4></div>
 
           <div class="d-flex flex-row post_options">
               <button type="button" class="btn" style="border: none;">
-                  <i class="fa fa-camera fa-2x" onclick="showPostBox()" ></i>
+                  <i class="fa fa-camera fa-2x" onclick="showPostBox()"></i>
               </button>
 
               <button type="button" class="btn" style="border: none;">
@@ -247,6 +251,7 @@ function loadHomePage() {
           </div>
       </div>
 
+      <!--Contact Box containing essential pages redirection and copyright mark-->
       <div class="contact_box text-center">
           <div class="widget_header"><h4>Contact</h4></div>
 
@@ -262,150 +267,158 @@ function loadHomePage() {
               Copyright &copy; 2024 Trailblazers' Hangout 
           </span>
       </div>
-
   </div>
 </div>
 
+<!--Settings Pop Up-->
 <div class="container settings_box mx-auto text-center">
 
-        <div class="settings_header">
-            <h2>Settings Box<hr></h2>   
-        </div>
+  <div class="settings_header">
+      <h2>Settings Box<hr></h2>   
+  </div>
 
-        <p>Account Creation Date:XX-XX-XXXX</p>
+  <p>Account Creation Date:XX-XX-XXXX</p>
 
-        <div class="d-flex flex-row mx-auto">
-            <button type="button" class="btn">Log Out</button>
-            <button type="button" class="btn">Delete account</button>
-        </div>
-    
+  <div class="d-flex flex-row mx-auto">
+      <button type="button" class="btn">Log Out</button>
+      <button type="button" class="btn">Delete account</button>
+  </div>
+
 </div>
 
+<!--Post Composer Pop Up-->
 <div class="container post_box mx-auto">
-    <div class="post_box_header d-flex flex-row">
-        <h2>Post Box</h2>
-        <i class="fa fa-times-circle-o fa-2x" onclick="closePostBox()"></i>
-    </div>
-    <textarea id="post_text" placeholder="Write something here..."></textarea>
+  <div class="post_box_header d-flex flex-row">
+      <h2>Post Box</h2>
+      <i class="fa fa-times-circle-o fa-2x" onclick="closePostBox()"></i>
+  </div>
+  <textarea id="post_text" placeholder="Write something here..."></textarea>
 
-    <div class="media_upload d-flex flex-column">
-        <span class="d-flex flex-row media_upload_button mb-3">
-            <p>Add </p>
-            <i class="fa fa-camera"></i>
-            <p>:</p>
-            <input type="file" accept="image/*">
-        </span>
+  <!--Accept Images and Videos to be posted as well-->
+  <div class="media_upload d-flex flex-column">
+      <span class="d-flex flex-row media_upload_button mb-3">
+          <p>Add </p>
+          <i class="fa fa-camera"></i>
+          <p>:</p>
+          <input type="file" accept="image/*">
+      </span>
 
-        <span class="d-flex flex-row media_upload_button">
-            <p>Add</p>
-            <i class="fa fa-video-camera"></i>
-            <p>:</p>
-            <input type="file" accept="video/*">
-        </span>
-    </div>
-    <button type="button" class="btn post_button">Post</button> 
+      <span class="d-flex flex-row media_upload_button">
+          <p>Add</p>
+          <i class="fa fa-video-camera"></i>
+          <p>:</p>
+          <input type="file" accept="video/*">
+      </span>
+  </div>
+  <button type="button" class="btn post_button">Post</button> 
 </div>`;
 
   loadPageContent(homePageContent,"homepage");
 }
 
+//loads sign up page's html elements
 function loadSignUpPage(){
     const content =`<link rel="stylesheet" href="forms.css">
+    <!--Back Button-->
     <div class="container d-flex flex-column">
-    <div class="back_button">
-        <a href="/">
-            <img src="images/icons8-back-button-64.png" alt="go_back">
-        </a>
-    </div>
+        <div class="back_button">
+            <a href="/#">
+                <img src="images/icons8-back-button-64.png" alt="go_back">
+            </a>
+        </div>
+        <!--sign up form with different data fields-->
+        <form class="mx-auto text-center d-flex flex-column">
+            <div class="form_header">
+                <h4>Sign up<hr></h4>
+            </div>
 
-    <form class="mx-auto text-center d-flex flex-column">
-        <div class="form_header">
-            <h4>Sign up<hr></h4>
+            <div class="mb-3">
+                <input type="text" class="form-input form-control mx-auto entry_field" placeholder="Full Name" required>
+            </div>
+
+            <div class="mb-3">
+                <input type="text" class="form-input form-control entry_field mx-auto" placeholder="Username" required>
+            </div>
+
+            <div class="mb-3">
+                <input type="email" class="form-input form-control entry_field mx-auto" placeholder="Email" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
+                <i class="fa fa-eye-slash show_hide_password"></i>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label for="gender">Gender: </label>
+
+                <input type="radio" class="radio" name="gender" value="male">
+                <label for="fullName" class="label">Male</label>
+
+                <input type="radio" class="radio" name="gender" value="female">
+                <label for="fullName" class="label">Female</label>
+
+                <input type="radio" class="radio" name="gender" value="other">
+                <label for="fullName" class="label">Rather not disclose</label>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="dob">Date of Birth: </label>
+                <input type="date" style="border-radius: 20px; border: 2px solid black" id="dob" name="dob" required>
+            </div>
+
+            <button type="submit" class="btn submit_button mx-auto">Submit</button>
+            
+        </form>
+
+        <!--Redirection to login page if user already has an account-->
+        <div class="mx-auto login_box text-center">
+            <p class="mt-3">Have an account? <a href="#/login" style="text-decoration: none;">Log in</a></p>
         </div>
 
-        <div class="mb-3">
-            <input type="text" class="form-input form-control mx-auto entry_field" placeholder="Full Name" required>
-        </div>
-
-        <div class="mb-3">
-            <input type="text" class="form-input form-control entry_field mx-auto" placeholder="Username" required>
-        </div>
-
-        <div class="mb-3">
-            <input type="text" class="form-input form-control entry_field mx-auto" placeholder="Email" required>
-        </div>
-
-        <div class="form-group">
-            <input type="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
-            <i class="fa fa-eye-slash show_hide_password"></i>
-        </div>
-        
-        <div class="form-group mb-3">
-            <label for="gender">Gender: </label>
-
-            <input type="radio" class="radio" name="gender" value="male">
-            <label for="fullName" class="label">Male</label>
-
-            <input type="radio" class="radio" name="gender" value="female">
-            <label for="fullName" class="label">Female</label>
-
-            <input type="radio" class="radio" name="gender" value="other">
-            <label for="fullName" class="label">Rather not disclose</label>
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="dob">Date of Birth: </label>
-            <input type="date" style="border-radius: 20px; border: 2px solid black" id="dob" name="dob" required>
-        </div>
-
-        <button type="submit" class="btn submit_button mx-auto">Submit</button>
-        
-    </form>
-
-    <div class="mx-auto login_box text-center">
-        <p class="mt-3">Have an account? <a href="/#/login" style="text-decoration: none;">Log in</a></p>
-    </div>
-
-</div>`;
+    </div>`;
     loadPageContent(content,"signup");
 }
 
+//loads login page's html elements
 function loadLoginPage(){
     const content=`<link rel="stylesheet" href="forms.css">
+    <!--Back Button-->
     <div class="container d-flex flex-column">
-    <div class="back_button">
-        <a href="/#">
-            <img src="images/icons8-back-button-64.png" alt="go_back">
-        </a>
-    </div>
-
-    <form class="mx-auto text-center d-flex flex-column">
-        <div class="form_header">
-            <h4>Login<hr></h4>
+        <div class="back_button">
+            <a href="/#">
+                <img src="images/icons8-back-button-64.png" alt="go_back">
+            </a>
         </div>
 
-        <div class="mb-3">
-            <input type="text" class="form-input form-control entry_field mx-auto" placeholder="Username" required>
+        <!--Login Form with username and password fields-->
+        <form class="mx-auto text-center d-flex flex-column">
+            <div class="form_header">
+                <h4>Login<hr></h4>
+            </div>
+
+            <div class="mb-3">
+                <input type="text" class="form-input form-control entry_field mx-auto" placeholder="Username" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
+                <i class="fa fa-eye-slash show_hide_password"></i>
+            </div>
+
+            <button type="submit" class="btn submit_button mx-auto">Confirm</button>
+            
+        </form>
+
+        <!--Redirection to signup page if user does not have an account already-->
+        <div class="mx-auto login_box text-center">
+            <p class="mt-3">Don't have an account? <a href="#/signup" style="text-decoration: none;">Sign Up</a></p>
         </div>
-
-        <div class="form-group">
-            <input type="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
-            <i class="fa fa-eye-slash show_hide_password"></i>
-        </div>
-        
-
-        <button type="submit" class="btn submit_button mx-auto">Confirm</button>
-        
-    </form>
-
-    <div class="mx-auto login_box text-center">
-        <p class="mt-3">Don't have an account? <a href="/#/signup" style="text-decoration: none;">Sign Up</a></p>
-    </div>
-
-</div>`;
+    </div>`;
     loadPageContent(content,"login");
 }
 
+//opens and closes settings box
 function ClickSettingsButton(){
     settingsBox = document.querySelector('.settings_box');
     console.log(settingsBox.style.display);
@@ -417,6 +430,7 @@ function ClickSettingsButton(){
     
 }
 
+//closes post box/composer on clicking close button
 function closePostBox(){
     postBox = document.querySelector('.post_box');
     if(postBox.style.display == 'block'){
@@ -424,6 +438,7 @@ function closePostBox(){
     }
 }
 
+//opens post box/composer on clicking on post panel's icons 
 function showPostBox(){
     postBox = document.querySelector('.post_box');
     if (postBox.style.display == 'block'){
@@ -433,4 +448,39 @@ function showPostBox(){
     }
 }
 
+//switch highlight to explore button on feed
+function showExplorePosts(){
+    exploreButton = document.getElementById("explorePostsButton");
+    exploreButton.style.textDecoration = 'underline';
 
+    followingPostsButton = document.getElementById("followingPostsButton");
+    followingPostsButton.style.textDecoration = "none";
+
+    eventPostsButton = document.getElementById("eventPostsButton");
+    eventPostsButton.style.textDecoration = "none";
+}
+
+//switch highlight to following button on feed
+function showFollowingPosts(){
+    exploreButton = document.getElementById("explorePostsButton");
+    exploreButton.style.textDecoration = 'none';
+
+    followingPostsButton = document.getElementById("followingPostsButton");
+    followingPostsButton.style.textDecoration = "underline";
+
+    eventPostsButton = document.getElementById("eventPostsButton");
+    eventPostsButton.style.textDecoration = "none";
+    
+}
+
+//switch highlight to events button on feed
+function showEventPosts(){
+    exploreButton = document.getElementById("explorePostsButton");
+    exploreButton.style.textDecoration = 'none';
+
+    followingPostsButton = document.getElementById("followingPostsButton");
+    followingPostsButton.style.textDecoration = "none";
+
+    eventPostsButton = document.getElementById("eventPostsButton");
+    eventPostsButton.style.textDecoration = "underline";
+}

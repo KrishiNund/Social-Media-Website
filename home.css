@@ -1,9 +1,8 @@
 body{
-    /* background-color: #F2F4FF; */
-    background-color: #f2f4ff;
-    /* background-image: url("images/peakpx (1).jpg"); */
+    background-color: #F2F4FF;
 }
 
+/*customising page scrollbar's thickness and color*/
 ::-webkit-scrollbar{
     width: 6px;
 }
@@ -22,15 +21,16 @@ body{
 }
 .navigation_bar{
     background-color:#02111B !important;
-    /* z-index: 1; */
 }
 
+/*setting a general font*/
 *{
     font-family: "Protest Riot", sans-serif;
     font-weight: 400;
     font-style: normal;
 }
 
+/*customising width and position of search bar*/
 .search_bar{
     position: relative;
     left: 7em;
@@ -46,6 +46,7 @@ body{
     z-index: 1;
 }
 
+/*Customising page redirection links to signup and login pages*/
 .go_to_signup_page{
     position: relative;
     left: 6em;
@@ -70,6 +71,7 @@ body{
     color: white;
 }
 
+/*Customising user profile button/dropdown and settings button*/
 .user_profile_button{
     position: relative;
     left: 18em;
@@ -88,6 +90,7 @@ body{
     
 }
 
+/*Adjusting feed buttons' position and effects*/
 .feed_options{
     position: relative;
     top: 5em;
@@ -100,12 +103,15 @@ body{
 .feed_options button{
     color: #F2F4FF;
     font-size: 20px;
+    border: none;
 }
 
 .feed_options button:hover{
+    color: white;
     text-decoration: underline;
 }
 
+/*Adjusting Post Area and customising example post's template*/
 .post_area{
     background-color: #B8BBD6;
     height: auto;
@@ -127,11 +133,17 @@ body{
 .user_info button{
     position: relative;
     left: 38em;
+    border: none;
 }
 
 .follow_button{
     background-color: #6969B3;
     border-radius: 20px;
+    border: none;
+}
+
+.follow_button:hover{
+    background-color:white ;
 }
 .post_content{
     position: relative;
@@ -159,6 +171,7 @@ body{
 }
 
 
+/*Customising widgets on right sidebar*/
 .trending_hashtags{
     background-color: #B8BBD6;
     position: fixed;
@@ -222,6 +235,8 @@ body{
     color: #02111B;
 }
 
+
+/*Styling settings box*/
 .settings_box{
     display:none;
     background-color: #B8BBD6;
@@ -259,6 +274,7 @@ body{
     scale: 1.1;
 }
 
+/*Styling Post box/composer*/
 .post_box{
     display: none;
     width: 30em;

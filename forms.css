@@ -4,12 +4,14 @@ body{
     background-image: url("images/hsr_wallpaper.jpg");
 }
 
+/*Setting general font*/
 *{
     font-family: "Protest Riot", sans-serif;
     font-weight: 400;
     font-style: normal;
 }
 
+/*Styling footer and adjusting position*/
 footer{
     position: fixed;
     bottom: 0;
@@ -19,6 +21,7 @@ footer{
     color: #F2F4FF;
 }
 
+/*Styling form, data fields and buttons*/
 form {
     position: relative;
     top: 4em;
