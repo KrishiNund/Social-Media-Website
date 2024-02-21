@@ -1,14 +1,14 @@
 //after webpage has loaded, execute the awaiting javascript
 document.addEventListener("DOMContentLoaded", () => {
-    goTo(window.location.hash);
+  goTo(window.location.hash);
 });
 
 window.addEventListener("hashchange", () => {
-    goTo(window.location.hash);
+  goTo(window.location.hash);
 });
 function goTo(hash) {
   switch (hash) {
-    case "#/signup": 
+    case "#/signup":
       loadSignUpPage();
       break;
 
@@ -23,9 +23,9 @@ function goTo(hash) {
 }
 
 //? load page content according to its type
-function loadPageContent(content,type) {
-    const app = document.getElementById("app");
-  if (type == "homepage"){
+function loadPageContent(content, type) {
+  const app = document.getElementById("app");
+  if (type == "homepage") {
     app.innerHTML = createHeader() + content;
   } else {
     app.innerHTML = content + createFooter();
@@ -86,15 +86,14 @@ function createHeader() {
   </nav>`;
 }
 
-//returns html code for footer 
+//returns html code for footer
 function createFooter() {
-    return `<!--Footer with copyright text-->
+  return `<!--Footer with copyright text-->
     <footer class="footer">
         <div class="container-fluid text-center">
             <small>&copy; 2024 Trailblazers' Hangout. All Rights Reserved.</small>
         </div>
-    </footer>`
-
+    </footer>`;
 }
 
 //loads home page's main content/html
@@ -141,7 +140,7 @@ function loadHomePage() {
                   </button>
 
                   <button type="button" class="btn">
-                      <i class="fa fa-comment-o"></i>
+                      <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
                   </button>
               </div>
           </div>
@@ -311,14 +310,94 @@ function loadHomePage() {
       </span>
   </div>
   <button type="button" class="btn post_button">Post</button> 
+</div>
+
+<!--Comment Box Pop up-->
+<div class="comment_section">
+  <div class="comment_section_header d-flex flex-row ">
+      <h2 class="mt-2">Comments</h2>
+      <i class="fa fa-times-circle-o fa-2x" onclick="closeCommentBox()"></i>
+  </div>
+
+  <div class="comment_box d-flex flex-column mx-auto mt-2 rounded">
+
+      <!--First example of comment-->
+      <div class="comment d-flex flex-column mt-2">
+          <div class="commenter_profile d-flex flex-row">
+              <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
+              <p class="mt-2">Salty Player</p>
+          </div>
+  
+          <div class="comment_content">
+              <p>Dan Heng IL is just too OP! The devs need to nerf him!!</p>
+          </div>
+          <!--Adding engagement buttons: like, dislike-->
+          <div class="d-flex flex-row">
+              <button type="button" class="btn">
+                  <i class="fa fa-heart-o"></i>
+              </button>
+
+              <button type="button" class="btn">
+                  <i class="fa fa-thumbs-o-down"></i>
+              </button>
+          </div>
+          <hr>
+      </div>
+
+       <!--Second example of comment-->
+       <div class="comment d-flex flex-column mt-2">
+          <div class="commenter_profile d-flex flex-row">
+              <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
+              <p class="mt-2">Top Cat</p>
+          </div>
+  
+          <div class="comment_content">
+              <p>Yes you can stop farming now! Maybe try to get sparkle next update to maximise his damage.</p>
+          </div>
+          <!--Adding engagement buttons: like, dislike-->
+          <div class="d-flex flex-row">
+              <button type="button" class="btn">
+                  <i class="fa fa-heart-o"></i>
+              </button>
+
+              <button type="button" class="btn">
+                  <i class="fa fa-thumbs-o-down"></i>
+              </button>
+          </div>
+          <hr>
+      </div>
+
+       <!--Third example of comment-->
+       <div class="comment d-flex flex-column mt-2">
+          <div class="commenter_profile d-flex flex-row">
+              <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
+              <p class="mt-2">Tryhard Player</p>
+          </div>
+  
+          <div class="comment_content">
+              <p>No!! You should never stop farming for your favourite character. Build Rating: 7/10. His relics can be improved.</p>
+          </div>
+          <!--Adding engagement buttons: like, dislike-->
+          <div class="d-flex flex-row">
+              <button type="button" class="btn">
+                  <i class="fa fa-heart-o"></i>
+              </button>
+
+              <button type="button" class="btn">
+                  <i class="fa fa-thumbs-o-down"></i>
+              </button>
+          </div>
+          <hr>
+      </div> 
+  </div>
 </div>`;
 
-  loadPageContent(homePageContent,"homepage");
+  loadPageContent(homePageContent, "homepage");
 }
 
 //loads sign up page's html elements
-function loadSignUpPage(){
-    const content =`<link rel="stylesheet" href="forms.css">
+function loadSignUpPage() {
+  const content = `<link rel="stylesheet" href="forms.css">
     <!--Back Button-->
     <div class="container d-flex flex-column">
         <div class="back_button">
@@ -377,12 +456,12 @@ function loadSignUpPage(){
         </div>
 
     </div>`;
-    loadPageContent(content,"signup");
+  loadPageContent(content, "signup");
 }
 
 //loads login page's html elements
-function loadLoginPage(){
-    const content=`<link rel="stylesheet" href="forms.css">
+function loadLoginPage() {
+  const content = `<link rel="stylesheet" href="forms.css">
     <!--Back Button-->
     <div class="container d-flex flex-column">
         <div class="back_button">
@@ -415,72 +494,88 @@ function loadLoginPage(){
             <p class="mt-3">Don't have an account? <a href="#/signup" style="text-decoration: none;">Sign Up</a></p>
         </div>
     </div>`;
-    loadPageContent(content,"login");
+  loadPageContent(content, "login");
 }
 
 //opens and closes settings box
-function ClickSettingsButton(){
-    settingsBox = document.querySelector('.settings_box');
-    console.log(settingsBox.style.display);
-    if (settingsBox.style.display == 'block'){
-        settingsBox.style.display = 'none';
-    } else {
-        settingsBox.style.display = 'block';
-    }
-    
+function ClickSettingsButton() {
+  settingsBox = document.querySelector(".settings_box");
+  console.log(settingsBox.style.display);
+  if (settingsBox.style.display == "block") {
+    settingsBox.style.display = "none";
+  } else {
+    settingsBox.style.display = "block";
+  }
 }
 
 //closes post box/composer on clicking close button
-function closePostBox(){
-    postBox = document.querySelector('.post_box');
-    if(postBox.style.display == 'block'){
-        postBox.style.display = 'none';
-    }
+function closePostBox() {
+  postBox = document.querySelector(".post_box");
+  if (postBox.style.display == "block") {
+    postBox.style.display = "none";
+  }
 }
 
-//opens post box/composer on clicking on post panel's icons 
-function showPostBox(){
-    postBox = document.querySelector('.post_box');
-    if (postBox.style.display == 'block'){
-        postBox.style.display = 'none';
-    } else {
-        postBox.style.display = 'block';
-    }
+//opens post box/composer on clicking on post panel's icons
+function showPostBox() {
+  postBox = document.querySelector(".post_box");
+  if (postBox.style.display == "block") {
+    postBox.style.display = "none";
+  } else {
+    postBox.style.display = "block";
+  }
 }
 
 //switch highlight to explore button on feed
-function showExplorePosts(){
-    exploreButton = document.getElementById("explorePostsButton");
-    exploreButton.style.textDecoration = 'underline';
+function showExplorePosts() {
+  exploreButton = document.getElementById("explorePostsButton");
+  exploreButton.style.textDecoration = "underline";
 
-    followingPostsButton = document.getElementById("followingPostsButton");
-    followingPostsButton.style.textDecoration = "none";
+  followingPostsButton = document.getElementById("followingPostsButton");
+  followingPostsButton.style.textDecoration = "none";
 
-    eventPostsButton = document.getElementById("eventPostsButton");
-    eventPostsButton.style.textDecoration = "none";
+  eventPostsButton = document.getElementById("eventPostsButton");
+  eventPostsButton.style.textDecoration = "none";
 }
 
 //switch highlight to following button on feed
-function showFollowingPosts(){
-    exploreButton = document.getElementById("explorePostsButton");
-    exploreButton.style.textDecoration = 'none';
+function showFollowingPosts() {
+  exploreButton = document.getElementById("explorePostsButton");
+  exploreButton.style.textDecoration = "none";
 
-    followingPostsButton = document.getElementById("followingPostsButton");
-    followingPostsButton.style.textDecoration = "underline";
+  followingPostsButton = document.getElementById("followingPostsButton");
+  followingPostsButton.style.textDecoration = "underline";
 
-    eventPostsButton = document.getElementById("eventPostsButton");
-    eventPostsButton.style.textDecoration = "none";
-    
+  eventPostsButton = document.getElementById("eventPostsButton");
+  eventPostsButton.style.textDecoration = "none";
 }
 
 //switch highlight to events button on feed
-function showEventPosts(){
-    exploreButton = document.getElementById("explorePostsButton");
-    exploreButton.style.textDecoration = 'none';
+function showEventPosts() {
+  exploreButton = document.getElementById("explorePostsButton");
+  exploreButton.style.textDecoration = "none";
 
-    followingPostsButton = document.getElementById("followingPostsButton");
-    followingPostsButton.style.textDecoration = "none";
+  followingPostsButton = document.getElementById("followingPostsButton");
+  followingPostsButton.style.textDecoration = "none";
 
-    eventPostsButton = document.getElementById("eventPostsButton");
-    eventPostsButton.style.textDecoration = "underline";
+  eventPostsButton = document.getElementById("eventPostsButton");
+  eventPostsButton.style.textDecoration = "underline";
+}
+
+//close comment box on a post
+function closeCommentBox(){
+    commentBox = document.querySelector(".comment_section");
+    if (commentBox.style.display == "block") {
+        commentBox.style.display = "none";
+    }
+}
+
+//open comment box on a post
+function showCommentBox() {
+    commentBox = document.querySelector(".comment_section");
+    if (commentBox.style.display == "block") {
+      commentBox.style.display = "none";
+    } else {
+      commentBox.style.display = "block";
+    }
 }

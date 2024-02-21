@@ -1,94 +1,88 @@
-body{
-    /* background-color: #F2F4FF; */
-    background-color: #f2f4ff;
-    background-image: url("images/hsr_wallpaper.jpg");
+body {
+  background-image: url("images/hsr_background_1.png");
 }
 
 /*Setting general font*/
-*{
-    font-family: "Protest Riot", sans-serif;
-    font-weight: 400;
-    font-style: normal;
+* {
+  font-family: "Protest Riot", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 /*Styling footer and adjusting position*/
-footer{
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    padding: 10px 0;
-    background-color: #02111B;
-    color: #F2F4FF;
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0;
+  background-color: #02111b;
+  color: #f2f4ff;
 }
 
 /*Styling form, data fields and buttons*/
 form {
-    position: relative;
-    top: 4em;
-    background-color: #6969B3;
-    width: 30em;
-    height: auto;
-    border-radius: 20px;
-    border: 2px solid black;
+  position: relative;
+  top: 4em;
+  background-color: #6969b3;
+  width: 30em;
+  height: auto;
+  border-radius: 20px;
+  border: 2px solid black;
 }
 
-.form_header{
-    position: relative;
-    /* padding-top: 0.3em; */
-    font-size: 30px;
-    background-color: #02111B;
-    border-top-left-radius: 18px;
-    border-top-right-radius: 18px;
-    color:#F2F4FF;
-    margin-bottom: 1em;
+.form_header {
+  position: relative;
+  font-size: 30px;
+  background-color: #02111b;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  color: #f2f4ff;
+  margin-bottom: 1em;
 }
 
-.form_header h4{
-    position: inherit;
-    top: 0.7em;
+.form_header h4 {
+  position: inherit;
+  top: 0.7em;
 }
 
-.entry_field{
-    width: 80%;
-    text-align: center;
-    border: 2px solid black;
+.entry_field {
+  width: 80%;
+  text-align: center;
+  border: 2px solid black;
 }
 
-.radio{
-    margin-left: 1em;
+.radio {
+  margin-left: 1em;
 }
-.submit_button{
-    background-color: #F2F4FF;
-    width: 40%;
-    border:  2px solid black;
-    margin-bottom: 1em;
-}
-
-.submit_button:hover{
-    background-color: #B8BBD6;
-    scale: 1.2;
-    border:  2px solid black;
-    
-}
-.login_box{
-    position: relative;
-    top: 5em;
-    /* margin-top: auto;
-    margin-bottom: auto; */
-    border-radius: 20px;
-    width: 30em;
-    height: 4em;
-    background-color: #6969B3;
-    border: 2px solid black;
+.submit_button {
+  background-color: #f2f4ff;
+  width: 40%;
+  border: 2px solid black;
+  margin-bottom: 1em;
 }
 
-.back_button{
-    position: relative;
-    top: 3em;
+.submit_button:hover {
+  background-color: #b8bbd6;
+  scale: 1.2;
+  border: 2px solid black;
+}
+.login_box {
+  position: relative;
+  top: 5em;
+  border-radius: 20px;
+  width: 30em;
+  height: 4em;
+  background-color: #6969b3;
+  border: 2px solid black;
 }
 
-.show_hide_password{
-    position: relative;
-    bottom: 2em;
-    left: 11em;
+.back_button {
+  position: relative;
+  top: 3em;
+}
+
+.show_hide_password {
+  position: relative;
+  bottom: 2em;
+  left: 11em;
 }

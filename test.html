@@ -113,7 +113,7 @@
                         </button>
 
                         <button type="button" class="btn">
-                            <i class="fa fa-comment-o"></i>
+                            <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
                         </button>
                     </div>
                 </div>
@@ -283,6 +283,86 @@
             </span>
         </div>
         <button type="button" class="btn post_button">Post</button> 
+    </div>
+
+    <!--Comment Box Pop up-->
+    <div class="comment_section">
+        <div class="comment_section_header d-flex flex-row ">
+            <h2 class="mt-2">Comments</h2>
+            <i class="fa fa-times-circle-o fa-2x" onclick="closeCommentBox()"></i>
+        </div>
+
+        <div class="comment_box d-flex flex-column mx-auto mt-2 rounded">
+
+            <!--First example of comment-->
+            <div class="comment d-flex flex-column mt-2">
+                <div class="commenter_profile d-flex flex-row">
+                    <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
+                    <p class="mt-2">Salty Player</p>
+                </div>
+        
+                <div class="comment_content">
+                    <p>Dan Heng IL is just too OP! The devs need to nerf him!!</p>
+                </div>
+                <!--Adding engagement buttons: like, dislike-->
+                <div class="d-flex flex-row">
+                    <button type="button" class="btn">
+                        <i class="fa fa-heart-o"></i>
+                    </button>
+
+                    <button type="button" class="btn">
+                        <i class="fa fa-thumbs-o-down"></i>
+                    </button>
+                </div>
+                <hr>
+            </div>
+
+             <!--Second example of comment-->
+             <div class="comment d-flex flex-column mt-2">
+                <div class="commenter_profile d-flex flex-row">
+                    <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
+                    <p class="mt-2">Top Cat</p>
+                </div>
+        
+                <div class="comment_content">
+                    <p>Yes you can stop farming now! Maybe try to get sparkle next update to maximise his damage.</p>
+                </div>
+                <!--Adding engagement buttons: like, dislike-->
+                <div class="d-flex flex-row">
+                    <button type="button" class="btn">
+                        <i class="fa fa-heart-o"></i>
+                    </button>
+
+                    <button type="button" class="btn">
+                        <i class="fa fa-thumbs-o-down"></i>
+                    </button>
+                </div>
+                <hr>
+            </div>
+
+             <!--Third example of comment-->
+             <div class="comment d-flex flex-column mt-2">
+                <div class="commenter_profile d-flex flex-row">
+                    <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
+                    <p class="mt-2">Tryhard Player</p>
+                </div>
+        
+                <div class="comment_content">
+                    <p>No!! You should never stop farming for your favourite character. Build Rating: 7/10. His relics can be improved.</p>
+                </div>
+                <!--Adding engagement buttons: like, dislike-->
+                <div class="d-flex flex-row">
+                    <button type="button" class="btn">
+                        <i class="fa fa-heart-o"></i>
+                    </button>
+
+                    <button type="button" class="btn">
+                        <i class="fa fa-thumbs-o-down"></i>
+                    </button>
+                </div>
+                <hr>
+            </div> 
+        </div>
     </div>
 
     <script src="main.js"></script>
