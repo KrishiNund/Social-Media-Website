@@ -563,19 +563,19 @@ function showEventPosts() {
 }
 
 //close comment box on a post
-function closeCommentBox(){
-    commentBox = document.querySelector(".comment_section");
-    if (commentBox.style.display == "block") {
-        commentBox.style.display = "none";
-    }
+function closeCommentBox() {
+  commentBox = document.querySelector(".comment_section");
+  if (commentBox.style.display == "block") {
+    commentBox.style.display = "none";
+  }
 }
 
 //open comment box on a post
 function showCommentBox() {
-    commentBox = document.querySelector(".comment_section");
-    if (commentBox.style.display == "block") {
-      commentBox.style.display = "none";
-    } else {
-      commentBox.style.display = "block";
-    }
+  commentBox = document.querySelector(".comment_section");
+  if (commentBox.style.display == "block") {
+    commentBox.style.display = "none";
+  } else {
+    commentBox.style.display = "block";
+  }
 }
