@@ -408,7 +408,7 @@ function loadSignUpPage() {
             </a>
         </div>
         <!--sign up form with different data fields-->
-        <form id="signupForm" class="mx-auto text-center d-flex flex-column" method = "post" onsubmit="checkValidation(event)">
+        <form id="signupForm" class="mx-auto text-center d-flex flex-column" method = "post" onsubmit="validateSignup(event)">
             <div class="form_header">
                 <h4>Sign up<hr></h4>
             </div>
@@ -473,17 +473,17 @@ function loadLoginPage() {
         </div>
 
         <!--Login Form with username and password fields-->
-        <form class="mx-auto text-center d-flex flex-column">
+        <form id="loginForm" name="loginForm" class="mx-auto text-center d-flex flex-column" method = "post" onsubmit="validateLogin(event)">
             <div class="form_header">
                 <h4>Login<hr></h4>
             </div>
 
             <div class="mb-3">
-                <input type="text" class="form-input form-control entry_field mx-auto" placeholder="Username" required>
+                <input type="text" id="username" name="username" class="form-input form-control entry_field mx-auto" placeholder="Username" required>
             </div>
 
             <div class="form-group">
-                <input type="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
+                <input type="password" id="password" name="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
                 <i class="fa fa-eye-slash show_hide_password"></i>
             </div>
 
@@ -562,7 +562,7 @@ function showEventPosts() {
 
   eventPostsButton = document.getElementById("eventPostsButton");
   eventPostsButton.style.textDecoration = "underline";
-}
+} 
 
 //close comment box on a post
 function closeCommentBox() {
@@ -581,12 +581,11 @@ function showCommentBox() {
     commentBox.style.display = "block";
   }
 }
-
-
+ 
 //when submit button is pressed on sign up form
 // const form = document.getElementById("signupForm");
 
-async function checkValidation(event){
+async function validateSignup(event){
     event.preventDefault();
     const form = document.getElementById("signupForm");
     const formData = new FormData(form);
@@ -635,3 +634,48 @@ async function checkValidation(event){
     });
 }
 
+async function validateLogin(event){
+    event.preventDefault();
+    const form = document.getElementById("loginForm");
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    fetch('/M00934333/validate-login', {
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({username, password})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === "User found"){
+            console.log("here as well");
+            Swal.fire({
+                title: "Authentication Successful",
+                text:"You've successfully logged in",
+                icon:"success", 
+                showCloseButton: true
+            })
+            form.reset();
+            
+        } else {
+            Swal.fire({
+                title: "Authentication Failed",
+                text:"Invalid Credentials!",
+                icon:"error", 
+                showCloseButton: true
+            })
+            form.reset();
+        }
+    })
+    .catch(error => {
+        console.log('Error',error);
+        Swal.fire({
+            title:'Oops...',
+            text:'Something went wrong!',
+            icon:'error',
+            showCloseButton:true
+        });
+    });
+}

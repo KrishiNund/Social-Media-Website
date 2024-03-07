@@ -93,6 +93,29 @@ async function validateSignup(req, res){
   }
 }
 
+app.post('/M00934333/validate-login', validateLogin);
+
+async function validateLogin(req, res){
+
+  const username = req.body.username;
+  const password = req.body.password;
+  
+  //checking if username and password match a user in database
+  const query = {username:username,password:password};
+  const user = await collection.findOne(query);
+  console.log(user);
+
+  //if there is a user with those credentials
+  if (user) {
+    console.log("here");
+    res.status(201).send({message:"User found"});
+  }
+  else{
+    // const result = await signup(req.body);
+    // console.log("Added successfully");
+    res.status(404).send({message:"User not found"});
+  }
+}
 
 //starting server
 app.listen(PORT, () => {
