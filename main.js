@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("hashchange", () => {
   goTo(window.location.hash);
 });
+
 function goTo(hash) {
   switch (hash) {
     case "#/signup":
@@ -396,6 +397,7 @@ function loadHomePage() {
 }
 
 //loads sign up page's html elements
+
 function loadSignUpPage() {
   const content = `<link rel="stylesheet" href="forms.css">
     <!--Back Button-->
@@ -406,25 +408,25 @@ function loadSignUpPage() {
             </a>
         </div>
         <!--sign up form with different data fields-->
-        <form class="mx-auto text-center d-flex flex-column">
+        <form id="signupForm" class="mx-auto text-center d-flex flex-column" method = "post" onsubmit="checkValidation(event)">
             <div class="form_header">
                 <h4>Sign up<hr></h4>
             </div>
 
             <div class="mb-3">
-                <input type="text" class="form-input form-control mx-auto entry_field" placeholder="Full Name" required>
+                <input type="text" name="fullName" class="form-input form-control mx-auto entry_field" placeholder="Full Name" required>
             </div>
 
             <div class="mb-3">
-                <input type="text" class="form-input form-control entry_field mx-auto" placeholder="Username" required>
+                <input type="text" name="username" id="username" class="form-input form-control entry_field mx-auto" placeholder="Username" required>
             </div>
 
             <div class="mb-3">
-                <input type="email" class="form-input form-control entry_field mx-auto" placeholder="Email" required>
+                <input type="email" name="email" id="email" class="form-input form-control entry_field mx-auto" placeholder="Email" required>
             </div>
 
             <div class="form-group">
-                <input type="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
+                <input type="password" name ="password" id="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
                 <i class="fa fa-eye-slash show_hide_password"></i>
             </div>
             
@@ -443,7 +445,7 @@ function loadSignUpPage() {
 
             <div class="form-group mb-3">
                 <label for="dob">Date of Birth: </label>
-                <input type="date" style="border-radius: 20px; border: 2px solid black" id="dob" name="dob" required>
+                <input type="date" name = "dob" style="border-radius: 20px; border: 2px solid black" id="dob" name="dob" required>
             </div>
 
             <button type="submit" class="btn submit_button mx-auto">Submit</button>
@@ -579,3 +581,57 @@ function showCommentBox() {
     commentBox.style.display = "block";
   }
 }
+
+
+//when submit button is pressed on sign up form
+// const form = document.getElementById("signupForm");
+
+async function checkValidation(event){
+    event.preventDefault();
+    const form = document.getElementById("signupForm");
+    const formData = new FormData(form);
+
+    const jsonData = {};
+    formData.forEach((value,key)=>{
+        jsonData[key] = value;
+    });
+
+    fetch('/M00934333/validate-signup', {
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify(jsonData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.message === "Username already taken"){
+            Swal.fire({
+                title: "Username already taken!",
+                text:"Choose another username",
+                icon:"error", 
+                showCloseButton: true
+            })
+            form.reset();
+        } else {
+            Swal.fire({
+                title: "Sign Up Successfully",
+                text:"You've successfully created an account!",
+                icon:"success", 
+                showCloseButton: true
+            })
+            form.reset();
+        }
+    })
+    .catch(error => {
+        console.log('Error',error);
+        Swal.fire({
+            title:'Oops...',
+            text:'Something went wrong!',
+            icon:'error',
+            showCloseButton:true
+        });
+    });
+}
+
