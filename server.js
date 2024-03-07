@@ -4,6 +4,7 @@ const express = require("express");
 const mongodb = require("mongodb");
 const bodyParser = require("body-parser");
 const expressSession = require('express-session');
+const {check, validationResult} = require('express-validator');
 const { sign } = require("crypto");
 
 //creating express application
@@ -65,7 +66,14 @@ const database = client.db("Social_Media_Website");
 const collection = database.collection("Example_Users");
 
 
-app.post('/M00934333/validate-signup',validateSignup);
+app.post('/M00934333/validate-signup',[
+  check('fullName').notEmpty().withMessage('Name cannot be blank').matches(/^[A-Za-z\s]+$/).withMessage('Name cannot contain digits'),
+  check('username').notEmpty().withMessage('Username cannot be blank').isLength({max:8}).withMessage('Max Username Length is 8'),
+  check('email').isEmail().withMessage('Invalid email'),
+  check('password').isLength({min:6}).withMessage('Password must contain at least 6 characters'),
+  check('gender').isIn(['male','female','other']).withMessage('Invalid Gender'),
+  check('dob').isISO8601().withMessage('Invalid Date format')
+],validateSignup);
 
 async function signup(userDetails){
   // console.log(req.body);
@@ -75,6 +83,7 @@ async function signup(userDetails){
 }
 
 async function validateSignup(req, res){
+  const errors = validationResult(req);
   const username = req.body.username;
   // console.log(username);
 
@@ -86,7 +95,11 @@ async function validateSignup(req, res){
   if (user) {
     res.status(409).send({message:"Username already taken"});
   }
-  else{
+  else if (!errors.isEmpty()){
+    const errorMessages = errors.array().map(error => error.msg);
+    res.status(400).send({message:"Error List", data: errorMessages});
+  }
+  else {
     const result = await signup(req.body);
     console.log("Added successfully");
     res.status(201).send({message:"Signup successful!", data:result});
@@ -111,8 +124,6 @@ async function validateLogin(req, res){
     res.status(201).send({message:"User found"});
   }
   else{
-    // const result = await signup(req.body);
-    // console.log("Added successfully");
     res.status(404).send({message:"User not found"});
   }
 }

@@ -433,14 +433,14 @@ function loadSignUpPage() {
             <div class="form-group mb-3">
                 <label for="gender">Gender: </label>
 
-                <input type="radio" class="radio" name="gender" value="male">
-                <label for="fullName" class="label">Male</label>
+                <input type="radio" class="radio" name="gender" value="male" required>
+                <label for="gender" class="label">Male</label>
 
-                <input type="radio" class="radio" name="gender" value="female">
-                <label for="fullName" class="label">Female</label>
+                <input type="radio" class="radio" name="gender" value="female" required>
+                <label for="gender" class="label">Female</label>
 
-                <input type="radio" class="radio" name="gender" value="other">
-                <label for="fullName" class="label">Rather not disclose</label>
+                <input type="radio" class="radio" name="gender" value="other" required>
+                <label for="gender" class="label">Rather not disclose</label>
             </div>
 
             <div class="form-group mb-3">
@@ -613,6 +613,14 @@ async function validateSignup(event){
                 showCloseButton: true
             })
             form.reset();
+        } else if (data.message === "Error List"){
+            Swal.fire({
+                title: "Sign up Failed",
+                html:data.data,
+                icon:"error", 
+                showCloseButton: true
+            })
+            form.reset();
         } else {
             Swal.fire({
                 title: "Sign Up Successfully",
@@ -631,6 +639,7 @@ async function validateSignup(event){
             icon:'error',
             showCloseButton:true
         });
+        form.reset();
     });
 }
 
@@ -677,5 +686,6 @@ async function validateLogin(event){
             icon:'error',
             showCloseButton:true
         });
+        form.reset();
     });
 }
