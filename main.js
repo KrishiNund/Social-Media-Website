@@ -71,7 +71,7 @@ function createHeader() {
                          <img src="images/icons8-user-profile-48.png" alt="User Profile" class="rounded-circle">
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end">
-                          <li><span class="dropdown-item-text">Status:Logged In/ Logged Out</span></li>
+                          <li><span id="statusText" class="dropdown-item-text">Status:Logged Out</span></li>
                       </ul>
                   </div>
 
@@ -280,7 +280,7 @@ function loadHomePage() {
   <p>Account Creation Date:XX-XX-XXXX</p>
 
   <div class="d-flex flex-row mx-auto">
-      <button type="button" class="btn">Log Out</button>
+      <button type="button" class="btn" onclick="logOut()">Log Out</button>
       <button type="button" class="btn">Delete account</button>
   </div>
 
@@ -626,7 +626,10 @@ async function validateSignup(event){
                 title: "Sign Up Successfully",
                 text:"You've successfully created an account!",
                 icon:"success", 
-                showCloseButton: true
+                showCloseButton: true,
+                willClose:function(){
+                    loadLoginPage();
+                }
             })
             form.reset();
         }
@@ -651,6 +654,7 @@ async function validateLogin(event){
 
     fetch('/M00934333/validate-login', {
         method:'POST',
+        credentials:'include',
         headers:{
             'Content-Type':'application/json'
         },
@@ -659,12 +663,17 @@ async function validateLogin(event){
     .then(response => response.json())
     .then(data => {
         if (data.message === "User found"){
-            console.log("here as well");
+            // console.log("here as well");
             Swal.fire({
                 title: "Authentication Successful",
                 text:"You've successfully logged in",
                 icon:"success", 
-                showCloseButton: true
+                showCloseButton: true,
+                willClose: function(){
+                    loadHomePage();
+                    const statusText = document.getElementById("statusText");
+                    statusText.innerHTML = "Status:Logged In";
+                }
             })
             form.reset();
             
@@ -687,5 +696,47 @@ async function validateLogin(event){
             showCloseButton:true
         });
         form.reset();
+    });
+}
+
+function logOut(){
+    fetch('/M00934333/logout',{
+        method:'GET',
+        credentials:'include',
+        headers:{
+            'Content-Type':'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data=>{
+      if (data.message === "Log out successful"){
+        Swal.fire({
+            title: "Log out Successful",
+            text:"You've successfully logged out",
+            icon:"success", 
+            showCloseButton: true,
+            willClose: function(){
+                loadHomePage();
+                const statusText = document.getElementById("statusText");
+                statusText.innerHTML = "Status:Logged Out";
+            }
+        })
+      } else {
+        Swal.fire({
+            title: "Log out Unsuccessful",
+            text:"You're already logged out!",
+            icon:"error", 
+            showCloseButton: true
+        })
+      }
+    })
+    .catch(error=>{
+        console.log("Error",error);
+        Swal.fire({
+            title: "Oops...",
+            text:"Something went wrong!",
+            icon:"error", 
+            showCloseButton: true
+        })
     });
 }

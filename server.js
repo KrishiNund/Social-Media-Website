@@ -3,7 +3,7 @@ const path = require("path");
 const express = require("express");
 const mongodb = require("mongodb");
 const bodyParser = require("body-parser");
-const expressSession = require('express-session');
+const session = require('express-session');
 const {check, validationResult} = require('express-validator');
 const { sign } = require("crypto");
 
@@ -11,19 +11,18 @@ const { sign } = require("crypto");
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+//configure express to use express-session
+app.use(
+  session({
+    secret:'cst2120 secret',
+    cookie:{maxAge:360000},
+    resave:false,
+    saveUninitialized:false,
+  })
+);
 //to parse form data correctly
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-//configure express to use express-session
-app.use(
-  expressSession({
-    secret:'cst2120 secret',
-    cookie:{maxAge:6000},
-    resave:false,
-    saveUninitialized:true
-  })
-);
 
 //connection details
 const password = "M00934333+2023";
@@ -63,7 +62,7 @@ connectToMongoDB();
 app.use("/", express.static(path.join(__dirname)));
 
 const database = client.db("Social_Media_Website");
-const collection = database.collection("Example_Users");
+// const collection = database.collection("Example_Users");
 
 
 app.post('/M00934333/validate-signup',[
@@ -76,13 +75,27 @@ app.post('/M00934333/validate-signup',[
 ],validateSignup);
 
 async function signup(userDetails){
+  const collection = database.collection("Users");
   // console.log(req.body);
   //inserting user details in database
   const result = await collection.insertOne(userDetails);
+
+  const insertedUserId = result.insertedId;
+
+  collection.updateOne(
+    {_id:insertedUserId},
+    {
+      $set:{
+        followers:[],
+        following:[],
+      }
+    }
+  )
   return result;
 }
 
 async function validateSignup(req, res){
+  const collection = database.collection("Users");
   const errors = validationResult(req);
   const username = req.body.username;
   // console.log(username);
@@ -109,7 +122,7 @@ async function validateSignup(req, res){
 app.post('/M00934333/validate-login', validateLogin);
 
 async function validateLogin(req, res){
-
+  const collection = database.collection("Users");
   const username = req.body.username;
   const password = req.body.password;
   
@@ -120,14 +133,30 @@ async function validateLogin(req, res){
 
   //if there is a user with those credentials
   if (user) {
-    console.log("here");
+    // console.log("here");
     res.status(201).send({message:"User found"});
+    req.session.username = username;
+    console.log(username);
+    console.log(req.session.username);
   }
   else{
     res.status(404).send({message:"User not found"});
   }
 }
 
+app.get('/M00934333/logout',logOut);
+
+function logOut(req,res){
+  // console.log(req.session.username);
+  // console.log("here");
+  req.session.destroy((err)=>{
+    if(err){
+      res.status(404).send({message:"Oops...Something went wrong!"});
+    } else {
+      res.status(201).send({message:"Log out successful"});
+    }
+  })
+}
 //starting server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
