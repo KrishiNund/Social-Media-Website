@@ -1,3 +1,5 @@
+// const { default: Swal } = require("sweetalert2");
+
 //after webpage has loaded, execute the awaiting javascript
 document.addEventListener("DOMContentLoaded", () => {
   goTo(window.location.hash);
@@ -71,7 +73,7 @@ function createHeader() {
                          <img src="images/icons8-user-profile-48.png" alt="User Profile" class="rounded-circle">
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end">
-                          <li><span id="statusText" class="dropdown-item-text">Status:Logged Out</span></li>
+                          <li><span id="statusText" class="dropdown-item-text"><span id="sessionUsername"></span>Status:Logged Out</span></li>
                       </ul>
                   </div>
 
@@ -114,16 +116,16 @@ function loadHomePage() {
           <!--First Post Example-->
           <div class="post">
               <!--Post related buttons-->
-              <div class="user_info d-flex align-items-center">
+              <div class="user_info d-flex flex-row align-items-center">
                   <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
                   <span style="position: relative; left: 1.5em;">CatKittyCatCat</span>
                   <button type="button" class="btn follow_button">Follow</button>
-                  <button type="button" class="btn">⋮</button>
+                  <button type="button" class="btn options_button">⋮</button>
               </div>
               
               <!--Post Contents-->
               <div class="post_content d-flex flex-column">
-                  <span><h5>Can I stop farming now?</h2></span>
+                  <span><h5>Can I stop farming now?</h5></span>
                   <img src="images/dan_heng_build.jpg" alt="dan_heng_build" class="img-fluid rounded" >
                   <span style="color: #533A7B;"><h6>#danheng #buildreview</h6></span>
               </div>
@@ -153,12 +155,12 @@ function loadHomePage() {
                   <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
                   <span style="position: relative; left: 1.5em;">GingerCat</span>
                   <button type="button" class="btn follow_button">Follow</button>
-                  <button type="button" class="btn">⋮</button>
+                  <button type="button" class="btn options_button">⋮</button>
               </div>
               
               <!--Post Contents-->
               <div class="post_content d-flex flex-column">
-                  <span><h5>Which banner do you recommend pulling on?</h2></span>
+                  <span><h5>Which banner do you recommend pulling on?</h5></span>
                   <img src="images/banner.jpg" alt="dan_heng_build" class="img-fluid rounded" >
                   <span style="color: #533A7B;"><h6>#banner #newupdate</h6></span>
               </div>
@@ -188,12 +190,12 @@ function loadHomePage() {
                   <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
                   <span style="position: relative; left: 1.5em;">GigaCat</span>
                   <button type="button" class="btn follow_button">Follow</button>
-                  <button type="button" class="btn">⋮</button>
+                  <button type="button" class="btn options_button">⋮</button>
               </div>
               
               <!--Post Contents-->
               <div class="post_content d-flex flex-column">
-                  <span><h5>How to defeat this boss in less than 2 turns?</h2></span>
+                  <span><h5>How to defeat this boss in less than 2 turns?</h5></span>
                   <img src="images/boss_battle.jpg" alt="dan_heng_build" class="img-fluid rounded" >
                   <span style="color: #533A7B;"><h6>#bossbattle #cocolia</h6></span>
               </div>
@@ -300,17 +302,17 @@ function loadHomePage() {
           <p>Add </p>
           <i class="fa fa-camera"></i>
           <p>:</p>
-          <input type="file" accept="image/*">
+          <input id="imageUpload" type="file" accept="image/*">
       </span>
 
       <span class="d-flex flex-row media_upload_button">
           <p>Add</p>
           <i class="fa fa-video-camera"></i>
           <p>:</p>
-          <input type="file" accept="video/*">
+          <input id="videoUpload" type="file" accept="video/*">
       </span>
   </div>
-  <button type="button" class="btn post_button">Post</button> 
+  <button type="button" class="btn post_button" onclick="createPost()">Post</button> 
 </div>
 
 <!--Comment Box Pop up-->
@@ -582,9 +584,8 @@ function showCommentBox() {
   }
 }
  
-//when submit button is pressed on sign up form
-// const form = document.getElementById("signupForm");
 
+//when submit button is pressed on sign up form
 async function validateSignup(event){
     event.preventDefault();
     const form = document.getElementById("signupForm");
@@ -646,6 +647,7 @@ async function validateSignup(event){
     });
 }
 
+//validate login
 async function validateLogin(event){
     event.preventDefault();
     const form = document.getElementById("loginForm");
@@ -663,6 +665,7 @@ async function validateLogin(event){
     .then(response => response.json())
     .then(data => {
         if (data.message === "User found"){
+            const username = data.data;
             // console.log("here as well");
             Swal.fire({
                 title: "Authentication Successful",
@@ -672,7 +675,7 @@ async function validateLogin(event){
                 willClose: function(){
                     loadHomePage();
                     const statusText = document.getElementById("statusText");
-                    statusText.innerHTML = "Status:Logged In";
+                    statusText.innerHTML = `Username:<span id="sessionUsername">${username}</span><br>Status:Logged In`;
                 }
             })
             form.reset();
@@ -699,17 +702,11 @@ async function validateLogin(event){
     });
 }
 
-function logOut(){
-    fetch('/M00934333/logout',{
-        method:'GET',
-        credentials:'include',
-        headers:{
-            'Content-Type':'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data=>{
-      if (data.message === "Log out successful"){
+//logout function 
+async function logOut(){
+    const username = document.getElementById("sessionUsername").innerText;
+    
+    if (username != ""){
         Swal.fire({
             title: "Log out Successful",
             text:"You've successfully logged out",
@@ -721,22 +718,125 @@ function logOut(){
                 statusText.innerHTML = "Status:Logged Out";
             }
         })
-      } else {
+    } else {
         Swal.fire({
-            title: "Log out Unsuccessful",
+            title: "Invalid Operation",
             text:"You're already logged out!",
             icon:"error", 
-            showCloseButton: true
+            showCloseButton: true,
         })
-      }
-    })
-    .catch(error=>{
-        console.log("Error",error);
+    }
+    // fetch('/M00934333/logout',{
+    //     method:'GET',
+    //     credentials:'include',
+    //     headers:{
+    //         'Content-Type':'application/json'
+    //     }
+    // })
+    // .then(response => response.json())
+    // .then(data=>{
+    //   if (data.message === "Log out successful"){
+    //     Swal.fire({
+    //         title: "Log out Successful",
+    //         text:"You've successfully logged out",
+    //         icon:"success", 
+    //         showCloseButton: true,
+    //         willClose: function(){
+    //             loadHomePage();
+    //             const statusText = document.getElementById("statusText");
+    //             statusText.innerHTML = "Status:Logged Out";
+    //         }
+    //     })
+    //   } else {
+    //     Swal.fire({
+    //         title: "Log out Unsuccessful",
+    //         text:"You're already logged out!",
+    //         icon:"error", 
+    //         showCloseButton: true
+    //     })
+    //   }
+    // })
+    // .catch(error=>{
+    //     console.log("Error",error);
+    //     Swal.fire({
+    //         title: "Oops...",
+    //         text:"Something went wrong!",
+    //         icon:"error", 
+    //         showCloseButton: true
+    //     })
+    // });
+}
+
+async function createPost(){
+    const username = document.getElementById("sessionUsername").innerText;
+    const postArea = document.querySelector(".post_area");
+    const postText = document.getElementById("post_text").value;
+    if (postText === ""){
         Swal.fire({
-            title: "Oops...",
-            text:"Something went wrong!",
+            title: "Blank Post",
+            text:"Post cannot be empty",
             icon:"error", 
             showCloseButton: true
+        });
+    } else {
+        console.log("Here1");
+        const postData = {
+            user:username,
+            text: postText,
+            likes:[],
+            dislikes:[]
+        }
+
+        fetch('/M00934333/create-post',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify(postData)
         })
-    });
+        .then(response => response.json())
+        .then(data =>{
+            if(data.message === "Post Created Successfully"){
+                postArea.innerHTML += `
+                <div class="post">
+                    <!--Post related buttons-->
+                    <div class="user_info d-flex align-items-center">
+                        <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                        <span style="position: relative; left: 1.5em;">${username}</span>
+                        <button type="button" class="btn follow_button">Follow</button>
+                        <button type="button" class="btn options_button">⋮</button>
+                    </div>
+                    
+                    <!--Post Contents-->
+                    <div class="post_content d-flex flex-column">
+                        <span><h5>${postText}</h5></span>
+                    </div>
+        
+                    <hr>
+
+                    <!--Adding engagement buttons: like, dislike, comment-->
+                    <div class="d-flex flex-row engagement_buttons">
+                        <button type="button" class="btn">
+                            <i class="fa fa-heart-o"></i>
+                        </button>
+    
+                        <button type="button" class="btn">
+                            <i class="fa fa-thumbs-o-down"></i>
+                        </button>
+    
+                        <button type="button" class="btn">
+                            <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                        </button>
+                    </div>
+                </div>`;
+                Swal.fire({
+                    title: "Post Created",
+                    text:"Post has been created successfully!",
+                    icon:"success", 
+                    showCloseButton: true
+                });
+                closePostBox();
+            }
+        })
+    }
 }

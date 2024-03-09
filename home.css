@@ -123,19 +123,32 @@ body {
   top: 1.9em;
 }
 
+/* .user_info button {
+  position: absolute;
+  left: 90%;
+  margin-left: 25px;
+  border: none;
+} */
+
 .user_profile {
   position: relative;
   left: 1em;
 }
 
-.user_info button {
-  position: relative;
-  left: 38em;
+
+.follow_button {
+  position: absolute;
+  left: 85%;
+  background-color: #6969b3;
+  border-radius: 20px;
   border: none;
 }
 
-.follow_button {
-  background-color: #6969b3;
+.options_button{
+  position: absolute;
+  left: 95%;
+  margin-right: 5px;
+  /* background-color: #6969b3; */
   border-radius: 20px;
   border: none;
 }
@@ -146,7 +159,7 @@ body {
 .post_content {
   position: relative;
   width: 820px;
-  height: 400px;
+  height: auto;
   top: 2em;
   left: 2em;
 }

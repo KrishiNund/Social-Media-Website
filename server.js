@@ -134,28 +134,38 @@ async function validateLogin(req, res){
   //if there is a user with those credentials
   if (user) {
     // console.log("here");
-    res.status(201).send({message:"User found"});
-    req.session.username = username;
-    console.log(username);
-    console.log(req.session.username);
+    res.status(201).send({message:"User found",data:user.username});
+    // req.session.username = username;
+    // console.log(username);
+    // console.log(req.session.username);
   }
   else{
     res.status(404).send({message:"User not found"});
   }
 }
 
-app.get('/M00934333/logout',logOut);
+// app.get('/M00934333/logout',logOut);
 
-function logOut(req,res){
-  // console.log(req.session.username);
-  // console.log("here");
-  req.session.destroy((err)=>{
-    if(err){
-      res.status(404).send({message:"Oops...Something went wrong!"});
-    } else {
-      res.status(201).send({message:"Log out successful"});
-    }
-  })
+// function logOut(req,res){
+//   // console.log(req.session.username);
+//   // console.log("here");
+//   req.session.destroy((err)=>{
+//     if(err){
+//       res.status(404).send({message:"Oops...Something went wrong!"});
+//     } else {
+//       res.status(201).send({message:"Log out successful"});
+//     }
+//   })
+// }
+
+app.post('/M00934333/create-post',storePost);
+
+async function storePost(req,res){
+  const collection = database.collection("Posts");
+  const postDetails = req.body;
+  const result = await collection.insertOne(postDetails);
+
+  res.status(201).send({message:"Post Created Successfully", data: result});
 }
 //starting server
 app.listen(PORT, () => {
