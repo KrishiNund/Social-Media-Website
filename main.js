@@ -429,7 +429,7 @@ function loadSignUpPage() {
 
             <div class="form-group">
                 <input type="password" name ="password" id="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
-                <i class="fa fa-eye-slash show_hide_password"></i>
+                <i class="fa fa-eye-slash show_hide_password" onclick="showHidePassword()"></i>
             </div>
             
             <div class="form-group mb-3">
@@ -486,7 +486,7 @@ function loadLoginPage() {
 
             <div class="form-group">
                 <input type="password" id="password" name="password" class="form-input form-control entry_field mx-auto" placeholder="Password" required>
-                <i class="fa fa-eye-slash show_hide_password"></i>
+                <i class="fa fa-eye-slash show_hide_password" onclick="showHidePassword()"></i>
             </div>
 
             <button type="submit" class="btn submit_button mx-auto">Confirm</button>
@@ -583,7 +583,26 @@ function showCommentBox() {
     commentBox.style.display = "block";
   }
 }
- 
+
+
+//if show is pressed, show actual password
+//else if hide is pressed, hide password
+//by default, password is hidden
+function showHidePassword() {
+    //show/hide password
+    let showHideButton = document.querySelector(".show_hide_password");
+    let password = document.getElementById("password");
+    
+    if (password.type === "password"){
+        password.type = "text";
+        showHideButton.classList.remove("fa-eye-slash");
+        showHideButton.classList.add("fa-eye");
+    } else {
+        password.type = "password";
+        showHideButton.classList.remove("fa-eye");
+        showHideButton.classList.add("fa-eye-slash");
+    }
+}
 
 //when submit button is pressed on sign up form
 async function validateSignup(event){
@@ -630,6 +649,7 @@ async function validateSignup(event){
                 showCloseButton: true,
                 willClose:function(){
                     loadLoginPage();
+                    window.location.hash = "#/login";
                 }
             })
             form.reset();
@@ -673,10 +693,10 @@ async function validateLogin(event){
                 icon:"success", 
                 showCloseButton: true,
                 willClose: function(){
+                    // window.location.hash = ""; 
                     loadHomePage();
-                    window.location.hash = "";
                     const statusText = document.getElementById("statusText");
-                    statusText.innerHTML = `Username:<span id="sessionUsername">${username}</span><br>Status:Logged In`;
+                    statusText.innerHTML = `Username:<span id="sessionUsername">${username}</span><br>Status:Logged In`;    
                 }
             })
             form.reset();
