@@ -674,6 +674,7 @@ async function validateLogin(event){
                 showCloseButton: true,
                 willClose: function(){
                     loadHomePage();
+                    window.location.hash = "";
                     const statusText = document.getElementById("statusText");
                     statusText.innerHTML = `Username:<span id="sessionUsername">${username}</span><br>Status:Logged In`;
                 }
@@ -726,51 +727,16 @@ async function logOut(){
             showCloseButton: true,
         })
     }
-    // fetch('/M00934333/logout',{
-    //     method:'GET',
-    //     credentials:'include',
-    //     headers:{
-    //         'Content-Type':'application/json'
-    //     }
-    // })
-    // .then(response => response.json())
-    // .then(data=>{
-    //   if (data.message === "Log out successful"){
-    //     Swal.fire({
-    //         title: "Log out Successful",
-    //         text:"You've successfully logged out",
-    //         icon:"success", 
-    //         showCloseButton: true,
-    //         willClose: function(){
-    //             loadHomePage();
-    //             const statusText = document.getElementById("statusText");
-    //             statusText.innerHTML = "Status:Logged Out";
-    //         }
-    //     })
-    //   } else {
-    //     Swal.fire({
-    //         title: "Log out Unsuccessful",
-    //         text:"You're already logged out!",
-    //         icon:"error", 
-    //         showCloseButton: true
-    //     })
-    //   }
-    // })
-    // .catch(error=>{
-    //     console.log("Error",error);
-    //     Swal.fire({
-    //         title: "Oops...",
-    //         text:"Something went wrong!",
-    //         icon:"error", 
-    //         showCloseButton: true
-    //     })
-    // });
 }
 
 async function createPost(){
     const username = document.getElementById("sessionUsername").innerText;
     const postArea = document.querySelector(".post_area");
     const postText = document.getElementById("post_text").value;
+    const imageUploaded = document.getElementById("imageUpload").files[0];
+    const videoUploaded = document.getElementById("videoUpload").files[0];
+    let imageURL, videoURL;
+
     if (postText === ""){
         Swal.fire({
             title: "Blank Post",
@@ -779,7 +745,7 @@ async function createPost(){
             showCloseButton: true
         });
     } else {
-        console.log("Here1");
+        // console.log("Here1");
         const postData = {
             user:username,
             text: postText,
@@ -797,38 +763,83 @@ async function createPost(){
         .then(response => response.json())
         .then(data =>{
             if(data.message === "Post Created Successfully"){
-                postArea.innerHTML += `
-                <div class="post">
-                    <!--Post related buttons-->
-                    <div class="user_info d-flex align-items-center">
-                        <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                        <span style="position: relative; left: 1.5em;">${username}</span>
-                        <button type="button" class="btn follow_button">Follow</button>
-                        <button type="button" class="btn options_button">⋮</button>
-                    </div>
-                    
-                    <!--Post Contents-->
-                    <div class="post_content d-flex flex-column">
-                        <span><h5>${postText}</h5></span>
-                    </div>
-        
-                    <hr>
+                if (imageUploaded){
+                    imageURL =URL.createObjectURL(imageUploaded);
+                    postArea.innerHTML += `
+                    <div class="post">
+                        <!--Post related buttons-->
+                        <div class="user_info d-flex align-items-center">
+                            <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                            <span style="position: relative; left: 1.5em;">${username}</span>
+                            <button type="button" class="btn follow_button">Follow</button>
+                            <button type="button" class="btn options_button">⋮</button>
+                        </div>
+                        
+                        <!--Post Contents-->
+                        <div class="post_content d-flex flex-column">
+                            <span><h5>${postText}</h5></span>
+                            <img src="${imageURL}" class="img-fluid rounded" >
+                        </div>
+            
+                        <hr>`;
+                } else if (videoUploaded){
+                    videoURL = URL.createObjectURL(videoUploaded);
+                    postArea.innerHTML += `
+                    <div class="post">
+                        <!--Post related buttons-->
+                        <div class="user_info d-flex align-items-center">
+                            <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                            <span style="position: relative; left: 1.5em;">${username}</span>
+                            <button type="button" class="btn follow_button">Follow</button>
+                            <button type="button" class="btn options_button">⋮</button>
+                        </div>
+                        
+                        <!--Post Contents-->
+                        <div class="post_content d-flex flex-column">
+                            <span><h5>${postText}</h5></span>
+                            <video class="img-fluid" controls>
+                                <source src="${videoURL}" type="video/mp4">
+                            </video>
+                        </div>
+            
+                        <hr>`;
 
-                    <!--Adding engagement buttons: like, dislike, comment-->
-                    <div class="d-flex flex-row engagement_buttons">
-                        <button type="button" class="btn">
-                            <i class="fa fa-heart-o"></i>
-                        </button>
-    
-                        <button type="button" class="btn">
-                            <i class="fa fa-thumbs-o-down"></i>
-                        </button>
-    
-                        <button type="button" class="btn">
-                            <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
-                        </button>
-                    </div>
+                } else {
+                    postArea.innerHTML += `
+                    <div class="post">
+                        <!--Post related buttons-->
+                        <div class="user_info d-flex align-items-center">
+                            <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                            <span style="position: relative; left: 1.5em;">${username}</span>
+                            <button type="button" class="btn follow_button">Follow</button>
+                            <button type="button" class="btn options_button">⋮</button>
+                        </div>
+                        
+                        <!--Post Contents-->
+                        <div class="post_content d-flex flex-column">
+                            <span><h5>${postText}</h5></span>
+                        </div>
+            
+                        <hr>`;
+
+                }
+
+                postArea.innerHTML +=`<!--Adding engagement buttons: like, dislike, comment-->
+                <div class="d-flex flex-row engagement_buttons">
+                    <button type="button" class="btn">
+                        <i class="fa fa-heart-o"></i>
+                    </button>
+
+                    <button type="button" class="btn">
+                        <i class="fa fa-thumbs-o-down"></i>
+                    </button>
+
+                    <button type="button" class="btn">
+                        <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                    </button>
+                </div>
                 </div>`;
+
                 Swal.fire({
                     title: "Post Created",
                     text:"Post has been created successfully!",
@@ -840,5 +851,3 @@ async function createPost(){
         })
     }
 }
-
-

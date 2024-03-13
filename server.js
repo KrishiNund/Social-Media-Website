@@ -5,7 +5,9 @@ const mongodb = require("mongodb");
 const bodyParser = require("body-parser");
 const session = require('express-session');
 const {check, validationResult} = require('express-validator');
+const multer = require('multer');
 const { sign } = require("crypto");
+
 
 //creating express application
 const app = express();
@@ -144,19 +146,14 @@ async function validateLogin(req, res){
   }
 }
 
-// app.get('/M00934333/logout',logOut);
-
-// function logOut(req,res){
-//   // console.log(req.session.username);
-//   // console.log("here");
-//   req.session.destroy((err)=>{
-//     if(err){
-//       res.status(404).send({message:"Oops...Something went wrong!"});
-//     } else {
-//       res.status(201).send({message:"Log out successful"});
-//     }
-//   })
-// }
+//creating storage for image uploads
+// const imageStorage = multer.diskStorage({
+//   //destination folder to store images
+//   destination:'images',
+//   filename: (req, file, cb) => {
+//     cb(null,file.fieldname + '_' + Date.now() + path.extname(file.originalname))
+//   }
+// })
 
 app.post('/M00934333/create-post',storePost);
 
