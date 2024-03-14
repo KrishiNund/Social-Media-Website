@@ -693,13 +693,13 @@ async function validateLogin(event){
                 icon:"success", 
                 showCloseButton: true,
                 willClose: function(){
-                    // window.location.hash = ""; 
                     loadHomePage();
                     const statusText = document.getElementById("statusText");
                     statusText.innerHTML = `Username:<span id="sessionUsername">${username}</span><br>Status:Logged In`;    
                 }
             })
             form.reset();
+            window.location.hash = ""; 
             
         } else {
             Swal.fire({
