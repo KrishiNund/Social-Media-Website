@@ -5,8 +5,8 @@ const mongodb = require("mongodb");
 const bodyParser = require("body-parser");
 const session = require('express-session');
 const {check, validationResult} = require('express-validator');
-const multer = require('multer');
-const { sign } = require("crypto");
+// const multer = require('multer');
+// const { sign } = require("crypto");
 
 
 //creating express application
@@ -17,11 +17,12 @@ const PORT = process.env.PORT || 8080;
 app.use(
   session({
     secret:'cst2120 secret',
-    cookie:{maxAge:360000},
+    cookie:{maxAge:3600000},
     resave:false,
-    saveUninitialized:false,
+    saveUninitialized:false
   })
 );
+
 //to parse form data correctly
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -63,10 +64,10 @@ connectToMongoDB();
 
 app.use("/", express.static(path.join(__dirname)));
 
+//sepcifying default database
 const database = client.db("Social_Media_Website");
-// const collection = database.collection("Example_Users");
 
-
+//validate sign up details
 app.post('/M00934333/validate-signup',[
   check('fullName').notEmpty().withMessage('Name cannot be blank').matches(/^[A-Za-z\s]+$/).withMessage('Name cannot contain digits'),
   check('username').notEmpty().withMessage('Username cannot be blank').isLength({max:8}).withMessage('Max Username Length is 8'),
@@ -76,9 +77,10 @@ app.post('/M00934333/validate-signup',[
   check('dob').isISO8601().withMessage('Invalid Date format')
 ],validateSignup);
 
+//add user details to Users collection
 async function signup(userDetails){
   const collection = database.collection("Users");
-  // console.log(req.body);
+  
   //inserting user details in database
   const result = await collection.insertOne(userDetails);
 
@@ -89,18 +91,19 @@ async function signup(userDetails){
     {
       $set:{
         followers:[],
-        following:[],
+        following:[]
       }
     }
   )
   return result;
 }
 
+//check user details before adding to mongodb database
 async function validateSignup(req, res){
   const collection = database.collection("Users");
   const errors = validationResult(req);
   const username = req.body.username;
-  // console.log(username);
+ 
 
   //checking if username is already taken
   const query = {username:username};
@@ -123,6 +126,7 @@ async function validateSignup(req, res){
 
 app.post('/M00934333/validate-login', validateLogin);
 
+//authenticate login details
 async function validateLogin(req, res){
   const collection = database.collection("Users");
   const username = req.body.username;
@@ -135,35 +139,43 @@ async function validateLogin(req, res){
 
   //if there is a user with those credentials
   if (user) {
-    // console.log("here");
-    res.status(201).send({message:"User found",data:user.username});
-    // req.session.username = username;
-    // console.log(username);
-    // console.log(req.session.username);
+    req.session.username = username;
+    // req.session.save();
+    res.status(201).send({message:"User found",data:req.session.username});
   }
   else{
     res.status(404).send({message:"User not found"});
   }
 }
 
-//creating storage for image uploads
-// const imageStorage = multer.diskStorage({
-//   //destination folder to store images
-//   destination:'images',
-//   filename: (req, file, cb) => {
-//     cb(null,file.fieldname + '_' + Date.now() + path.extname(file.originalname))
-//   }
-// })
-
 app.post('/M00934333/create-post',storePost);
 
+//store details of post
 async function storePost(req,res){
-  const collection = database.collection("Posts");
-  const postDetails = req.body;
-  const result = await collection.insertOne(postDetails);
+  // console.log("Username:",req.session);
+  if (!req.session.username){
+    res.status(404).send({message:"User is not logged in"});
+  } else {
+    const collection = database.collection("Posts");
+    const postDetails = req.body;
+    const result = await collection.insertOne(postDetails);
 
-  res.status(201).send({message:"Post Created Successfully", data: result});
+    res.status(201).send({message:"Post Created Successfully", data: result});
+  }
 }
+
+app.get('/M00934333/logout',logout);
+
+async function logout(req,res){
+  if (!req.session.username){
+    res.status(404).send({message:"Already logged out"});
+  } else {
+    req.session.destroy();
+    res.status(201).send({message:"Log Out Successful"});
+  }
+}
+  
+
 //starting server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

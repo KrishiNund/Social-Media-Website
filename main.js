@@ -25,7 +25,7 @@ function goTo(hash) {
   }
 }
 
-//? load page content according to its type
+// load page content according to its type
 function loadPageContent(content, type) {
   const app = document.getElementById("app");
   if (type == "homepage") {
@@ -399,7 +399,6 @@ function loadHomePage() {
 }
 
 //loads sign up page's html elements
-
 function loadSignUpPage() {
   const content = `<link rel="stylesheet" href="forms.css">
     <!--Back Button-->
@@ -585,9 +584,9 @@ function showCommentBox() {
 }
 
 
-//if show is pressed, show actual password
-//else if hide is pressed, hide password
-//by default, password is hidden
+/*if show is pressed, show actual password
+else if hide is pressed, hide password
+by default, password is hidden*/
 function showHidePassword() {
     //show/hide password
     let showHideButton = document.querySelector(".show_hide_password");
@@ -604,7 +603,7 @@ function showHidePassword() {
     }
 }
 
-//when submit button is pressed on sign up form
+//trigger validation for sign up
 async function validateSignup(event){
     event.preventDefault();
     const form = document.getElementById("signupForm");
@@ -667,16 +666,17 @@ async function validateSignup(event){
     });
 }
 
-//validate login
+//trigger validation for login
 async function validateLogin(event){
     event.preventDefault();
     const form = document.getElementById("loginForm");
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
+
     fetch('/M00934333/validate-login', {
         method:'POST',
-        credentials:'include',
+        credentials:"include",
         headers:{
             'Content-Type':'application/json'
         },
@@ -695,7 +695,18 @@ async function validateLogin(event){
                 willClose: function(){
                     loadHomePage();
                     const statusText = document.getElementById("statusText");
-                    statusText.innerHTML = `Username:<span id="sessionUsername">${username}</span><br>Status:Logged In`;    
+                    statusText.innerHTML = `Username:<span id="sessionUsername">${username}</span><br>Status:Logged In`; 
+                    
+                    const signupButton = document.querySelector(".go_to_signup_page");
+                    signupButton.style.display = "none";
+
+                    const loginButton = document.querySelector(".go_to_login_page");
+                    loginButton.style.display = "none";
+
+                    const userProfileButton = document.querySelector(".user_profile_button");
+                    const settingsButton = document.querySelector(".settings_button");
+                    settingsButton.style.left = "17em";
+                    userProfileButton.style.left = "27em";
                 }
             })
             form.reset();
@@ -725,30 +736,41 @@ async function validateLogin(event){
 
 //logout function 
 async function logOut(){
-    const username = document.getElementById("sessionUsername").innerText;
-    
-    if (username != ""){
-        Swal.fire({
-            title: "Log out Successful",
-            text:"You've successfully logged out",
-            icon:"success", 
-            showCloseButton: true,
-            willClose: function(){
-                loadHomePage();
-                const statusText = document.getElementById("statusText");
-                statusText.innerHTML = "Status:Logged Out";
-            }
-        })
-    } else {
-        Swal.fire({
-            title: "Invalid Operation",
-            text:"You're already logged out!",
-            icon:"error", 
-            showCloseButton: true,
-        })
-    }
+
+    fetch('/M00934333/logout', {
+        method:'GET',
+        credentials:"include",
+        headers:{
+            'Content-Type':'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === "Log Out Successful"){
+            Swal.fire({
+                title: "Log out Successful",
+                text:"You've successfully logged out",
+                icon:"success", 
+                showCloseButton: true,
+                willClose: function(){
+                    ClickSettingsButton();
+                    loadHomePage();
+                    const statusText = document.getElementById("statusText");
+                    statusText.innerHTML = "Status:Logged Out";
+                }
+            })
+        } else {
+            Swal.fire({
+                title: "Invalid Operation",
+                text:"You're already logged out!",
+                icon:"error", 
+                showCloseButton: true,
+            })
+        }
+    })
 }
 
+//creating a post
 async function createPost(){
     const username = document.getElementById("sessionUsername").innerText;
     const postArea = document.querySelector(".post_area");
@@ -778,11 +800,13 @@ async function createPost(){
             headers:{
                 'Content-Type':'application/json'
             },
-            body:JSON.stringify(postData)
+            body:JSON.stringify(postData),
+            credentials: "include",
         })
         .then(response => response.json())
         .then(data =>{
             if(data.message === "Post Created Successfully"){
+                //if there is an image file
                 if (imageUploaded){
                     imageURL =URL.createObjectURL(imageUploaded);
                     postArea.innerHTML += `
@@ -802,6 +826,7 @@ async function createPost(){
                         </div>
             
                         <hr>`;
+                //if there is a video file
                 } else if (videoUploaded){
                     videoURL = URL.createObjectURL(videoUploaded);
                     postArea.innerHTML += `
@@ -823,7 +848,8 @@ async function createPost(){
                         </div>
             
                         <hr>`;
-
+                
+                //if it's only text
                 } else {
                     postArea.innerHTML += `
                     <div class="post">
@@ -841,9 +867,9 @@ async function createPost(){
                         </div>
             
                         <hr>`;
-
                 }
 
+                //adding default engagement buttons to the post
                 postArea.innerHTML +=`<!--Adding engagement buttons: like, dislike, comment-->
                 <div class="d-flex flex-row engagement_buttons">
                     <button type="button" class="btn">
@@ -864,6 +890,14 @@ async function createPost(){
                     title: "Post Created",
                     text:"Post has been created successfully!",
                     icon:"success", 
+                    showCloseButton: true
+                });
+                closePostBox();
+            } else {
+                Swal.fire({
+                    title: "Cannot Post",
+                    text:"You need to login to post!",
+                    icon:"error", 
                     showCloseButton: true
                 });
                 closePostBox();

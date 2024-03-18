@@ -48,6 +48,7 @@ body {
 
 /*Customising page redirection links to signup and login pages*/
 .go_to_signup_page {
+  display: block;
   position: relative;
   left: 6em;
   font-size: 25px;
@@ -60,6 +61,7 @@ body {
 }
 
 .go_to_login_page {
+  display: block;
   position: relative;
   left: 7em;
   font-size: 25px;
