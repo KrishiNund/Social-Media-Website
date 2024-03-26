@@ -70,7 +70,7 @@ function createHeader() {
                   <!--User profile button/dropdown-->
                   <div class="dropdown user_profile_button flex-grow-1">
                       <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
-                         <img src="images/icons8-user-profile-48.png" alt="User Profile" class="rounded-circle">
+                        <i class="fa fa-circle-user fa-2x" style="color:#b8bbd6"></i>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end">
                           <li><span id="statusText" class="dropdown-item-text"><span id="sessionUsername"></span>Status:Logged Out</span></li>
@@ -80,7 +80,7 @@ function createHeader() {
                   <!--Settings Button-->
                   <div class="flex-grow-1">
                       <button type="button" class="btn settings_button" onclick="ClickSettingsButton()">
-                          <img src="images/icons8-settings-40.png" alt="settings button" class="img-fluid">
+                        <i class="fa fa-gear fa-2x" style="color:#b8bbd6;"></i>
                       </button>
                   </div>
               </div>
@@ -235,22 +235,27 @@ function loadHomePage() {
 
       <!--Post Panel: Post Text, Images and Videos-->
       <div class="post_panel text-center">
-          <div class="widget_header"><h4>Post Now~~</h4></div>
+          <div class="widget_header d-flex flex-row">
+            <h4>Post Area</h4>
+            <button type="button" class="btn mt-4" style="border:none;" onclick="showPostBox()">
+                <i class="fa fa-square-plus fa-2x"></i>
+            </button>
+          </div>
 
           <div class="d-flex flex-row post_options">
               <button type="button" class="btn" style="border: none;">
-                  <i class="fa fa-camera fa-2x" onclick="showPostBox()"></i>
+                  <i class="fa fa-camera fa-2x"></i>
               </button>
 
               <button type="button" class="btn" style="border: none;">
-                  <i class="fa fa-video-camera fa-2x" onclick="showPostBox()"></i>
+                  <i class="fa fa-video-camera fa-2x"></i>
               </button>
 
               <button type="button" class="btn" style="border: none;">
-                  <i class="fa fa-pencil-square-o fa-2x" onclick="showPostBox()"></i>
+                  <i class="fa fa-pencil-square-o fa-2x"></i>
               </button>
-
           </div>
+
       </div>
 
       <!--Contact Box containing essential pages redirection and copyright mark-->
@@ -300,16 +305,9 @@ function loadHomePage() {
   <div class="media_upload d-flex flex-column">
       <span class="d-flex flex-row media_upload_button mb-3">
           <p>Add </p>
-          <i class="fa fa-camera"></i>
+          <i class="fa fa-photo-film"></i>
           <p>:</p>
-          <input id="imageUpload" type="file" accept="image/*">
-      </span>
-
-      <span class="d-flex flex-row media_upload_button">
-          <p>Add</p>
-          <i class="fa fa-video-camera"></i>
-          <p>:</p>
-          <input id="videoUpload" type="file" accept="video/*">
+          <input name="mediaUpload" id="mediaUpload" type="file" accept="image/*,video/*">
       </span>
   </div>
   <button type="button" class="btn post_button" onclick="createPost()">Post</button> 
@@ -405,7 +403,7 @@ function loadSignUpPage() {
     <div class="container d-flex flex-column">
         <div class="back_button">
             <a href="/#">
-                <img src="images/icons8-back-button-64.png" alt="go_back">
+                <i class="fa fa-circle-left fa-3x" style="color:white"></i>
             </a>
         </div>
         <!--sign up form with different data fields-->
@@ -469,7 +467,7 @@ function loadLoginPage() {
     <div class="container d-flex flex-column">
         <div class="back_button">
             <a href="/#">
-                <img src="images/icons8-back-button-64.png" alt="go_back">
+                <i class="fa fa-circle-left fa-3x" style="color:white"></i>
             </a>
         </div>
 
@@ -755,8 +753,8 @@ async function logOut(){
                 willClose: function(){
                     ClickSettingsButton();
                     loadHomePage();
-                    const statusText = document.getElementById("statusText");
-                    statusText.innerHTML = "Status:Logged Out";
+                    // const statusText = document.getElementById("statusText");
+                    // statusText.innerHTML = "Status:Logged Out";
                 }
             })
         } else {
@@ -775,9 +773,8 @@ async function createPost(){
     const username = document.getElementById("sessionUsername").innerText;
     const postArea = document.querySelector(".post_area");
     const postText = document.getElementById("post_text").value;
-    const imageUploaded = document.getElementById("imageUpload").files[0];
-    const videoUploaded = document.getElementById("videoUpload").files[0];
-    let imageURL, videoURL;
+    const mediaUploaded = document.getElementById("mediaUpload").files[0];
+    let imageURL,videoURL;
 
     if (postText === ""){
         Swal.fire({
@@ -787,13 +784,96 @@ async function createPost(){
             showCloseButton: true
         });
     } else {
-        // console.log("Here1");
         const postData = {
             user:username,
             text: postText,
             likes:[],
-            dislikes:[]
+            dislikes:[],
         }
+
+        if (mediaUploaded){
+            const mimeType = mediaUploaded.type;
+            //if there is an image file
+            if (mimeType.startsWith('image/')){
+                imageURL =URL.createObjectURL(mediaUploaded);
+                // postData.image = imageURL;
+                postArea.innerHTML += `
+                <div class="post">
+                    <!--Post related buttons-->
+                    <div class="user_info d-flex align-items-center">
+                        <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                        <span style="position: relative; left: 1.5em;">${username}</span>
+                        <button type="button" class="btn follow_button">Follow</button>
+                        <button type="button" class="btn options_button">⋮</button>
+                    </div>
+                    
+                    <!--Post Contents-->
+                    <div class="post_content d-flex flex-column">
+                        <span><h5>${postText}</h5></span>
+                        <img src="${imageURL}" class="img-fluid rounded" >
+                    </div>
+        
+                    <hr>`;
+                //if it's video file
+            } else {
+                videoURL = URL.createObjectURL(mediaUploaded);
+                // postData.video = videoURL;
+                postArea.innerHTML += `
+                <div class="post">
+                    <!--Post related buttons-->
+                    <div class="user_info d-flex align-items-center">
+                        <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                        <span style="position: relative; left: 1.5em;">${username}</span>
+                        <button type="button" class="btn follow_button">Follow</button>
+                        <button type="button" class="btn options_button">⋮</button>
+                    </div>
+                    
+                    <!--Post Contents-->
+                    <div class="post_content d-flex flex-column">
+                        <span><h5>${postText}</h5></span>
+                        <video class="img-fluid" controls>
+                            <source src="${videoURL}" type="video/mp4">
+                        </video>
+                    </div>
+        
+                    <hr>`;
+            }
+            
+        //if there is text only
+        } else {
+            postArea.innerHTML += `
+            <div class="post">
+                <!--Post related buttons-->
+                <div class="user_info d-flex align-items-center">
+                    <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                    <span style="position: relative; left: 1.5em;">${username}</span>
+                    <button type="button" class="btn follow_button">Follow</button>
+                    <button type="button" class="btn options_button">⋮</button>
+                </div>
+                
+                <!--Post Contents-->
+                <div class="post_content d-flex flex-column">
+                    <span><h5>${postText}</h5></span>
+                </div>
+    
+                <hr>`;
+        }
+        //adding default engagement buttons to the post
+        postArea.innerHTML +=`<!--Adding engagement buttons: like, dislike, comment-->
+        <div class="d-flex flex-row engagement_buttons">
+            <button type="button" class="btn">
+                <i class="fa fa-heart-o"></i>
+            </button>
+
+            <button type="button" class="btn">
+                <i class="fa fa-thumbs-o-down"></i>
+            </button>
+
+            <button type="button" class="btn">
+                <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+            </button>
+        </div>
+        </div>`;
 
         fetch('/M00934333/create-post',{
             method:'POST',
@@ -806,86 +886,7 @@ async function createPost(){
         .then(response => response.json())
         .then(data =>{
             if(data.message === "Post Created Successfully"){
-                //if there is an image file
-                if (imageUploaded){
-                    imageURL =URL.createObjectURL(imageUploaded);
-                    postArea.innerHTML += `
-                    <div class="post">
-                        <!--Post related buttons-->
-                        <div class="user_info d-flex align-items-center">
-                            <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                            <span style="position: relative; left: 1.5em;">${username}</span>
-                            <button type="button" class="btn follow_button">Follow</button>
-                            <button type="button" class="btn options_button">⋮</button>
-                        </div>
-                        
-                        <!--Post Contents-->
-                        <div class="post_content d-flex flex-column">
-                            <span><h5>${postText}</h5></span>
-                            <img src="${imageURL}" class="img-fluid rounded" >
-                        </div>
-            
-                        <hr>`;
-                //if there is a video file
-                } else if (videoUploaded){
-                    videoURL = URL.createObjectURL(videoUploaded);
-                    postArea.innerHTML += `
-                    <div class="post">
-                        <!--Post related buttons-->
-                        <div class="user_info d-flex align-items-center">
-                            <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                            <span style="position: relative; left: 1.5em;">${username}</span>
-                            <button type="button" class="btn follow_button">Follow</button>
-                            <button type="button" class="btn options_button">⋮</button>
-                        </div>
-                        
-                        <!--Post Contents-->
-                        <div class="post_content d-flex flex-column">
-                            <span><h5>${postText}</h5></span>
-                            <video class="img-fluid" controls>
-                                <source src="${videoURL}" type="video/mp4">
-                            </video>
-                        </div>
-            
-                        <hr>`;
-                
-                //if it's only text
-                } else {
-                    postArea.innerHTML += `
-                    <div class="post">
-                        <!--Post related buttons-->
-                        <div class="user_info d-flex align-items-center">
-                            <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                            <span style="position: relative; left: 1.5em;">${username}</span>
-                            <button type="button" class="btn follow_button">Follow</button>
-                            <button type="button" class="btn options_button">⋮</button>
-                        </div>
-                        
-                        <!--Post Contents-->
-                        <div class="post_content d-flex flex-column">
-                            <span><h5>${postText}</h5></span>
-                        </div>
-            
-                        <hr>`;
-                }
-
-                //adding default engagement buttons to the post
-                postArea.innerHTML +=`<!--Adding engagement buttons: like, dislike, comment-->
-                <div class="d-flex flex-row engagement_buttons">
-                    <button type="button" class="btn">
-                        <i class="fa fa-heart-o"></i>
-                    </button>
-
-                    <button type="button" class="btn">
-                        <i class="fa fa-thumbs-o-down"></i>
-                    </button>
-
-                    <button type="button" class="btn">
-                        <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
-                    </button>
-                </div>
-                </div>`;
-
+                //if there is a media file
                 Swal.fire({
                     title: "Post Created",
                     text:"Post has been created successfully!",

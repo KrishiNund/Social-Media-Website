@@ -5,7 +5,7 @@ const mongodb = require("mongodb");
 const bodyParser = require("body-parser");
 const session = require('express-session');
 const {check, validationResult} = require('express-validator');
-// const multer = require('multer');
+const multer = require('multer');
 // const { sign } = require("crypto");
 
 
@@ -47,6 +47,20 @@ const client = new mongodb.MongoClient(uri, {
     deprecationErrors: true,
   },
 });
+
+//creating a storage engine
+const storageEngine = multer.diskStorage({
+  destination:"./images",
+  filename: (req,file,cb) => {
+    cb(null, `${Date.now()}--${file.originalname}`);
+  },
+})
+
+//initializing multer
+const mediaUpload = multer({
+  storage: storageEngine,
+}).single('mediaUpload');
+
 
 //creating mongodb connect function
 async function connectToMongoDB() {
@@ -148,7 +162,7 @@ async function validateLogin(req, res){
   }
 }
 
-app.post('/M00934333/create-post',storePost);
+app.post('/M00934333/create-post',mediaUpload, storePost);
 
 //store details of post
 async function storePost(req,res){
@@ -157,10 +171,24 @@ async function storePost(req,res){
     res.status(404).send({message:"User is not logged in"});
   } else {
     const collection = database.collection("Posts");
-    const postDetails = req.body;
-    const result = await collection.insertOne(postDetails);
 
-    res.status(201).send({message:"Post Created Successfully", data: result});
+    try{
+      const postDetails = {
+        user: req.session.username,
+        text: req.body.text,
+        likes: [],
+        dislikes: [],
+        media: req.file ? req.file.path : null,
+      };
+
+      const result = await collection.insertOne(postDetails);
+
+      res.status(201).send({message:"Post Created Successfully", data: result});
+    } catch (err){
+      console.log(err);
+      res.status(500).send({message:"Internal Server error"});
+
+    } 
   }
 }
 

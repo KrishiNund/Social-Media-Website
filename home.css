@@ -76,7 +76,7 @@ body {
 /*Customising user profile button/dropdown and settings button*/
 .user_profile_button {
   position: relative;
-  left: 18em;
+  left: 20em;
   cursor: pointer;
 }
 
@@ -86,7 +86,7 @@ body {
 
 .settings_button {
   position: relative;
-  left: 8em;
+  left: 10em;
   border: none;
   cursor: pointer;
 }
@@ -207,12 +207,22 @@ body {
   border-top-right-radius: 20px;
   background-color: #02111b;
   height: 3em;
-  text-align: center;
 }
 
 .widget_header h4 {
+  display: block;
   position: relative;
-  top: 0.5em;
+  top: 0.3em;
+  margin-left: auto;
+  margin-right: auto;
+  color: #f2f4ff;
+}
+
+.widget_header button {
+  display: block;
+  position: relative;
+  right: 10em;
+  bottom: 1.4em;
   color: #f2f4ff;
 }
 
@@ -334,7 +344,7 @@ body {
 #post_text {
   display: block;
   width: 25em;
-  height: 12em;
+  height: 14em;
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
@@ -361,7 +371,7 @@ body {
   background-color: #f2f4ff;
   position: relative;
   width: 5em;
-  top: 2em;
+  top: 1.5em;
   margin-left: auto;
   margin-right: auto;
 }
