@@ -784,12 +784,6 @@ async function createPost(){
             showCloseButton: true
         });
     } else {
-        const postData = {
-            user:username,
-            text: postText,
-            likes:[],
-            dislikes:[],
-        }
 
         if (mediaUploaded){
             const mimeType = mediaUploaded.type;
@@ -875,12 +869,14 @@ async function createPost(){
         </div>
         </div>`;
 
+        const formData = new FormData();
+        formData.append('user',username);
+        formData.append('text',postText);
+        formData.append('mediaUpload',mediaUploaded);
+
         fetch('/M00934333/create-post',{
             method:'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify(postData),
+            body:formData,
             credentials: "include",
         })
         .then(response => response.json())

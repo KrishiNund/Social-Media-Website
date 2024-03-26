@@ -13,6 +13,8 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+app.use("/", express.static(path.join(__dirname)));
+
 //configure express to use express-session
 app.use(
   session({
@@ -24,8 +26,8 @@ app.use(
 );
 
 //to parse form data correctly
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, limit:'100mb' }));
+app.use(bodyParser.json({limit:'100mb'}));
 
 //connection details
 const password = "M00934333+2023";
@@ -49,16 +51,19 @@ const client = new mongodb.MongoClient(uri, {
 });
 
 //creating a storage engine
-const storageEngine = multer.diskStorage({
-  destination:"./images",
-  filename: (req,file,cb) => {
-    cb(null, `${Date.now()}--${file.originalname}`);
+const storage = multer.diskStorage({
+  destination: function (req, file, cb){
+    cb(null, './uploads');
   },
-})
+  filename: function (req, file, cb){
+    cb(null, Date.now()+ '-' + file.originalname);
+  },
+});
 
 //initializing multer
 const mediaUpload = multer({
-  storage: storageEngine,
+  storage:storage,
+  limits:{fileSize: 100 * 1024 * 1024},
 }).single('mediaUpload');
 
 
@@ -75,8 +80,6 @@ async function connectToMongoDB() {
 
 //try to establish connection to mongodb
 connectToMongoDB();
-
-app.use("/", express.static(path.join(__dirname)));
 
 //sepcifying default database
 const database = client.db("Social_Media_Website");
@@ -166,7 +169,7 @@ app.post('/M00934333/create-post',mediaUpload, storePost);
 
 //store details of post
 async function storePost(req,res){
-  // console.log("Username:",req.session);
+  // console.log(req.file.path);
   if (!req.session.username){
     res.status(404).send({message:"User is not logged in"});
   } else {
