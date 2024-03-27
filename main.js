@@ -30,6 +30,7 @@ function loadPageContent(content, type) {
   const app = document.getElementById("app");
   if (type == "homepage") {
     app.innerHTML = createHeader() + content;
+    loadPosts();
   } else {
     app.innerHTML = content + createFooter();
   }
@@ -101,298 +102,197 @@ function createFooter() {
 
 //loads home page's main content/html
 function loadHomePage() {
-  const homePageContent = `<div class="container-fluid d-flex flex-row align-items-center justify-content-between">
-  <!--Main Content-->
-  <div>
-      <!--Feed menu showcasing the different kinds of feed-->
-      <div class="feed_options d-flex flex-row align-items-center justify-content-between rounded fixed-top">
-          <button type="button" class="btn" style="text-decoration:underline;" id="explorePostsButton" onclick="showExplorePosts()">Explore</button>
-          <button type="button" class="btn" id="followingPostsButton"  onclick="showFollowingPosts()">Following</button>
-          <button type="button" class="btn" id="eventPostsButton" onclick="showEventPosts()">Events</button>
-      </div>
+    const TopContent = `<div class="container-fluid d-flex flex-row align-items-center justify-content-between">
+        <!--Main Content-->
+        <div>
+            <!--Feed menu showcasing the different kinds of feed-->
+            <div class="feed_options d-flex flex-row align-items-center justify-content-between rounded fixed-top">
+                <button type="button" class="btn" style="text-decoration:underline;" id="explorePostsButton" onclick="showExplorePosts()">Explore</button>
+                <button type="button" class="btn" id="followingPostsButton"  onclick="showFollowingPosts()">Following</button>
+                <button type="button" class="btn" id="eventPostsButton" onclick="showEventPosts()">Events</button>
+            </div>
 
-      <!--Posts Sections-->
-      <div class="post_area">
-          <!--First Post Example-->
-          <div class="post">
-              <!--Post related buttons-->
-              <div class="user_info d-flex flex-row align-items-center">
-                  <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                  <span style="position: relative; left: 1.5em;">CatKittyCatCat</span>
-                  <button type="button" class="btn follow_button">Follow</button>
-                  <button type="button" class="btn options_button">⋮</button>
-              </div>
-              
-              <!--Post Contents-->
-              <div class="post_content d-flex flex-column">
-                  <span><h5>Can I stop farming now?</h5></span>
-                  <img src="images/dan_heng_build.jpg" alt="dan_heng_build" class="img-fluid rounded" >
-                  <span style="color: #533A7B;"><h6>#danheng #buildreview</h6></span>
-              </div>
+            <!--Posts Sections-->
+            <div class="post_area">
+                
+
+            </div>
+        </div>`;
+
+    const sideContent = `<!--Right sidebar-->
+            <div class="d-flex flex-column position-fixed sidebar">
+        
+                <!--Trending Hashtags Widget-->
+                <div class="trending_hashtags text-center">
+                    <div class="widget_header"><h4>Trending</h4></div>
+                    <span>#PenaconyUpdate <hr></span>
+                    <span>#Version2.0 <hr></span>
+                    <span>#Firefly <hr></span>
+                    <span>#HSR</span>
+                </div>
+        
+                <!--Post Panel: Post Text, Images and Videos-->
+                <div class="post_panel text-center">
+                    <div class="widget_header d-flex flex-row">
+                    <h4>Post Area</h4>
+                    <button type="button" class="btn mt-4" style="border:none;" onclick="showPostBox()">
+                        <i class="fa fa-square-plus fa-2x"></i>
+                    </button>
+                    </div>
+        
+                    <div class="d-flex flex-row post_options">
+                        <button type="button" class="btn" style="border: none;">
+                            <i class="fa fa-camera fa-2x"></i>
+                        </button>
+        
+                        <button type="button" class="btn" style="border: none;">
+                            <i class="fa fa-video-camera fa-2x"></i>
+                        </button>
+        
+                        <button type="button" class="btn" style="border: none;">
+                            <i class="fa fa-pencil-square-o fa-2x"></i>
+                        </button>
+                    </div>
+        
+                </div>
+        
+                <!--Contact Box containing essential pages redirection and copyright mark-->
+                <div class="contact_box text-center">
+                    <div class="widget_header"><h4>Contact</h4></div>
+        
+                    <span>
+                        <a href="#">About Us</a>
+                        <br>
+                        <a href="#">Terms of Use</a>
+                        <br>
+                        <a href="#">Privacy Policy</a>
+                        <br>
+                        Email Address: ON144@live.mdx.ac.uk 
+                        <br>
+                        Copyright &copy; 2024 Trailblazers' Hangout 
+                    </span>
+                </div>
+            </div>
+        </div>`;
   
-              <hr>
+    const popupContent = `<!--Settings Pop Up-->
+        <div class="container settings_box mx-auto text-center">
+        
+        <div class="settings_header">
+            <h2>Settings Box<hr></h2>   
+        </div>
+        
+        <p>Account Creation Date:XX-XX-XXXX</p>
+        
+        <div class="d-flex flex-row mx-auto">
+            <button type="button" class="btn" onclick="logOut()">Log Out</button>
+            <button type="button" class="btn">Delete account</button>
+        </div>
+        
+        </div>
+        
+        <!--Post Composer Pop Up-->
+        <div class="container post_box mx-auto">
+        <div class="post_box_header d-flex flex-row">
+            <h2>Post Box</h2>
+            <i class="fa fa-times-circle-o fa-2x" onclick="closePostBox()"></i>
+        </div>
+        <textarea id="post_text" placeholder="Write something here..."></textarea>
+        
+        <!--Accept Images and Videos to be posted as well-->
+        <div class="media_upload d-flex flex-column">
+            <span class="d-flex flex-row media_upload_button mb-3">
+                <p>Add </p>
+                <i class="fa fa-photo-film"></i>
+                <p>:</p>
+                <input name="mediaUpload" id="mediaUpload" type="file" accept="image/*,video/*">
+            </span>
+        </div>
+        <button type="button" class="btn post_button" onclick="createPost()">Post</button> 
+        </div>
+        
+        <!--Comment Box Pop up-->
+        <div class="comment_section">
+        <div class="comment_section_header d-flex flex-row ">
+            <h2 class="mt-2">Comments</h2>
+            <i class="fa fa-times-circle-o fa-2x" onclick="closeCommentBox()"></i>
+        </div>
+        
+        <div class="comment_box d-flex flex-column mx-auto mt-2 rounded">
+        
+            <!--First example of comment-->
+            <div class="comment d-flex flex-column mt-2">
+                <div class="commenter_profile d-flex flex-row">
+                    <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
+                    <p class="mt-2">Salty Player</p>
+                </div>
+        
+                <div class="comment_content">
+                    <p>Dan Heng IL is just too OP! The devs need to nerf him!!</p>
+                </div>
+                <!--Adding engagement buttons: like, dislike-->
+                <div class="d-flex flex-row">
+                    <button type="button" class="btn">
+                        <i class="fa fa-heart-o"></i>
+                    </button>
+        
+                    <button type="button" class="btn">
+                        <i class="fa fa-thumbs-o-down"></i>
+                    </button>
+                </div>
+                <hr>
+            </div>
+        
+            <!--Second example of comment-->
+            <div class="comment d-flex flex-column mt-2">
+                <div class="commenter_profile d-flex flex-row">
+                    <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
+                    <p class="mt-2">Top Cat</p>
+                </div>
+        
+                <div class="comment_content">
+                    <p>Yes you can stop farming now! Maybe try to get sparkle next update to maximise his damage.</p>
+                </div>
+                <!--Adding engagement buttons: like, dislike-->
+                <div class="d-flex flex-row">
+                    <button type="button" class="btn">
+                        <i class="fa fa-heart-o"></i>
+                    </button>
+        
+                    <button type="button" class="btn">
+                        <i class="fa fa-thumbs-o-down"></i>
+                    </button>
+                </div>
+                <hr>
+            </div>
+        
+            <!--Third example of comment-->
+            <div class="comment d-flex flex-column mt-2">
+                <div class="commenter_profile d-flex flex-row">
+                    <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
+                    <p class="mt-2">Tryhard Player</p>
+                </div>
+        
+                <div class="comment_content">
+                    <p>No!! You should never stop farming for your favourite character. Build Rating: 7/10. His relics can be improved.</p>
+                </div>
+                <!--Adding engagement buttons: like, dislike-->
+                <div class="d-flex flex-row">
+                    <button type="button" class="btn">
+                        <i class="fa fa-heart-o"></i>
+                    </button>
+        
+                    <button type="button" class="btn">
+                        <i class="fa fa-thumbs-o-down"></i>
+                    </button>
+                </div>
+                <hr>
+            </div> 
+        </div>
+        </div>`;
 
-              <!--Adding engagement buttons: like, dislike, comment-->
-              <div class="d-flex flex-row engagement_buttons">
-                  <button type="button" class="btn">
-                      <i class="fa fa-heart-o"></i>
-                  </button>
-
-                  <button type="button" class="btn">
-                      <i class="fa fa-thumbs-o-down"></i>
-                  </button>
-
-                  <button type="button" class="btn">
-                      <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
-                  </button>
-              </div>
-          </div>
-
-          <!--Second Post Example-->
-          <div class="post">
-              <!--Post related buttons-->
-              <div class="user_info d-flex align-items-center">
-                  <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                  <span style="position: relative; left: 1.5em;">GingerCat</span>
-                  <button type="button" class="btn follow_button">Follow</button>
-                  <button type="button" class="btn options_button">⋮</button>
-              </div>
-              
-              <!--Post Contents-->
-              <div class="post_content d-flex flex-column">
-                  <span><h5>Which banner do you recommend pulling on?</h5></span>
-                  <img src="images/banner.jpg" alt="dan_heng_build" class="img-fluid rounded" >
-                  <span style="color: #533A7B;"><h6>#banner #newupdate</h6></span>
-              </div>
-  
-              <hr>
-
-              <!--Adding engagement buttons: like, dislike, comment-->
-              <div class="d-flex flex-row engagement_buttons">
-                  <button type="button" class="btn">
-                      <i class="fa fa-heart-o"></i>
-                  </button>
-
-                  <button type="button" class="btn">
-                      <i class="fa fa-thumbs-o-down"></i>
-                  </button>
-
-                  <button type="button" class="btn">
-                      <i class="fa fa-comment-o"></i>
-                  </button>
-              </div>
-          </div>
-
-          <!--Third Post Example-->
-          <div class="post">
-              <!--Post related buttons-->
-              <div class="user_info d-flex align-items-center">
-                  <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                  <span style="position: relative; left: 1.5em;">GigaCat</span>
-                  <button type="button" class="btn follow_button">Follow</button>
-                  <button type="button" class="btn options_button">⋮</button>
-              </div>
-              
-              <!--Post Contents-->
-              <div class="post_content d-flex flex-column">
-                  <span><h5>How to defeat this boss in less than 2 turns?</h5></span>
-                  <img src="images/boss_battle.jpg" alt="dan_heng_build" class="img-fluid rounded" >
-                  <span style="color: #533A7B;"><h6>#bossbattle #cocolia</h6></span>
-              </div>
-  
-              <hr>
-
-              <!--Adding engagement buttons: like, dislike, comment-->
-              <div class="d-flex flex-row engagement_buttons">
-                  <button type="button" class="btn">
-                      <i class="fa fa-heart-o"></i>
-                  </button>
-
-                  <button type="button" class="btn">
-                      <i class="fa fa-thumbs-o-down"></i>
-                  </button>
-
-                  <button type="button" class="btn">
-                      <i class="fa fa-comment-o"></i>
-                  </button>
-              </div>
-          </div>
-
-      </div>
-  </div>
-
-  <!--Right sidebar-->
-  <div class="d-flex flex-column position-fixed sidebar">
-
-      <!--Trending Hashtags Widget-->
-      <div class="trending_hashtags text-center">
-          <div class="widget_header"><h4>Trending</h4></div>
-          <span>#PenaconyUpdate <hr></span>
-          <span>#Version2.0 <hr></span>
-          <span>#Firefly <hr></span>
-          <span>#HSR</span>
-      </div>
-
-      <!--Post Panel: Post Text, Images and Videos-->
-      <div class="post_panel text-center">
-          <div class="widget_header d-flex flex-row">
-            <h4>Post Area</h4>
-            <button type="button" class="btn mt-4" style="border:none;" onclick="showPostBox()">
-                <i class="fa fa-square-plus fa-2x"></i>
-            </button>
-          </div>
-
-          <div class="d-flex flex-row post_options">
-              <button type="button" class="btn" style="border: none;">
-                  <i class="fa fa-camera fa-2x"></i>
-              </button>
-
-              <button type="button" class="btn" style="border: none;">
-                  <i class="fa fa-video-camera fa-2x"></i>
-              </button>
-
-              <button type="button" class="btn" style="border: none;">
-                  <i class="fa fa-pencil-square-o fa-2x"></i>
-              </button>
-          </div>
-
-      </div>
-
-      <!--Contact Box containing essential pages redirection and copyright mark-->
-      <div class="contact_box text-center">
-          <div class="widget_header"><h4>Contact</h4></div>
-
-          <span>
-              <a href="#">About Us</a>
-              <br>
-              <a href="#">Terms of Use</a>
-              <br>
-              <a href="#">Privacy Policy</a>
-              <br>
-              Email Address: ON144@live.mdx.ac.uk 
-              <br>
-              Copyright &copy; 2024 Trailblazers' Hangout 
-          </span>
-      </div>
-  </div>
-</div>
-
-<!--Settings Pop Up-->
-<div class="container settings_box mx-auto text-center">
-
-  <div class="settings_header">
-      <h2>Settings Box<hr></h2>   
-  </div>
-
-  <p>Account Creation Date:XX-XX-XXXX</p>
-
-  <div class="d-flex flex-row mx-auto">
-      <button type="button" class="btn" onclick="logOut()">Log Out</button>
-      <button type="button" class="btn">Delete account</button>
-  </div>
-
-</div>
-
-<!--Post Composer Pop Up-->
-<div class="container post_box mx-auto">
-  <div class="post_box_header d-flex flex-row">
-      <h2>Post Box</h2>
-      <i class="fa fa-times-circle-o fa-2x" onclick="closePostBox()"></i>
-  </div>
-  <textarea id="post_text" placeholder="Write something here..."></textarea>
-
-  <!--Accept Images and Videos to be posted as well-->
-  <div class="media_upload d-flex flex-column">
-      <span class="d-flex flex-row media_upload_button mb-3">
-          <p>Add </p>
-          <i class="fa fa-photo-film"></i>
-          <p>:</p>
-          <input name="mediaUpload" id="mediaUpload" type="file" accept="image/*,video/*">
-      </span>
-  </div>
-  <button type="button" class="btn post_button" onclick="createPost()">Post</button> 
-</div>
-
-<!--Comment Box Pop up-->
-<div class="comment_section">
-  <div class="comment_section_header d-flex flex-row ">
-      <h2 class="mt-2">Comments</h2>
-      <i class="fa fa-times-circle-o fa-2x" onclick="closeCommentBox()"></i>
-  </div>
-
-  <div class="comment_box d-flex flex-column mx-auto mt-2 rounded">
-
-      <!--First example of comment-->
-      <div class="comment d-flex flex-column mt-2">
-          <div class="commenter_profile d-flex flex-row">
-              <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
-              <p class="mt-2">Salty Player</p>
-          </div>
-  
-          <div class="comment_content">
-              <p>Dan Heng IL is just too OP! The devs need to nerf him!!</p>
-          </div>
-          <!--Adding engagement buttons: like, dislike-->
-          <div class="d-flex flex-row">
-              <button type="button" class="btn">
-                  <i class="fa fa-heart-o"></i>
-              </button>
-
-              <button type="button" class="btn">
-                  <i class="fa fa-thumbs-o-down"></i>
-              </button>
-          </div>
-          <hr>
-      </div>
-
-       <!--Second example of comment-->
-       <div class="comment d-flex flex-column mt-2">
-          <div class="commenter_profile d-flex flex-row">
-              <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
-              <p class="mt-2">Top Cat</p>
-          </div>
-  
-          <div class="comment_content">
-              <p>Yes you can stop farming now! Maybe try to get sparkle next update to maximise his damage.</p>
-          </div>
-          <!--Adding engagement buttons: like, dislike-->
-          <div class="d-flex flex-row">
-              <button type="button" class="btn">
-                  <i class="fa fa-heart-o"></i>
-              </button>
-
-              <button type="button" class="btn">
-                  <i class="fa fa-thumbs-o-down"></i>
-              </button>
-          </div>
-          <hr>
-      </div>
-
-       <!--Third example of comment-->
-       <div class="comment d-flex flex-column mt-2">
-          <div class="commenter_profile d-flex flex-row">
-              <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
-              <p class="mt-2">Tryhard Player</p>
-          </div>
-  
-          <div class="comment_content">
-              <p>No!! You should never stop farming for your favourite character. Build Rating: 7/10. His relics can be improved.</p>
-          </div>
-          <!--Adding engagement buttons: like, dislike-->
-          <div class="d-flex flex-row">
-              <button type="button" class="btn">
-                  <i class="fa fa-heart-o"></i>
-              </button>
-
-              <button type="button" class="btn">
-                  <i class="fa fa-thumbs-o-down"></i>
-              </button>
-          </div>
-          <hr>
-      </div> 
-  </div>
-</div>`;
-
+    const homePageContent = TopContent + sideContent + popupContent;
+    
   loadPageContent(homePageContent, "homepage");
 }
 
@@ -768,13 +668,11 @@ async function logOut(){
     })
 }
 
-//creating a post
+//creating a post and posting the details to server to store them
 async function createPost(){
     const username = document.getElementById("sessionUsername").innerText;
-    const postArea = document.querySelector(".post_area");
     const postText = document.getElementById("post_text").value;
     const mediaUploaded = document.getElementById("mediaUpload").files[0];
-    let imageURL,videoURL;
 
     if (postText === ""){
         Swal.fire({
@@ -784,91 +682,6 @@ async function createPost(){
             showCloseButton: true
         });
     } else {
-
-        if (mediaUploaded){
-            const mimeType = mediaUploaded.type;
-            //if there is an image file
-            if (mimeType.startsWith('image/')){
-                imageURL =URL.createObjectURL(mediaUploaded);
-                // postData.image = imageURL;
-                postArea.innerHTML += `
-                <div class="post">
-                    <!--Post related buttons-->
-                    <div class="user_info d-flex align-items-center">
-                        <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                        <span style="position: relative; left: 1.5em;">${username}</span>
-                        <button type="button" class="btn follow_button">Follow</button>
-                        <button type="button" class="btn options_button">⋮</button>
-                    </div>
-                    
-                    <!--Post Contents-->
-                    <div class="post_content d-flex flex-column">
-                        <span><h5>${postText}</h5></span>
-                        <img src="${imageURL}" class="img-fluid rounded" >
-                    </div>
-        
-                    <hr>`;
-                //if it's video file
-            } else {
-                videoURL = URL.createObjectURL(mediaUploaded);
-                // postData.video = videoURL;
-                postArea.innerHTML += `
-                <div class="post">
-                    <!--Post related buttons-->
-                    <div class="user_info d-flex align-items-center">
-                        <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                        <span style="position: relative; left: 1.5em;">${username}</span>
-                        <button type="button" class="btn follow_button">Follow</button>
-                        <button type="button" class="btn options_button">⋮</button>
-                    </div>
-                    
-                    <!--Post Contents-->
-                    <div class="post_content d-flex flex-column">
-                        <span><h5>${postText}</h5></span>
-                        <video class="img-fluid" controls>
-                            <source src="${videoURL}" type="video/mp4">
-                        </video>
-                    </div>
-        
-                    <hr>`;
-            }
-            
-        //if there is text only
-        } else {
-            postArea.innerHTML += `
-            <div class="post">
-                <!--Post related buttons-->
-                <div class="user_info d-flex align-items-center">
-                    <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                    <span style="position: relative; left: 1.5em;">${username}</span>
-                    <button type="button" class="btn follow_button">Follow</button>
-                    <button type="button" class="btn options_button">⋮</button>
-                </div>
-                
-                <!--Post Contents-->
-                <div class="post_content d-flex flex-column">
-                    <span><h5>${postText}</h5></span>
-                </div>
-    
-                <hr>`;
-        }
-        //adding default engagement buttons to the post
-        postArea.innerHTML +=`<!--Adding engagement buttons: like, dislike, comment-->
-        <div class="d-flex flex-row engagement_buttons">
-            <button type="button" class="btn">
-                <i class="fa fa-heart-o"></i>
-            </button>
-
-            <button type="button" class="btn">
-                <i class="fa fa-thumbs-o-down"></i>
-            </button>
-
-            <button type="button" class="btn">
-                <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
-            </button>
-        </div>
-        </div>`;
-
         const formData = new FormData();
         formData.append('user',username);
         formData.append('text',postText);
@@ -889,6 +702,8 @@ async function createPost(){
                     icon:"success", 
                     showCloseButton: true
                 });
+                document.getElementById("post_text").value = "";
+                document.getElementById("mediaUpload").value = "";
                 closePostBox();
             } else {
                 Swal.fire({
@@ -897,13 +712,119 @@ async function createPost(){
                     icon:"error", 
                     showCloseButton: true
                 });
+                document.getElementById("post_text").value = "";
+                document.getElementById("mediaUpload").value = "";
                 closePostBox();
             }
         })
     }
 }
 
+//check media type
+function checkIfImage(url){
+    const imageExtensions = ['.jpg','.png','.jpeg','.gif'];
+    const extension = url.substring(url.lastIndexOf('.')).toLowerCase();
+    return imageExtensions.includes(extension);
+}
 
+function checkIfVideo(url){
+    const videoExtensions = ['.mp4','.webm','.avi'];
+    const extension = url.substring(url.lastIndexOf('.')).toLowerCase();
+    return videoExtensions.includes(extension);
+}
+//load the posts created
+async function loadPosts(){
+    let postArea = document.querySelector(".post_area");
+    fetch('/M00934333/get-all-posts',{
+        method:'GET',
+        credentials:"include",
+        headers:{
+            'Content-Type':'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data =>{
+        const postsArray = data.data;
+        console.log("postarray:",postsArray);
+        for (let i =0; i<postsArray.length; i++){
+            mediaURL = postsArray[i].media;
+            username = postsArray[i].user;
+            text = postsArray[i].text;
+            console.log("here1");
+            if(checkIfImage(mediaURL) == true){
+                console.log("image");
+                postArea.innerHTML+=`<div class="post">
+                    <!--Post related buttons-->
+                    <div class="user_info d-flex flex-row align-items-center">
+                        <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                        <span style="position: relative; left: 1.5em;">${username}</span>
+                        <button type="button" class="btn follow_button">Follow</button>
+                        <button type="button" class="btn options_button">⋮</button>
+                    </div>
+                    
+                    <!--Post Contents-->
+                    <div class="post_content d-flex flex-column">
+                        <span><h5>${text}</h5></span>
+                        <img src="${mediaURL}" alt="dan_heng_build" class="img-fluid rounded" >
+                    </div>
+        
+                    <hr>
+
+                    <!--Adding engagement buttons: like, dislike, comment-->
+                    <div class="d-flex flex-row engagement_buttons">
+                        <button type="button" class="btn">
+                            <i class="fa fa-heart-o"></i>
+                        </button>
+
+                        <button type="button" class="btn">
+                            <i class="fa fa-thumbs-o-down"></i>
+                        </button>
+
+                        <button type="button" class="btn">
+                            <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                        </button>
+                    </div>
+                </div>`;
+            } else if (checkIfVideo(mediaURL) == true){
+                console.log("video");
+                postArea.innerHTML += `<div class="post">
+                        <!--Post related buttons-->
+                        <div class="user_info d-flex flex-row align-items-center">
+                            <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                            <span style="position: relative; left: 1.5em;">${username}</span>
+                            <button type="button" class="btn follow_button">Follow</button>
+                            <button type="button" class="btn options_button">⋮</button>
+                        </div>
+                        
+                        <!--Post Contents-->
+                        <div class="post_content d-flex flex-column">
+                            <span><h5>${text}</h5></span>
+                            <video class="img-fluid" controls>
+                                <source src="${mediaURL}" type="video/mp4">
+                            </video>
+                        </div>
+            
+                        <hr>
+
+                        <!--Adding engagement buttons: like, dislike, comment-->
+                        <div class="d-flex flex-row engagement_buttons">
+                            <button type="button" class="btn">
+                                <i class="fa fa-heart-o"></i>
+                            </button>
+
+                            <button type="button" class="btn">
+                                <i class="fa fa-thumbs-o-down"></i>
+                            </button>
+
+                            <button type="button" class="btn">
+                                <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                            </button>
+                        </div>
+                    </div>`;
+            }
+        }
+    }) 
+}
 
 
 

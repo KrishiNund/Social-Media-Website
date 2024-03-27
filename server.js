@@ -205,7 +205,15 @@ async function logout(req,res){
     res.status(201).send({message:"Log Out Successful"});
   }
 }
-  
+
+app.get('/M00934333/get-all-posts', getAllPosts);
+
+async function getAllPosts(req,res){
+  const collection = database.collection("Posts");
+  const posts = await collection.find({}).toArray();
+  // console.log(posts);
+  res.status(201).send({message:"Posts Successfully Retrieved",data:posts});
+}
 
 //starting server
 app.listen(PORT, () => {
