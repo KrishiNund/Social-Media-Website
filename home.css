@@ -328,6 +328,7 @@ body {
   color: #f2f4ff;
   margin-bottom: 1em;
 }
+
 .post_box_header h2 {
   position: relative;
   left: 5.5em;
@@ -341,6 +342,7 @@ body {
   margin-bottom: auto;
   left: 10em;
 }
+
 #post_text {
   display: block;
   width: 25em;
@@ -355,17 +357,20 @@ body {
   position: relative;
   top: 1em;
 }
+
 .media_upload_button p {
   position: relative;
   margin-top: auto;
   margin-bottom: auto;
 }
+
 .media_upload_button i {
   position: relative;
   margin-left: 0.4em;
   margin-top: auto;
   margin-bottom: auto;
 }
+
 .post_button {
   display: block;
   background-color: #f2f4ff;
@@ -433,4 +438,67 @@ body {
 .comment_content{
   position: relative;
   margin-left: 0.5em;
+}
+
+
+/*Following list styling - applicable for both following list and followers list*/
+.following_list{
+  display: none;
+  width: 30em;
+  height: 25em;
+  background-color: #6969b3;
+  border-radius: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-60%, -50%);
+}
+
+.following_list_header{
+  background-color: #02111b;
+  color: #f2f4ff;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
+
+.following_list_header h2{
+  position: relative;
+  left: 4.5em;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.following_list_header i{
+  position: relative;
+  margin-top: auto;
+  margin-bottom: auto;
+  left: 7.5em;
+}
+
+.following_list_box{
+  width: 28em;
+  height: 21em;
+  background-color: #f2f4ff;
+  overflow-y: auto;
+}
+
+.following_profile i{
+  position: relative;
+  top: 0.8em;
+  left: 0.3em;
+}
+
+.following_profile h5{
+  display: block;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  top: 0.8em;
+}
+
+.following_profile button {
+  border: none;
+  position: relative;
+  bottom: 0.2em;
+  right: 0.2em;
 }

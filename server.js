@@ -107,7 +107,6 @@ async function signup(userDetails){
     {_id:insertedUserId},
     {
       $set:{
-        followers:[],
         following:[]
       }
     }
@@ -152,7 +151,7 @@ async function validateLogin(req, res){
   //checking if username and password match a user in database
   const query = {username:username,password:password};
   const user = await collection.findOne(query);
-  console.log(user);
+  // console.log(user);
 
   //if there is a user with those credentials
   if (user) {
@@ -215,8 +214,48 @@ async function getAllPosts(req,res){
   res.status(201).send({message:"Posts Successfully Retrieved",data:posts});
 }
 
+
+app.get('/M00934333/get-status',getUserStatus);
+
+async function getUserStatus(req,res){
+  const username = req.session.username;
+  if (!username){
+    res.send({message:"Logged Out",data:"None"});
+  } else {
+    res.send({message:"Logged In",data:username});
+  }
+  
+}
+
+app.post('/M00934333/follow-user',followUser);
+
+async function followUser(req,res){
+
+  try{
+    const username = req.body.username;
+    console.log("username:",username);
+    console.log("session:",req.session.username);
+    if (!req.session.username){
+      res.status(404).send({message:"Not logged in"});
+
+    } else if (username === req.session.username){
+      res.status(404).send({message:"Cannot follow yourself"});
+
+    } else {
+      const collection = database.collection("Users");
+
+      const result = await collection.updateOne({username:req.session.username},{$addToSet:{following:req.body}});
+
+      res.status(201).send({message:"Successfully followed user",data:result});
+    }
+  } catch(error){
+    res.status(404).send({message:"Couldn't follow user"});
+  }
+}
+
 //starting server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
 

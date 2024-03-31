@@ -30,6 +30,7 @@ function loadPageContent(content, type) {
   const app = document.getElementById("app");
   if (type == "homepage") {
     app.innerHTML = createHeader() + content;
+    getUserStatus();
     loadPosts();
   } else {
     app.innerHTML = content + createFooter();
@@ -38,56 +39,83 @@ function loadPageContent(content, type) {
 
 //returns html code for header and navigation bar
 function createHeader() {
-  return `<!--Creating our navigation bar-->
-  <nav class="navigation_bar navbar navbar-expand-sm bg-warning navbar-dark fixed-top">
-      <div class="container-fluid">
-          <div class="d-flex flex-row align-items-center justify-content-between">
-              <div class="flex-grow-1">
-                  <!--Logo and Title-->
-                  <a class="navbar-brand ms-left" href="#">
-                      <img src="images/icons8-honkai-star-rail-logo-50.png" class="img-fluid" alt="Logo">
-                      <span class="navbar-text" style="color: #B8BBD6;">Trailblazers' Hangout</span>
-                  </a>
-              </div>
+    return `<!--Creating our navigation bar-->
+        <nav class="navigation_bar navbar navbar-expand-sm bg-warning navbar-dark fixed-top">
+            <div class="container-fluid">
+                <div class="d-flex flex-row align-items-center justify-content-between">
+                    <div class="flex-grow-1">
+                        <!--Logo and Title-->
+                        <a class="navbar-brand ms-left" href="#">
+                            <img src="images/icons8-honkai-star-rail-logo-50.png" class="img-fluid" alt="Logo">
+                            <span class="navbar-text" style="color: #B8BBD6;">Trailblazers' Hangout</span>
+                        </a>
+                    </div>
 
-              <div class="flex-grow-1">
-                  <!--Search Bar-->
-                  <div class="form search_bar">
-                      <i class="fa fa-search"></i>
-                      <input type="text" class="form-control form-input" placeholder="Search Anything...">
-                  </div>
-              </div>
+                    <div class="flex-grow-1">
+                        <!--Search Bar-->
+                        <div class="form search_bar">
+                            <i class="fa fa-search"></i>
+                            <input type="text" class="form-control form-input" placeholder="Search Anything...">
+                        </div>
+                    </div>
 
-              <div class="d-flex align-items-center flex-grow-1">
-                  <!--Sign Up-->
-                  <div class="flex-grow-1">
-                      <a href="#/signup" class="go_to_signup_page">Sign Up</a>
-                  </div>
-                  <!--Login-->
-                  <div class="flex-grow-1">
-                      <a href="#/login" class="go_to_login_page">Login</a>
-                  </div>
+                    <div class="d-flex align-items-center flex-grow-1">
+                        <!--Sign Up-->
+                        <div class="flex-grow-1">
+                            <a href="#/signup" class="go_to_signup_page">Sign Up</a>
+                        </div>
+                        <!--Login-->
+                        <div class="flex-grow-1">
+                            <a href="#/login" class="go_to_login_page">Login</a>
+                        </div>
 
-                  <!--User profile button/dropdown-->
-                  <div class="dropdown user_profile_button flex-grow-1">
-                      <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
-                        <i class="fa fa-circle-user fa-2x" style="color:#b8bbd6"></i>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-end">
-                          <li><span id="statusText" class="dropdown-item-text"><span id="sessionUsername"></span>Status:Logged Out</span></li>
-                      </ul>
-                  </div>
+                        <!--User profile button/dropdown-->
+                        <div class="dropdown user_profile_button flex-grow-1">
+                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fa fa-circle-user fa-2x" style="color:#b8bbd6"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <span id="statusText" class="dropdown-item-text">
+                                        <span id="sessionUsername"></span>
+                                        <span id="userStatus"></span>
+                                        <button type="button" class="btn" onclick="openFollowingList()">Following</button>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
 
-                  <!--Settings Button-->
-                  <div class="flex-grow-1">
-                      <button type="button" class="btn settings_button" onclick="ClickSettingsButton()">
-                        <i class="fa fa-gear fa-2x" style="color:#b8bbd6;"></i>
-                      </button>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </nav>`;
+                        <!--Settings Button-->
+                        <div class="flex-grow-1">
+                            <button type="button" class="btn settings_button" onclick="ClickSettingsButton()">
+                                <i class="fa fa-gear fa-2x" style="color:#b8bbd6;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>`;
+}
+
+async function getUserStatus(){
+    fetch('/M00934333/get-status', {
+        method:'GET',
+        credentials:"include",
+        headers:{
+            'Content-Type':'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const status = data.message;
+        const username = data.data;
+        
+        const sessionUsername = document.getElementById("sessionUsername");
+        const userStatus = document.getElementById("userStatus");
+
+        sessionUsername.innerHTML = `Username: ${username}`;
+        userStatus.innerHTML =`Status:${status}`;  
+    }); 
 }
 
 //returns html code for footer
@@ -102,6 +130,7 @@ function createFooter() {
 
 //loads home page's main content/html
 function loadHomePage() {
+
     const TopContent = `<div class="container-fluid d-flex flex-row align-items-center justify-content-between">
         <!--Main Content-->
         <div>
@@ -178,117 +207,99 @@ function loadHomePage() {
     const popupContent = `<!--Settings Pop Up-->
         <div class="container settings_box mx-auto text-center">
         
-        <div class="settings_header">
-            <h2>Settings Box<hr></h2>   
-        </div>
-        
-        <p>Account Creation Date:XX-XX-XXXX</p>
-        
-        <div class="d-flex flex-row mx-auto">
-            <button type="button" class="btn" onclick="logOut()">Log Out</button>
-            <button type="button" class="btn">Delete account</button>
-        </div>
+            <div class="settings_header">
+                <h2>Settings Box<hr></h2>   
+            </div>
+            
+            <p>Account Creation Date:XX-XX-XXXX</p>
+            
+            <div class="d-flex flex-row mx-auto">
+                <button type="button" class="btn" onclick="logOut()">Log Out</button>
+                <button type="button" class="btn">Delete account</button>
+            </div>
         
         </div>
         
         <!--Post Composer Pop Up-->
         <div class="container post_box mx-auto">
-        <div class="post_box_header d-flex flex-row">
-            <h2>Post Box</h2>
-            <i class="fa fa-times-circle-o fa-2x" onclick="closePostBox()"></i>
-        </div>
-        <textarea id="post_text" placeholder="Write something here..."></textarea>
-        
-        <!--Accept Images and Videos to be posted as well-->
-        <div class="media_upload d-flex flex-column">
-            <span class="d-flex flex-row media_upload_button mb-3">
-                <p>Add </p>
-                <i class="fa fa-photo-film"></i>
-                <p>:</p>
-                <input name="mediaUpload" id="mediaUpload" type="file" accept="image/*,video/*">
-            </span>
-        </div>
-        <button type="button" class="btn post_button" onclick="createPost()">Post</button> 
+            <div class="post_box_header d-flex flex-row">
+                <h2>Post Box</h2>
+                <i class="fa fa-times-circle-o fa-2x" onclick="closePostBox()"></i>
+            </div>
+            <textarea id="post_text" placeholder="Write something here..."></textarea>
+            
+            <!--Accept Images and Videos to be posted as well-->
+            <div class="media_upload d-flex flex-column">
+                <span class="d-flex flex-row media_upload_button mb-3">
+                    <p>Add </p>
+                    <i class="fa fa-photo-film"></i>
+                    <p>:</p>
+                    <input name="mediaUpload" id="mediaUpload" type="file" accept="image/*,video/*">
+                </span>
+            </div>
+            <button type="button" class="btn post_button" onclick="createPost()">Post</button> 
         </div>
         
         <!--Comment Box Pop up-->
         <div class="comment_section">
-        <div class="comment_section_header d-flex flex-row ">
-            <h2 class="mt-2">Comments</h2>
-            <i class="fa fa-times-circle-o fa-2x" onclick="closeCommentBox()"></i>
+
+            <div class="comment_section_header d-flex flex-row ">
+                <h2 class="mt-2">Comments</h2>
+                <i class="fa fa-times-circle-o fa-2x" onclick="closeCommentBox()"></i>
+            </div>
+            
+            <div class="comment_box d-flex flex-column mx-auto mt-2 rounded">
+            
+                <!--First example of comment-->
+                <div class="comment d-flex flex-column mt-2">
+                    <div class="commenter_profile d-flex flex-row">
+                        <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
+                        <p class="mt-2">Salty Player</p>
+                    </div>
+            
+                    <div class="comment_content">
+                        <p>Dan Heng IL is just too OP! The devs need to nerf him!!</p>
+                    </div>
+                    <!--Adding engagement buttons: like, dislike-->
+                    <div class="d-flex flex-row">
+                        <button type="button" class="btn">
+                            <i class="fa fa-heart-o"></i>
+                        </button>
+            
+                        <button type="button" class="btn">
+                            <i class="fa fa-thumbs-o-down"></i>
+                        </button>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+
         </div>
         
-        <div class="comment_box d-flex flex-column mx-auto mt-2 rounded">
-        
-            <!--First example of comment-->
-            <div class="comment d-flex flex-column mt-2">
-                <div class="commenter_profile d-flex flex-row">
-                    <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
-                    <p class="mt-2">Salty Player</p>
-                </div>
-        
-                <div class="comment_content">
-                    <p>Dan Heng IL is just too OP! The devs need to nerf him!!</p>
-                </div>
-                <!--Adding engagement buttons: like, dislike-->
-                <div class="d-flex flex-row">
-                    <button type="button" class="btn">
-                        <i class="fa fa-heart-o"></i>
-                    </button>
-        
-                    <button type="button" class="btn">
-                        <i class="fa fa-thumbs-o-down"></i>
+        <!--Following List-->
+        <div id="following_list" class="following_list">
+
+            <div class="following_list_header d-flex flex-row">
+                <h2 class="mt-2">Following List</h2>
+                <i class="fa fa-times-circle-o fa-2x" onclick="closeFollowingList()"></i>
+            </div>
+
+            <div class="following_list_box d-flex flex-column mx-auto mt-2 rounded">
+
+                <!--First example of following user-->
+
+                <div class="following_profile d-flex flex-row">
+                    <i class="fa fa-user fa-2xl"></i>
+                    <h5 id="following_user">Salty Player</h5>
+                    <button class="btn" type="button">
+                        <i class="fa fa-minus fa-lg"></i>
                     </button>
                 </div>
-                <hr>
+
+                <hr> 
+
             </div>
         
-            <!--Second example of comment-->
-            <div class="comment d-flex flex-column mt-2">
-                <div class="commenter_profile d-flex flex-row">
-                    <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
-                    <p class="mt-2">Top Cat</p>
-                </div>
-        
-                <div class="comment_content">
-                    <p>Yes you can stop farming now! Maybe try to get sparkle next update to maximise his damage.</p>
-                </div>
-                <!--Adding engagement buttons: like, dislike-->
-                <div class="d-flex flex-row">
-                    <button type="button" class="btn">
-                        <i class="fa fa-heart-o"></i>
-                    </button>
-        
-                    <button type="button" class="btn">
-                        <i class="fa fa-thumbs-o-down"></i>
-                    </button>
-                </div>
-                <hr>
-            </div>
-        
-            <!--Third example of comment-->
-            <div class="comment d-flex flex-column mt-2">
-                <div class="commenter_profile d-flex flex-row">
-                    <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
-                    <p class="mt-2">Tryhard Player</p>
-                </div>
-        
-                <div class="comment_content">
-                    <p>No!! You should never stop farming for your favourite character. Build Rating: 7/10. His relics can be improved.</p>
-                </div>
-                <!--Adding engagement buttons: like, dislike-->
-                <div class="d-flex flex-row">
-                    <button type="button" class="btn">
-                        <i class="fa fa-heart-o"></i>
-                    </button>
-        
-                    <button type="button" class="btn">
-                        <i class="fa fa-thumbs-o-down"></i>
-                    </button>
-                </div>
-                <hr>
-            </div> 
-        </div>
         </div>`;
 
     const homePageContent = TopContent + sideContent + popupContent;
@@ -481,6 +492,22 @@ function showCommentBox() {
   }
 }
 
+function openFollowingList(){
+    following_list = document.getElementById("following_list");
+    // if (following_list.style.display == "block") {
+    //     following_list.style.display = "none";
+    // } else {
+    //     following_list.style.display = "block";
+    // }
+    following_list.style.display = "block";
+}
+
+function closeFollowingList(){
+    following_list = document.getElementById("following_list");
+    if (following_list.style.display == "block") {
+        following_list.style.display = "none";
+    }
+}
 
 /*if show is pressed, show actual password
 else if hide is pressed, hide password
@@ -591,20 +618,8 @@ async function validateLogin(event){
                 icon:"success", 
                 showCloseButton: true,
                 willClose: function(){
+                    window.location.reload();
                     loadHomePage();
-                    const statusText = document.getElementById("statusText");
-                    statusText.innerHTML = `Username:<span id="sessionUsername">${username}</span><br>Status:Logged In`; 
-                    
-                    const signupButton = document.querySelector(".go_to_signup_page");
-                    signupButton.style.display = "none";
-
-                    const loginButton = document.querySelector(".go_to_login_page");
-                    loginButton.style.display = "none";
-
-                    const userProfileButton = document.querySelector(".user_profile_button");
-                    const settingsButton = document.querySelector(".settings_button");
-                    settingsButton.style.left = "17em";
-                    userProfileButton.style.left = "27em";
                 }
             })
             form.reset();
@@ -652,9 +667,8 @@ async function logOut(){
                 showCloseButton: true,
                 willClose: function(){
                     ClickSettingsButton();
+                    window.location.reload();
                     loadHomePage();
-                    // const statusText = document.getElementById("statusText");
-                    // statusText.innerHTML = "Status:Logged Out";
                 }
             })
         } else {
@@ -732,6 +746,7 @@ function checkIfVideo(url){
     const extension = url.substring(url.lastIndexOf('.')).toLowerCase();
     return videoExtensions.includes(extension);
 }
+
 //load the posts created
 async function loadPosts(){
     let postArea = document.querySelector(".post_area");
@@ -750,15 +765,15 @@ async function loadPosts(){
             mediaURL = postsArray[i].media;
             username = postsArray[i].user;
             text = postsArray[i].text;
-            console.log("here1");
+            // console.log("here1");
             if(checkIfImage(mediaURL) == true){
-                console.log("image");
+                // console.log("image");
                 postArea.innerHTML+=`<div class="post">
                     <!--Post related buttons-->
                     <div class="user_info d-flex flex-row align-items-center">
                         <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                        <span style="position: relative; left: 1.5em;">${username}</span>
-                        <button type="button" class="btn follow_button">Follow</button>
+                        <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                        <button type="button" class="btn follow_button" value="${username}">Follow</button>
                         <button type="button" class="btn options_button">⋮</button>
                     </div>
                     
@@ -786,13 +801,13 @@ async function loadPosts(){
                     </div>
                 </div>`;
             } else if (checkIfVideo(mediaURL) == true){
-                console.log("video");
+                // console.log("video");
                 postArea.innerHTML += `<div class="post">
                         <!--Post related buttons-->
                         <div class="user_info d-flex flex-row align-items-center">
                             <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                            <span style="position: relative; left: 1.5em;">${username}</span>
-                            <button type="button" class="btn follow_button">Follow</button>
+                            <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                            <button type="button" class="btn follow_button" value="${username}">Follow</button>
                             <button type="button" class="btn options_button">⋮</button>
                         </div>
                         
@@ -821,15 +836,83 @@ async function loadPosts(){
                             </button>
                         </div>
                     </div>`;
+            } else {
+                postArea.innerHTML += `<div class="post">
+                        <!--Post related buttons-->
+                        <div class="user_info d-flex flex-row align-items-center">
+                            <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                            <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                            <button type="button" class="btn follow_button" value="${username}">Follow</button>
+                            <button type="button" class="btn options_button">⋮</button>
+                        </div>
+                        
+                        <!--Post Contents-->
+                        <div class="post_content d-flex flex-column">
+                            <span><h5>${text}</h5></span>
+                        </div>
+            
+                        <hr>
+
+                        <!--Adding engagement buttons: like, dislike, comment-->
+                        <div class="d-flex flex-row engagement_buttons">
+                            <button type="button" class="btn">
+                                <i class="fa fa-heart-o"></i>
+                            </button>
+
+                            <button type="button" class="btn">
+                                <i class="fa fa-thumbs-o-down"></i>
+                            </button>
+
+                            <button type="button" class="btn">
+                                <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                            </button>
+                        </div>
+                    </div>`;
             }
         }
     }) 
 }
 
+//follow User
+document.addEventListener('DOMContentLoaded', function() {
+    let postArea = document.querySelector(".post_area");
+    postArea.addEventListener('click', function(event) {
+        if (event.target.classList.contains('follow_button')) {
+            const username = event.target.value;
+            // console.log(username);
 
-
-
-
-
+            fetch('/M00934333/follow-user', {
+                method:'POST',
+                credentials:"include",
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({username:username})
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.message === "Successfully followed user"){
+                    Swal.fire({
+                        title: "Followed Successfully",
+                        text:"You've successfully followed this user",
+                        icon:"success", 
+                        showCloseButton: true
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Oops, something went wrong!",
+                        text:"Unable to follow user. Must be logged in and you cannot follow yourself.",
+                        icon:"error", 
+                        showCloseButton: true
+                    });
+                }
+            })
+            .catch(error=>{
+                console.error(error);
+            })
+        }
+    });
+});
 
 
