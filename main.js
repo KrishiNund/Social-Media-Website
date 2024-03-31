@@ -32,6 +32,7 @@ function loadPageContent(content, type) {
     app.innerHTML = createHeader() + content;
     getUserStatus();
     loadPosts();
+    loadFollowing(); 
   } else {
     app.innerHTML = content + createFooter();
   }
@@ -286,17 +287,7 @@ function loadHomePage() {
 
             <div class="following_list_box d-flex flex-column mx-auto mt-2 rounded">
 
-                <!--First example of following user-->
-
-                <div class="following_profile d-flex flex-row">
-                    <i class="fa fa-user fa-2xl"></i>
-                    <h5 id="following_user">Salty Player</h5>
-                    <button class="btn" type="button">
-                        <i class="fa fa-minus fa-lg"></i>
-                    </button>
-                </div>
-
-                <hr> 
+                
 
             </div>
         
@@ -737,14 +728,23 @@ async function createPost(){
 //check media type
 function checkIfImage(url){
     const imageExtensions = ['.jpg','.png','.jpeg','.gif'];
-    const extension = url.substring(url.lastIndexOf('.')).toLowerCase();
-    return imageExtensions.includes(extension);
+    try{
+        const extension = url.substring(url.lastIndexOf('.')).toLowerCase();
+        return imageExtensions.includes(extension); 
+    } catch (error){
+        return false;
+    } 
 }
 
 function checkIfVideo(url){
     const videoExtensions = ['.mp4','.webm','.avi'];
-    const extension = url.substring(url.lastIndexOf('.')).toLowerCase();
-    return videoExtensions.includes(extension);
+    try{
+        const extension = url.substring(url.lastIndexOf('.')).toLowerCase();
+        return videoExtensions.includes(extension);
+    } catch(error){
+        return false;
+    }
+    
 }
 
 //load the posts created
@@ -873,7 +873,7 @@ async function loadPosts(){
     }) 
 }
 
-//follow User
+//follow User when follow button is pressed
 document.addEventListener('DOMContentLoaded', function() {
     let postArea = document.querySelector(".post_area");
     postArea.addEventListener('click', function(event) {
@@ -897,14 +897,23 @@ document.addEventListener('DOMContentLoaded', function() {
                         title: "Followed Successfully",
                         text:"You've successfully followed this user",
                         icon:"success", 
-                        showCloseButton: true
+                        showCloseButton: true,
+                        willClose: function(){
+                            window.location.reload();
+                        }
                     });
+                   
+
                 } else {
                     Swal.fire({
                         title: "Oops, something went wrong!",
                         text:"Unable to follow user. Must be logged in and you cannot follow yourself.",
                         icon:"error", 
-                        showCloseButton: true
+                        showCloseButton: true,
+                        willClose: function(){
+                            window.location.reload();
+                        }
+
                     });
                 }
             })
@@ -915,4 +924,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+//load the following users in the following list
 
+async function loadFollowing(){
+    const followingListBox = document.querySelector(".following_list_box");
+    fetch('/M00934333/get-following',{
+        method:'GET',
+        credentials:"include",
+        headers:{
+            'Content-Type':'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data =>{
+        const followingList = data.data;
+        for (let i =0; i < followingList.length;i++){
+            followingListBox.innerHTML += `
+                <div class="following_profile d-flex flex-row">
+                    <i class="fa fa-user fa-2xl"></i>
+                    <h5 id="following_user">${followingList[i].username}</h5>
+                    <button class="btn unfollow_button" type="button" value="${followingList[i].username}">
+                        <i class="fa fa-minus fa-lg"></i>
+                    </button>
+                </div>
+
+                <hr> `;
+        }
+    })
+}

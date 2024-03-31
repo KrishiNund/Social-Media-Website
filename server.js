@@ -227,6 +227,7 @@ async function getUserStatus(req,res){
   
 }
 
+//follow a user
 app.post('/M00934333/follow-user',followUser);
 
 async function followUser(req,res){
@@ -252,6 +253,26 @@ async function followUser(req,res){
     res.status(404).send({message:"Couldn't follow user"});
   }
 }
+
+//return list of following users
+app.get('/M00934333/get-following',getFollowing);
+
+async function getFollowing(req,res){
+  try{
+    const collection = database.collection("Users");
+    const loggedInUser = req.session.username;
+    const query = {username:loggedInUser};
+    // const projection = {following:1};
+  
+    const result = await collection.findOne(query);
+    // console.log(result.following);
+    res.status(201).send({message:"Following list",data:result.following}); 
+  } catch(error){
+    res.status(404).send({message:"Not logged in"}); 
+  }
+  
+}
+
 
 //starting server
 app.listen(PORT, () => {
