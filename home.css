@@ -441,7 +441,7 @@ body {
 }
 
 
-/*Following list styling - applicable for both following list and followers list*/
+/*Following list styling*/
 .following_list{
   display: none;
   width: 30em;
@@ -497,8 +497,8 @@ body {
 }
 
 .following_profile button {
-  border: none;
+  border: 2px solid black;
   position: relative;
-  bottom: 0.2em;
+  top: 0.5em;
   right: 0.2em;
 }

@@ -273,6 +273,25 @@ async function getFollowing(req,res){
   
 }
 
+//unfollow user
+app.post('/M00934333/unfollow-user',unfollowUser);
+
+async function unfollowUser(req,res){
+  try{
+    const username = req.body.username;
+    console.log("username:",username);
+    console.log("session:",req.session.username);
+    
+    const collection = database.collection("Users");
+
+    const result = await collection.updateOne({username:req.session.username},{$pull:{following:req.body}});
+
+    res.status(201).send({message:"Successfully unfollowed user",data:result});
+    
+  } catch(error){
+    res.status(404).send({message:"Couldn't unfollow user"});
+  }
+}
 
 //starting server
 app.listen(PORT, () => {

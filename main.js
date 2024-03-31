@@ -903,7 +903,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                    
-
                 } else {
                     Swal.fire({
                         title: "Oops, something went wrong!",
@@ -943,12 +942,60 @@ async function loadFollowing(){
                 <div class="following_profile d-flex flex-row">
                     <i class="fa fa-user fa-2xl"></i>
                     <h5 id="following_user">${followingList[i].username}</h5>
-                    <button class="btn unfollow_button" type="button" value="${followingList[i].username}">
-                        <i class="fa fa-minus fa-lg"></i>
-                    </button>
+                    <button class="btn unfollow_button" type="button" value="${followingList[i].username}">Unfollow</button>
                 </div>
 
                 <hr> `;
         }
     })
 }
+
+//unfollow user
+document.addEventListener('DOMContentLoaded', function() {
+    let followingListBox = document.querySelector(".following_list_box");
+    followingListBox.addEventListener('click', function(event) {
+        if (event.target.classList.contains('unfollow_button')) {
+            const username = event.target.value;
+            // console.log(username);
+
+            fetch('/M00934333/unfollow-user', {
+                method:'POST',
+                credentials:"include",
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({username:username})
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.message === "Successfully unfollowed user"){
+                    Swal.fire({
+                        title: "Unfollowed Successfully",
+                        text:"You've successfully unfollowed this user",
+                        icon:"success", 
+                        showCloseButton: true,
+                        willClose: function(){
+                            window.location.reload();
+                        }
+                    });
+                   
+                } else {
+                    Swal.fire({
+                        title: "Oops, something went wrong!",
+                        text:"Unable to unfollow user.",
+                        icon:"error", 
+                        showCloseButton: true,
+                        willClose: function(){
+                            window.location.reload();
+                        }
+
+                    });
+                }
+            })
+            .catch(error=>{
+                console.error(error);
+            })
+        }
+    });
+});
