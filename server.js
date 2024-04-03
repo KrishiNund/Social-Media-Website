@@ -205,6 +205,7 @@ async function logout(req,res){
   }
 }
 
+//get all posts (for explore posts feed)
 app.get('/M00934333/get-all-posts', getAllPosts);
 
 async function getAllPosts(req,res){
@@ -214,7 +215,40 @@ async function getAllPosts(req,res){
   res.status(201).send({message:"Posts Successfully Retrieved",data:posts});
 }
 
+//get following posts
+app.get('/M00934333/get-following-posts',getFollowingPosts);
 
+async function getFollowingPosts(req,res){
+  try{
+    //get username of logged in user
+    let collection = database.collection("Users");
+    const loggedInUser = req.session.username;
+    let query = {username:loggedInUser};
+
+    //get list of people user follows
+    let result = await collection.findOne(query);
+    let followingUsersArray = result.following.map(user => user.username);
+    // console.log(followingUsersArray);
+
+    //get posts from people user follows
+    collection = database.collection("Posts");
+
+    query = {user:{$in: followingUsersArray}};
+    
+    const followingPosts = await collection.find(query).toArray();
+
+    // console.log(followingPosts);
+
+    res.status(201).send({message:"Following Posts",data:followingPosts}); 
+
+  } catch(error){
+    res.status(404).send({message:"Error",data:error}); 
+  }
+  
+}
+
+
+//get user status through session management
 app.get('/M00934333/get-status',getUserStatus);
 
 async function getUserStatus(req,res){
@@ -290,6 +324,26 @@ async function unfollowUser(req,res){
     
   } catch(error){
     res.status(404).send({message:"Couldn't unfollow user"});
+  }
+}
+
+//search functionality
+app.post('/M00934333/search-user',searchUser);
+
+async function searchUser(req,res){
+  try{
+    const collection = database.collection("Users");
+    const usernameEntered = req.body.username;
+
+    const query = {username:usernameEntered};
+
+    const result = await collection.findOne(query);
+
+    // console.log(result);
+
+    res.status(201).send({message:"User found",data:result});
+  } catch(error){
+    res.status(404).send({message:"User not found",data:result});
   }
 }
 

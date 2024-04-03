@@ -46,6 +46,26 @@ body {
   z-index: 1;
 }
 
+.results_box{
+  display: none;
+  position: fixed;
+  left: 23.26em;
+  top: 3.1em;
+  height: auto;
+  width: 38em;
+  background-color: aliceblue;
+  border-top: 1px solid #999;
+  padding: 15px 10px;
+}
+
+.result button{
+  border:2px solid black;
+}
+
+.result button:hover{
+  scale: 1.1;
+}
+
 /*Customising page redirection links to signup and login pages*/
 .go_to_signup_page {
   display: block;
@@ -125,12 +145,6 @@ body {
   top: 1.9em;
 }
 
-/* .user_info button {
-  position: absolute;
-  left: 90%;
-  margin-left: 25px;
-  border: none;
-} */
 
 .user_profile {
   position: relative;
@@ -150,7 +164,6 @@ body {
   position: absolute;
   left: 95%;
   margin-right: 5px;
-  /* background-color: #6969b3; */
   border-radius: 20px;
   border: none;
 }

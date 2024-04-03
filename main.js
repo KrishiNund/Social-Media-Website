@@ -31,7 +31,7 @@ function loadPageContent(content, type) {
   if (type == "homepage") {
     app.innerHTML = createHeader() + content;
     getUserStatus();
-    loadPosts();
+    loadExplorePosts();
     loadFollowing(); 
   } else {
     app.innerHTML = content + createFooter();
@@ -52,11 +52,15 @@ function createHeader() {
                         </a>
                     </div>
 
-                    <div class="flex-grow-1">
+                    <div class="d-flex flex-column flex-grow-1">
                         <!--Search Bar-->
                         <div class="form search_bar">
-                            <i class="fa fa-search"></i>
-                            <input type="text" class="form-control form-input" placeholder="Search Anything...">
+                            <i class="fa fa-search" onclick="searchUser()"></i>
+                            <input id="search" name="search" type="text" class="form-control form-input" placeholder="Search Anything...">
+                        </div>
+
+                        <div class="results_box">
+
                         </div>
                     </div>
 
@@ -98,27 +102,6 @@ function createHeader() {
         </nav>`;
 }
 
-async function getUserStatus(){
-    fetch('/M00934333/get-status', {
-        method:'GET',
-        credentials:"include",
-        headers:{
-            'Content-Type':'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        const status = data.message;
-        const username = data.data;
-        
-        const sessionUsername = document.getElementById("sessionUsername");
-        const userStatus = document.getElementById("userStatus");
-
-        sessionUsername.innerHTML = `Username: ${username}`;
-        userStatus.innerHTML =`Status:${status}`;  
-    }); 
-}
-
 //returns html code for footer
 function createFooter() {
   return `<!--Footer with copyright text-->
@@ -131,15 +114,14 @@ function createFooter() {
 
 //loads home page's main content/html
 function loadHomePage() {
-
+    //loading the feed
     const TopContent = `<div class="container-fluid d-flex flex-row align-items-center justify-content-between">
         <!--Main Content-->
         <div>
             <!--Feed menu showcasing the different kinds of feed-->
-            <div class="feed_options d-flex flex-row align-items-center justify-content-between rounded fixed-top">
-                <button type="button" class="btn" style="text-decoration:underline;" id="explorePostsButton" onclick="showExplorePosts()">Explore</button>
+            <div class="feed_options d-flex flex-row align-items-center justify-content-around rounded fixed-top">
+                <button type="button" class="btn" style="text-decoration:underline;" id="explorePostsButton" onclick="showExplorePosts()">Explore</button>|
                 <button type="button" class="btn" id="followingPostsButton"  onclick="showFollowingPosts()">Following</button>
-                <button type="button" class="btn" id="eventPostsButton" onclick="showEventPosts()">Events</button>
             </div>
 
             <!--Posts Sections-->
@@ -149,6 +131,7 @@ function loadHomePage() {
             </div>
         </div>`;
 
+    //loading the side bar elements and widgets
     const sideContent = `<!--Right sidebar-->
             <div class="d-flex flex-column position-fixed sidebar">
         
@@ -204,7 +187,8 @@ function loadHomePage() {
                 </div>
             </div>
         </div>`;
-  
+    
+    //loading pop up elements
     const popupContent = `<!--Settings Pop Up-->
         <div class="container settings_box mx-auto text-center">
         
@@ -400,6 +384,28 @@ function loadLoginPage() {
   loadPageContent(content, "login");
 }
 
+//get user status from session
+function getUserStatus(){
+    fetch('/M00934333/get-status', {
+        method:'GET',
+        credentials:"include",
+        headers:{
+            'Content-Type':'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const status = data.message;
+        const username = data.data;
+        
+        const sessionUsername = document.getElementById("sessionUsername");
+        const userStatus = document.getElementById("userStatus");
+
+        sessionUsername.innerHTML = `Username: ${username}`;
+        userStatus.innerHTML =`Status:${status}`;  
+    }); 
+}
+
 //opens and closes settings box
 function ClickSettingsButton() {
   settingsBox = document.querySelector(".settings_box");
@@ -437,8 +443,7 @@ function showExplorePosts() {
   followingPostsButton = document.getElementById("followingPostsButton");
   followingPostsButton.style.textDecoration = "none";
 
-  eventPostsButton = document.getElementById("eventPostsButton");
-  eventPostsButton.style.textDecoration = "none";
+  loadExplorePosts();
 }
 
 //switch highlight to following button on feed
@@ -449,21 +454,8 @@ function showFollowingPosts() {
   followingPostsButton = document.getElementById("followingPostsButton");
   followingPostsButton.style.textDecoration = "underline";
 
-  eventPostsButton = document.getElementById("eventPostsButton");
-  eventPostsButton.style.textDecoration = "none";
+  loadFollowingPosts();
 }
-
-//switch highlight to events button on feed
-function showEventPosts() {
-  exploreButton = document.getElementById("explorePostsButton");
-  exploreButton.style.textDecoration = "none";
-
-  followingPostsButton = document.getElementById("followingPostsButton");
-  followingPostsButton.style.textDecoration = "none";
-
-  eventPostsButton = document.getElementById("eventPostsButton");
-  eventPostsButton.style.textDecoration = "underline";
-} 
 
 //close comment box on a post
 function closeCommentBox() {
@@ -485,11 +477,6 @@ function showCommentBox() {
 
 function openFollowingList(){
     following_list = document.getElementById("following_list");
-    // if (following_list.style.display == "block") {
-    //     following_list.style.display = "none";
-    // } else {
-    //     following_list.style.display = "block";
-    // }
     following_list.style.display = "block";
 }
 
@@ -500,8 +487,7 @@ function closeFollowingList(){
     }
 }
 
-/*if show is pressed, show actual password
-else if hide is pressed, hide password
+/*if show is pressed, show actual password else if hide is pressed, hide password
 by default, password is hidden*/
 function showHidePassword() {
     //show/hide password
@@ -520,7 +506,7 @@ function showHidePassword() {
 }
 
 //trigger validation for sign up
-async function validateSignup(event){
+function validateSignup(event){
     event.preventDefault();
     const form = document.getElementById("signupForm");
     const formData = new FormData(form);
@@ -583,7 +569,7 @@ async function validateSignup(event){
 }
 
 //trigger validation for login
-async function validateLogin(event){
+function validateLogin(event){
     event.preventDefault();
     const form = document.getElementById("loginForm");
     const username = document.getElementById("username").value;
@@ -639,7 +625,7 @@ async function validateLogin(event){
 }
 
 //logout function 
-async function logOut(){
+function logOut(){
 
     fetch('/M00934333/logout', {
         method:'GET',
@@ -674,7 +660,7 @@ async function logOut(){
 }
 
 //creating a post and posting the details to server to store them
-async function createPost(){
+function createPost(){
     const username = document.getElementById("sessionUsername").innerText;
     const postText = document.getElementById("post_text").value;
     const mediaUploaded = document.getElementById("mediaUpload").files[0];
@@ -748,7 +734,7 @@ function checkIfVideo(url){
 }
 
 //load the posts created
-async function loadPosts(){
+function loadExplorePosts(){
     let postArea = document.querySelector(".post_area");
     fetch('/M00934333/get-all-posts',{
         method:'GET',
@@ -761,6 +747,8 @@ async function loadPosts(){
     .then(data =>{
         const postsArray = data.data;
         console.log("postarray:",postsArray);
+        //clear post area first
+        postArea.innerHTML = "";
         for (let i =0; i<postsArray.length; i++){
             mediaURL = postsArray[i].media;
             username = postsArray[i].user;
@@ -873,6 +861,133 @@ async function loadPosts(){
     }) 
 }
 
+//load posts from following users
+function loadFollowingPosts() {
+    let postArea = document.querySelector(".post_area");
+    fetch('/M00934333/get-following-posts',{
+        method:'GET',
+        credentials:"include",
+        headers:{
+            'Content-Type':'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data =>{
+        const followingPostsArray = data.data;
+        //clear post area first
+        postArea.innerHTML = "";
+        for (let i =0; i<followingPostsArray.length; i++){
+            mediaURL = followingPostsArray[i].media;
+            username = followingPostsArray[i].user;
+            text = followingPostsArray[i].text;
+            // console.log("here1");
+            if(checkIfImage(mediaURL) == true){
+                // console.log("image");
+                postArea.innerHTML+=`<div class="post">
+                    <!--Post related buttons-->
+                    <div class="user_info d-flex flex-row align-items-center">
+                        <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                        <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                        <button type="button" class="btn follow_button" value="${username}">Follow</button>
+                        <button type="button" class="btn options_button">⋮</button>
+                    </div>
+                    
+                    <!--Post Contents-->
+                    <div class="post_content d-flex flex-column">
+                        <span><h5>${text}</h5></span>
+                        <img src="${mediaURL}" alt="dan_heng_build" class="img-fluid rounded" >
+                    </div>
+        
+                    <hr>
+
+                    <!--Adding engagement buttons: like, dislike, comment-->
+                    <div class="d-flex flex-row engagement_buttons">
+                        <button type="button" class="btn">
+                            <i class="fa fa-heart-o"></i>
+                        </button>
+
+                        <button type="button" class="btn">
+                            <i class="fa fa-thumbs-o-down"></i>
+                        </button>
+
+                        <button type="button" class="btn">
+                            <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                        </button>
+                    </div>
+                </div>`;
+            } else if (checkIfVideo(mediaURL) == true){
+                // console.log("video");
+                postArea.innerHTML += `<div class="post">
+                        <!--Post related buttons-->
+                        <div class="user_info d-flex flex-row align-items-center">
+                            <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                            <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                            <button type="button" class="btn follow_button" value="${username}">Follow</button>
+                            <button type="button" class="btn options_button">⋮</button>
+                        </div>
+                        
+                        <!--Post Contents-->
+                        <div class="post_content d-flex flex-column">
+                            <span><h5>${text}</h5></span>
+                            <video class="img-fluid" controls>
+                                <source src="${mediaURL}" type="video/mp4">
+                            </video>
+                        </div>
+            
+                        <hr>
+
+                        <!--Adding engagement buttons: like, dislike, comment-->
+                        <div class="d-flex flex-row engagement_buttons">
+                            <button type="button" class="btn">
+                                <i class="fa fa-heart-o"></i>
+                            </button>
+
+                            <button type="button" class="btn">
+                                <i class="fa fa-thumbs-o-down"></i>
+                            </button>
+
+                            <button type="button" class="btn">
+                                <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                            </button>
+                        </div>
+                    </div>`;
+            } else {
+                postArea.innerHTML += `<div class="post">
+                        <!--Post related buttons-->
+                        <div class="user_info d-flex flex-row align-items-center">
+                            <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
+                            <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                            <button type="button" class="btn follow_button" value="${username}">Follow</button>
+                            <button type="button" class="btn options_button">⋮</button>
+                        </div>
+                        
+                        <!--Post Contents-->
+                        <div class="post_content d-flex flex-column">
+                            <span><h5>${text}</h5></span>
+                        </div>
+            
+                        <hr>
+
+                        <!--Adding engagement buttons: like, dislike, comment-->
+                        <div class="d-flex flex-row engagement_buttons">
+                            <button type="button" class="btn">
+                                <i class="fa fa-heart-o"></i>
+                            </button>
+
+                            <button type="button" class="btn">
+                                <i class="fa fa-thumbs-o-down"></i>
+                            </button>
+
+                            <button type="button" class="btn">
+                                <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                            </button>
+                        </div>
+                    </div>`;
+            }
+        }
+    })
+}
+
 //follow User when follow button is pressed
 document.addEventListener('DOMContentLoaded', function() {
     let postArea = document.querySelector(".post_area");
@@ -924,8 +1039,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 //load the following users in the following list
-
-async function loadFollowing(){
+function loadFollowing(){
     const followingListBox = document.querySelector(".following_list_box");
     fetch('/M00934333/get-following',{
         method:'GET',
@@ -936,17 +1050,22 @@ async function loadFollowing(){
     })
     .then(response => response.json())
     .then(data =>{
-        const followingList = data.data;
-        for (let i =0; i < followingList.length;i++){
-            followingListBox.innerHTML += `
-                <div class="following_profile d-flex flex-row">
-                    <i class="fa fa-user fa-2xl"></i>
-                    <h5 id="following_user">${followingList[i].username}</h5>
-                    <button class="btn unfollow_button" type="button" value="${followingList[i].username}">Unfollow</button>
-                </div>
-
-                <hr> `;
+        try{
+            const followingList = data.data;
+            for (let i =0; i < followingList.length;i++){
+                followingListBox.innerHTML += `
+                    <div class="following_profile d-flex flex-row">
+                        <i class="fa fa-user fa-2xl"></i>
+                        <h5 id="following_user">${followingList[i].username}</h5>
+                        <button class="btn unfollow_button" type="button" value="${followingList[i].username}">Unfollow</button>
+                    </div>
+    
+                    <hr> `;
+            }
+        } catch(error){
+            console.log(error);
         }
+       
     })
 }
 
@@ -999,3 +1118,80 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+//search bar function - search user
+
+function searchUser(){
+    const usernameEntered = document.getElementById('search').value;
+    const resultsBox = document.querySelector(".results_box");
+    fetch('/M00934333/search-user', {
+        method:'POST',
+        credentials:"include",
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({username:usernameEntered})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === "User found"){
+            resultsBox.innerHTML = `<div class="d-flex flex-row align-items-center justify-content-around result">
+                <i class="fa fa-user fa-xl"></i>
+                <span>${usernameEntered}</span>
+                <button id="followUserButton" class="btn" value="${usernameEntered}" onclick="followUser()">Follow</button>
+            </div>`;
+            resultsBox.style.display = "block";
+        } else {
+            Swal.fire({
+                title: "Unsuccessful Search",
+                text:"User was not found!",
+                icon:"error", 
+                showCloseButton: true,
+                willClose: function(){
+                    window.location.reload();
+                }
+            });
+
+        }
+    })
+}
+
+function followUser(){
+    const user = document.getElementById("followUserButton").value;
+    fetch('/M00934333/follow-user', {
+        method:'POST',
+        credentials:"include",
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({username:user})
+    })
+    .then(response => response.json())
+    .then(data => {
+        const resultsBox = document.querySelector(".results_box");
+        if (data.message === "Successfully followed user"){
+            Swal.fire({
+                title: "Followed Successfully",
+                text:"You've successfully followed this user",
+                icon:"success", 
+                showCloseButton: true,
+                willClose: function(){
+                    window.location.reload();
+                    resultsBox.style.display = "none";
+                }
+            });
+        } else {
+            Swal.fire({
+                title: "Oops, something went wrong!",
+                text:"Unable to follow user. Must be logged in and you cannot follow yourself.",
+                icon:"error", 
+                showCloseButton: true,
+                willClose: function(){
+                    window.location.reload();
+                    resultsBox.style.display = "none";
+                }
+
+            });
+        }
+    })
+}
