@@ -1211,10 +1211,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     const commentsArray = data.data;
-            
+                    console.log(commentsArray);
+                    commentBox.innerHTML = "";
                     for (i = 0; i<commentsArray.length; i++){
                         const user = commentsArray[i].user;
                         const text = commentsArray[i].text;
+                        console.log(user,text);
                         commentBox.innerHTML += `
                         <div class="comment d-flex flex-column mt-2">
                             <div class="commenter_profile d-flex flex-row">

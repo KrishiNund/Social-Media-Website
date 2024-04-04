@@ -360,7 +360,7 @@ async function getComments(req,res){
     const query = {_id:new ObjectId(postID)};
 
     const result = await collection.findOne(query);
-    console.log(result);
+    // console.log(result);
 
     const commentsArray = result.comments;
     console.log("comments:",commentsArray);
