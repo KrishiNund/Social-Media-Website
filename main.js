@@ -234,29 +234,14 @@ function loadHomePage() {
             </div>
             
             <div class="comment_box d-flex flex-column mx-auto mt-2 rounded">
-            
-                <!--First example of comment-->
-                <div class="comment d-flex flex-column mt-2">
-                    <div class="commenter_profile d-flex flex-row">
-                        <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
-                        <p class="mt-2">Salty Player</p>
-                    </div>
-            
-                    <div class="comment_content">
-                        <p>Dan Heng IL is just too OP! The devs need to nerf him!!</p>
-                    </div>
-                    <!--Adding engagement buttons: like, dislike-->
-                    <div class="d-flex flex-row">
-                        <button type="button" class="btn">
-                            <i class="fa fa-heart-o"></i>
-                        </button>
-            
-                        <button type="button" class="btn">
-                            <i class="fa fa-thumbs-o-down"></i>
-                        </button>
-                    </div>
-                    <hr>
-                </div>
+                
+            </div>
+
+            <div class="d-flex flex-row">
+                <textarea id="comment_text" placeholder="Write something here..."></textarea>
+                <button class="btn postCommentButton" value="" onclick="addComment()">
+                    <i class="fa fa-paper-plane fa-2x" style="position:relative; right:0.3em"></i>
+                </button>
             </div>
 
         </div>
@@ -753,6 +738,8 @@ function loadExplorePosts(){
             mediaURL = postsArray[i].media;
             username = postsArray[i].user;
             text = postsArray[i].text;
+            postID = postsArray[i]._id;
+            console.log(postID);
             // console.log("here1");
             if(checkIfImage(mediaURL) == true){
                 // console.log("image");
@@ -775,16 +762,16 @@ function loadExplorePosts(){
 
                     <!--Adding engagement buttons: like, dislike, comment-->
                     <div class="d-flex flex-row engagement_buttons">
-                        <button type="button" class="btn">
+                        <button id="likeButton" type="button" class="btn" value="${postID}">
                             <i class="fa fa-heart-o"></i>
                         </button>
 
-                        <button type="button" class="btn">
+                        <button id="dislikeButton" type="button" class="btn" value="${postID}">
                             <i class="fa fa-thumbs-o-down"></i>
                         </button>
 
-                        <button type="button" class="btn">
-                            <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                        <button class="commentsButton btn" type="button" value="${postID}">
+                            <i class="fa fa-comment-o" style="position:relative; z-index:"></i>
                         </button>
                     </div>
                 </div>`;
@@ -811,16 +798,16 @@ function loadExplorePosts(){
 
                         <!--Adding engagement buttons: like, dislike, comment-->
                         <div class="d-flex flex-row engagement_buttons">
-                            <button type="button" class="btn">
+                            <button id="likeButton" type="button" class="btn" value="${postID}">
                                 <i class="fa fa-heart-o"></i>
                             </button>
 
-                            <button type="button" class="btn">
+                            <button id="dislikeButton" type="button" class="btn" value="${postID}">
                                 <i class="fa fa-thumbs-o-down"></i>
                             </button>
 
-                            <button type="button" class="btn">
-                                <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                            <button class="commentsButton btn" type="button" value="${postID}">
+                                <i class="fa fa-comment-o"></i>
                             </button>
                         </div>
                     </div>`;
@@ -843,16 +830,16 @@ function loadExplorePosts(){
 
                         <!--Adding engagement buttons: like, dislike, comment-->
                         <div class="d-flex flex-row engagement_buttons">
-                            <button type="button" class="btn">
+                            <button id="likeButton" type="button" class="btn" value="${postID}">
                                 <i class="fa fa-heart-o"></i>
                             </button>
 
-                            <button type="button" class="btn">
+                            <button id="dislikeButton" type="button" class="btn" value="${postID}">
                                 <i class="fa fa-thumbs-o-down"></i>
                             </button>
 
-                            <button type="button" class="btn">
-                                <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                            <button class="commentsButton btn" type="button" value="${postID}">
+                                <i class="fa fa-comment-o"></i>
                             </button>
                         </div>
                     </div>`;
@@ -880,6 +867,7 @@ function loadFollowingPosts() {
             mediaURL = followingPostsArray[i].media;
             username = followingPostsArray[i].user;
             text = followingPostsArray[i].text;
+            postID = followingPostsArray[i]._id;
             // console.log("here1");
             if(checkIfImage(mediaURL) == true){
                 // console.log("image");
@@ -902,16 +890,16 @@ function loadFollowingPosts() {
 
                     <!--Adding engagement buttons: like, dislike, comment-->
                     <div class="d-flex flex-row engagement_buttons">
-                        <button type="button" class="btn">
+                        <button id="likeButton" type="button" class="btn" value="${postID}">
                             <i class="fa fa-heart-o"></i>
                         </button>
 
-                        <button type="button" class="btn">
+                        <button id="dislikeButton" type="button" class="btn" value="${postID}">
                             <i class="fa fa-thumbs-o-down"></i>
                         </button>
 
-                        <button type="button" class="btn">
-                            <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                        <button class="commentsButton btn" type="button" value="${postID}">
+                            <i class="fa fa-comment-o"></i>
                         </button>
                     </div>
                 </div>`;
@@ -938,16 +926,16 @@ function loadFollowingPosts() {
 
                         <!--Adding engagement buttons: like, dislike, comment-->
                         <div class="d-flex flex-row engagement_buttons">
-                            <button type="button" class="btn">
+                            <button id="likeButton" type="button" class="btn" value="${postID}">
                                 <i class="fa fa-heart-o"></i>
                             </button>
 
-                            <button type="button" class="btn">
+                            <button id="dislikeButton" type="button" class="btn" value="${postID}">
                                 <i class="fa fa-thumbs-o-down"></i>
                             </button>
 
-                            <button type="button" class="btn">
-                                <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                            <button class="commentsButton btn" type="button" value="${postID}">
+                                <i class="fa fa-comment-o"></i>
                             </button>
                         </div>
                     </div>`;
@@ -970,16 +958,16 @@ function loadFollowingPosts() {
 
                         <!--Adding engagement buttons: like, dislike, comment-->
                         <div class="d-flex flex-row engagement_buttons">
-                            <button type="button" class="btn">
+                            <button id="likeButton" type="button" class="btn" value="${postID}">
                                 <i class="fa fa-heart-o"></i>
                             </button>
 
-                            <button type="button" class="btn">
+                            <button id="dislikeButton" type="button" class="btn" value="${postID}">
                                 <i class="fa fa-thumbs-o-down"></i>
                             </button>
 
-                            <button type="button" class="btn">
-                                <i class="fa fa-comment-o" onclick="showCommentBox()"></i>
+                            <button class="commentsButton btn" type="button" value="${postID}">
+                                <i class="fa fa-comment-o"></i>
                             </button>
                         </div>
                     </div>`;
@@ -1120,7 +1108,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 //search bar function - search user
-
 function searchUser(){
     const usernameEntered = document.getElementById('search').value;
     const resultsBox = document.querySelector(".results_box");
@@ -1156,6 +1143,7 @@ function searchUser(){
     })
 }
 
+//follow user from search results
 function followUser(){
     const user = document.getElementById("followUserButton").value;
     fetch('/M00934333/follow-user', {
@@ -1196,3 +1184,99 @@ function followUser(){
     })
 }
 
+//load comments when comments box is opened
+document.addEventListener('DOMContentLoaded', function() {
+    //console.log("works");
+    try{
+        let postArea = document.querySelector(".post_area");
+        let commentBox = document.querySelector(".comment_box");
+        postArea.addEventListener('click', function(event) {
+            if (event.target.classList.contains('commentsButton')) {
+                showCommentBox();
+                const postID = event.target.value;
+                console.log(postID);
+
+                const postCommentButton = document.querySelector(".postCommentButton");
+                postCommentButton.value = postID;
+                // console.log(postCommentButton.value);
+            
+                fetch('/M00934333/get-comments', {
+                    method:'POST',
+                    credentials:"include",
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({postID:postID})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const commentsArray = data.data;
+            
+                    for (i = 0; i<commentsArray.length; i++){
+                        const user = commentsArray[i].user;
+                        const text = commentsArray[i].text;
+                        commentBox.innerHTML += `
+                        <div class="comment d-flex flex-column mt-2">
+                            <div class="commenter_profile d-flex flex-row">
+                                <img src="images/icons8-user-profile-48.png" alt="user_profile" class="img-fluid mb-2">
+                                <p class="mt-2">${user}</p>
+                            </div>
+                    
+                            <div class="comment_content">
+                                <p>${text}</p>
+                            </div>
+                            <hr>
+                        </div>`;
+                    }
+                })
+            }
+        });
+    } catch(error){
+        console.log(error);
+    }
+    
+});
+
+//create comment
+function addComment(){
+    const postID = document.querySelector(".postCommentButton").value;
+    const text = document.getElementById("comment_text").value;
+
+    console.log(postID);
+    console.log(text);
+
+    fetch('/M00934333/add-comment', {
+        method:'POST',
+        credentials:"include",
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({postID:postID,text:text})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === "Comment successfully created"){
+            Swal.fire({
+                title: "Comment Successfully Created",
+                text:"You've successfully commented on this post!",
+                icon:"success", 
+                showCloseButton: true,
+                willClose: function(){
+                    window.location.reload();
+                }
+            });
+        } else {
+            Swal.fire({
+                title: "Oops, something went wrong!",
+                text:"Unable to comment on post! Must be logged in to be able to comment.",
+                icon:"error", 
+                showCloseButton: true,
+                willClose: function(){
+                    window.location.reload();
+                }
+
+            });
+        }
+    })
+
+}

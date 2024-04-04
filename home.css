@@ -203,6 +203,11 @@ body {
 
 .engagement_buttons button{
   border: none;
+  position: relative;
+  z-index: 0;
+}
+.engagement_buttons button i{
+  pointer-events: none;
 }
 /*Customising widgets on right sidebar*/
 .trending_hashtags {
@@ -443,9 +448,37 @@ body {
 }
 .comment_box{
   width: 28em;
-  height: 21em;
+  height: 10em;
   background-color: #f2f4ff;
   overflow-y: auto;
+}
+
+#comment_text{
+  display: block;
+  position: relative;
+  top: 3em;
+  width: 25em;
+  height: 7em;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+  border: 4px solid black;
+}
+
+.postCommentButton{
+  position: relative;
+  height: 3em;
+  width: 3em;
+  top: 4em;
+  right: 0.5em;
+  background-color: #b8bbd6;
+  border: 2px solid black;
+  border-radius: 50%;
+}
+.postCommentButton:hover{
+  background-color: white;
+  border: 2px solid black;
+  scale: 1.1;
 }
 
 .comment_content{

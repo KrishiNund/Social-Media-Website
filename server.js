@@ -2,6 +2,7 @@
 const path = require("path");
 const express = require("express");
 const mongodb = require("mongodb");
+const {ObjectId} = require('mongodb');
 const bodyParser = require("body-parser");
 const session = require('express-session');
 const {check, validationResult} = require('express-validator');
@@ -180,6 +181,7 @@ async function storePost(req,res){
         text: req.body.text,
         likes: [],
         dislikes: [],
+        comments:[],
         media: req.file ? req.file.path : null,
       };
 
@@ -344,6 +346,62 @@ async function searchUser(req,res){
     res.status(201).send({message:"User found",data:result});
   } catch(error){
     res.status(404).send({message:"User not found",data:result});
+  }
+}
+
+//get all comments
+app.post('/M00934333/get-comments',getComments);
+
+async function getComments(req,res){
+  try{
+    const collection = database.collection("Posts");
+    const postID = req.body.postID;
+    console.log(postID);
+    const query = {_id:new ObjectId(postID)};
+
+    const result = await collection.findOne(query);
+    console.log(result);
+
+    const commentsArray = result.comments;
+    console.log("comments:",commentsArray);
+
+    res.status(201).send({message:"List of Comments:", data: commentsArray});
+  } catch(error){
+    res.status(404).send({message:"Can't get Comments", data: error});
+  }
+  
+}
+
+//create a comment
+app.post('/M00934333/add-comment',storeComment);
+
+async function storeComment(req,res){
+  if (!req.session.username){
+    res.status(404).send({message:"Not logged in"});
+  } else {
+    try{
+      const postID = req.body.postID;
+      const text = req.body.text;
+      const loggedInUser = req.session.username;
+      
+      console.log(postID,text);
+
+      const commentDetails = {
+        user:loggedInUser,
+        text:text
+      }
+  
+      const collection = database.collection("Posts");
+
+      const result = await collection.updateOne({_id:new ObjectId(postID)},{$addToSet:{comments:commentDetails}});
+  
+      res.status(201).send({message:"Comment successfully created",data:result});
+
+    } catch(error){
+      res.status(404).send({message:"Something went wrong",data:error});
+      console.log(error);
+    }
+
   }
 }
 
