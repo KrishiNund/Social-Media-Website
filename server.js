@@ -179,8 +179,8 @@ async function storePost(req,res){
       const postDetails = {
         user: req.session.username,
         text: req.body.text,
-        likes: [],
-        dislikes: [],
+        likes: 0,
+        dislikes: 0,
         comments:[],
         media: req.file ? req.file.path : null,
       };
@@ -402,6 +402,44 @@ async function storeComment(req,res){
       console.log(error);
     }
 
+  }
+}
+
+//like post
+app.post('/M00934333/like-post',likePost);
+
+async function likePost(req,res){
+  if (!req.session.username){
+    res.status(404).send({message:"Not logged in"});
+  } else {
+    const postID = req.body.postID;
+    const value = req.body.change;
+
+    const collection = database.collection("Posts");
+
+    const result = await collection.updateOne({_id:new ObjectId(postID)},{$inc:{likes:value}});
+
+    res.status(201).send({message:"Successful",data:result});
+  }
+}
+
+//dislike post
+app.post('/M00934333/dislike-post',dislikePost);
+
+async function dislikePost(req,res){
+  if (!req.session.username){
+    res.status(404).send({message:"Not logged in"});
+  } else {
+    const postID = req.body.postID;
+    const value = req.body.change;
+
+    // console.log(postID,value);
+
+    const collection = database.collection("Posts");
+
+    const result = await collection.updateOne({_id:new ObjectId(postID)},{$inc:{dislikes:value}});
+
+    res.status(201).send({message:"Successful",data:result});
   }
 }
 

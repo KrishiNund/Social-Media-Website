@@ -739,8 +739,10 @@ function loadExplorePosts(){
             username = postsArray[i].user;
             text = postsArray[i].text;
             postID = postsArray[i]._id;
-            console.log(postID);
-            // console.log("here1");
+            likes = postsArray[i].likes;
+            dislikes = postsArray[i].dislikes;
+            //console.log(postID);
+            
             if(checkIfImage(mediaURL) == true){
                 // console.log("image");
                 postArea.innerHTML+=`<div class="post">
@@ -762,11 +764,14 @@ function loadExplorePosts(){
 
                     <!--Adding engagement buttons: like, dislike, comment-->
                     <div class="d-flex flex-row engagement_buttons">
-                        <button id="likeButton" type="button" class="btn" value="${postID}">
-                            <i class="fa fa-heart-o"></i>
+                        
+                        <button class="likeButton btn" type="button" value="${postID}">
+                            <span>${likes}</span>
+                            <i class="fa fa-heart-o" style="color:red"></i> 
                         </button>
-
-                        <button id="dislikeButton" type="button" class="btn" value="${postID}">
+                        
+                        <button class="dislikeButton btn" type="button" value="${postID}">
+                            <span>${dislikes}</span>
                             <i class="fa fa-thumbs-o-down"></i>
                         </button>
 
@@ -798,11 +803,14 @@ function loadExplorePosts(){
 
                         <!--Adding engagement buttons: like, dislike, comment-->
                         <div class="d-flex flex-row engagement_buttons">
-                            <button id="likeButton" type="button" class="btn" value="${postID}">
-                                <i class="fa fa-heart-o"></i>
+                            <button class="likeButton btn" type="button" value="${postID}">
+                                <span>${likes}</span>
+                                <i class="fa fa-heart-o"></i> 
                             </button>
+                        
 
-                            <button id="dislikeButton" type="button" class="btn" value="${postID}">
+                            <button class="dislikeButton btn" type="button" value="${postID}">
+                                <span>${dislikes}</span>
                                 <i class="fa fa-thumbs-o-down"></i>
                             </button>
 
@@ -830,11 +838,14 @@ function loadExplorePosts(){
 
                         <!--Adding engagement buttons: like, dislike, comment-->
                         <div class="d-flex flex-row engagement_buttons">
-                            <button id="likeButton" type="button" class="btn" value="${postID}">
-                                <i class="fa fa-heart-o"></i>
+                            <button class="likeButton btn" type="button" value="${postID}">
+                                <span>${likes}</span>
+                                <i class="fa fa-heart-o"></i> 
                             </button>
+                        
 
-                            <button id="dislikeButton" type="button" class="btn" value="${postID}">
+                            <button class="dislikeButton btn" type="button" value="${postID}">
+                                <span>${dislikes}</span>
                                 <i class="fa fa-thumbs-o-down"></i>
                             </button>
 
@@ -868,6 +879,8 @@ function loadFollowingPosts() {
             username = followingPostsArray[i].user;
             text = followingPostsArray[i].text;
             postID = followingPostsArray[i]._id;
+            likes = followingPostsArray[i].likes;
+            dislikes = followingPostsArray[i].dislikes;
             // console.log("here1");
             if(checkIfImage(mediaURL) == true){
                 // console.log("image");
@@ -890,11 +903,14 @@ function loadFollowingPosts() {
 
                     <!--Adding engagement buttons: like, dislike, comment-->
                     <div class="d-flex flex-row engagement_buttons">
-                        <button id="likeButton" type="button" class="btn" value="${postID}">
-                            <i class="fa fa-heart-o"></i>
+                        <button class="likeButton btn" type="button" value="${postID}">
+                            <span>${likes}</span>
+                            <i class="fa fa-heart-o"></i> 
                         </button>
+                    
 
-                        <button id="dislikeButton" type="button" class="btn" value="${postID}">
+                        <button class="dislikeButton btn" type="button" value="${postID}">
+                            <span>${dislikes}</span>
                             <i class="fa fa-thumbs-o-down"></i>
                         </button>
 
@@ -926,11 +942,14 @@ function loadFollowingPosts() {
 
                         <!--Adding engagement buttons: like, dislike, comment-->
                         <div class="d-flex flex-row engagement_buttons">
-                            <button id="likeButton" type="button" class="btn" value="${postID}">
-                                <i class="fa fa-heart-o"></i>
+                            <button class="likeButton btn" type="button" value="${postID}">
+                                <span>${likes}</span>
+                                <i class="fa fa-heart-o"></i> 
                             </button>
+                        
 
-                            <button id="dislikeButton" type="button" class="btn" value="${postID}">
+                            <button class="dislikeButton btn" type="button" value="${postID}">
+                                <span>${dislikes}</span>
                                 <i class="fa fa-thumbs-o-down"></i>
                             </button>
 
@@ -958,11 +977,14 @@ function loadFollowingPosts() {
 
                         <!--Adding engagement buttons: like, dislike, comment-->
                         <div class="d-flex flex-row engagement_buttons">
-                            <button id="likeButton" type="button" class="btn" value="${postID}">
-                                <i class="fa fa-heart-o"></i>
+                            <button class="likeButton btn" type="button" value="${postID}">
+                                <span>${likes}</span>
+                                <i class="fa fa-heart-o"></i> 
                             </button>
+                        
 
-                            <button id="dislikeButton" type="button" class="btn" value="${postID}">
+                            <button class="dislikeButton btn" type="button" value="${postID}">
+                                <span>${dislikes}</span>
                                 <i class="fa fa-thumbs-o-down"></i>
                             </button>
 
@@ -1282,3 +1304,107 @@ function addComment(){
     })
 
 }
+
+//like post
+document.addEventListener('DOMContentLoaded', function() {
+    try{
+        let postArea = document.querySelector(".post_area");
+        postArea.addEventListener('click', function(event) {
+            if (event.target.classList.contains('likeButton')) {
+                const likeButton = event.target;
+                const likeIcon = likeButton.querySelector('i');
+                const postID = event.target.value;
+                // console.log(values);
+                let likeCounter = 0;
+                console.log(likeCounter,postID);
+               
+                if (likeIcon.classList.contains('fa-heart-o')){
+                    likeCounter = 1;
+                    likeIcon.classList.replace('fa-heart-o','fa-heart');
+                }
+            
+                fetch('/M00934333/like-post', {
+                    method:'POST',
+                    credentials:"include",
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({change:likeCounter, postID:postID})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === "Successful"){
+                        window.location.reload();
+                    } else {
+                        Swal.fire({
+                            title: "Operation Unsuccessful",
+                            text:"Unable to like post when not logged in!",
+                            icon:"error", 
+                            showCloseButton: true,
+                            willClose: function(){
+                                window.location.reload();
+                            }
+            
+                        });
+                    }
+                })
+                    
+            }
+        });
+    } catch(error){
+        console.log(error);
+    }
+    
+});
+
+//dislike post
+document.addEventListener('DOMContentLoaded', function() {
+    try{
+        let postArea = document.querySelector(".post_area");
+        postArea.addEventListener('click', function(event) {
+            if (event.target.classList.contains('dislikeButton')) {
+                const dislikeButton = event.target;
+                const dislikeIcon = dislikeButton.querySelector('i');
+                const postID = event.target.value;
+                
+                let dislikeCounter = 0;
+                // console.log(dislikeCounter,postID);
+               
+                if (dislikeIcon.classList.contains('fa-thumbs-o-down')){
+                    dislikeCounter = 1;
+                    dislikeIcon.classList.replace('fa-thumbs-o-down','fa-thumbs-down');
+                }
+            
+                fetch('/M00934333/dislike-post', {
+                    method:'POST',
+                    credentials:"include",
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({change:dislikeCounter, postID:postID})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === "Successful"){
+                        window.location.reload();
+                    } else {
+                        Swal.fire({
+                            title: "Operation Unsuccessful",
+                            text:"Unable to dislike post when not logged in!",
+                            icon:"error", 
+                            showCloseButton: true,
+                            willClose: function(){
+                                window.location.reload();
+                            }
+            
+                        });
+                    }
+                })
+                    
+            }
+        });
+    } catch(error){
+        console.log(error);
+    }
+    
+});
