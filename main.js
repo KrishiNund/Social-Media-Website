@@ -47,7 +47,7 @@ function createHeader() {
                     <div class="flex-grow-1">
                         <!--Logo and Title-->
                         <a class="navbar-brand ms-left" href="#">
-                            <img src="images/icons8-honkai-star-rail-logo-50.png" class="img-fluid" alt="Logo">
+                            <img src="images/logo.png" class="img-fluid" alt="Logo">
                             <span class="navbar-text" style="color: #B8BBD6;">Trailblazers' Hangout</span>
                         </a>
                     </div>
@@ -138,9 +138,9 @@ function loadHomePage() {
                 <!--Trending Hashtags Widget-->
                 <div class="trending_hashtags text-center">
                     <div class="widget_header"><h4>Trending</h4></div>
-                    <span>#PenaconyUpdate <hr></span>
-                    <span>#Version2.0 <hr></span>
-                    <span>#Firefly <hr></span>
+                    <span>#PenaconyUpdate</span>
+                    <span>#Version2.0</span>
+                    <span>#Firefly</span>
                     <span>#HSR</span>
                 </div>
         
@@ -193,7 +193,7 @@ function loadHomePage() {
         <div class="container settings_box mx-auto text-center">
         
             <div class="settings_header">
-                <h2>Settings Box<hr></h2>   
+                <h2>Settings Box</h2>   
             </div>
             
             <p>Account Creation Date:XX-XX-XXXX</p>
@@ -216,9 +216,9 @@ function loadHomePage() {
             <!--Accept Images and Videos to be posted as well-->
             <div class="media_upload d-flex flex-column">
                 <span class="d-flex flex-row media_upload_button mb-3">
-                    <p>Add </p>
+                    Add
                     <i class="fa fa-photo-film"></i>
-                    <p>:</p>
+                    :
                     <input name="mediaUpload" id="mediaUpload" type="file" accept="image/*,video/*">
                 </span>
             </div>
@@ -749,15 +749,15 @@ function loadExplorePosts(){
                     <!--Post related buttons-->
                     <div class="user_info d-flex flex-row align-items-center">
                         <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                        <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                        <span class="username" style="position: relative; left: 1.5em;">${username}</span>
                         <button type="button" class="btn follow_button" value="${username}">Follow</button>
                         <button type="button" class="btn options_button">⋮</button>
                     </div>
                     
                     <!--Post Contents-->
                     <div class="post_content d-flex flex-column">
-                        <span><h5>${text}</h5></span>
-                        <img src="${mediaURL}" alt="dan_heng_build" class="img-fluid rounded" >
+                        <span style="font-size:20px">${text}</span>
+                        <img src="${mediaURL}" alt="post_image" class="img-fluid rounded" >
                     </div>
         
                     <hr>
@@ -776,7 +776,7 @@ function loadExplorePosts(){
                         </button>
 
                         <button class="commentsButton btn" type="button" value="${postID}">
-                            <i class="fa fa-comment-o" style="position:relative; z-index:"></i>
+                            <i class="fa fa-comment-o"></i>
                         </button>
                     </div>
                 </div>`;
@@ -786,14 +786,14 @@ function loadExplorePosts(){
                         <!--Post related buttons-->
                         <div class="user_info d-flex flex-row align-items-center">
                             <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                            <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                            <span class="username" style="position: relative; left: 1.5em;">${username}</span>
                             <button type="button" class="btn follow_button" value="${username}">Follow</button>
                             <button type="button" class="btn options_button">⋮</button>
                         </div>
                         
                         <!--Post Contents-->
                         <div class="post_content d-flex flex-column">
-                            <span><h5>${text}</h5></span>
+                            <span style="font-size:20px">${text}</span>
                             <video class="img-fluid" controls>
                                 <source src="${mediaURL}" type="video/mp4">
                             </video>
@@ -824,14 +824,14 @@ function loadExplorePosts(){
                         <!--Post related buttons-->
                         <div class="user_info d-flex flex-row align-items-center">
                             <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                            <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                            <span class="username" style="position: relative; left: 1.5em;">${username}</span>
                             <button type="button" class="btn follow_button" value="${username}">Follow</button>
                             <button type="button" class="btn options_button">⋮</button>
                         </div>
                         
                         <!--Post Contents-->
                         <div class="post_content d-flex flex-column">
-                            <span><h5>${text}</h5></span>
+                            <span style="font-size:20px">${text}</span>
                         </div>
             
                         <hr>
@@ -888,14 +888,14 @@ function loadFollowingPosts() {
                     <!--Post related buttons-->
                     <div class="user_info d-flex flex-row align-items-center">
                         <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                        <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                        <span class="username" style="position: relative; left: 1.5em;">${username}</span>
                         <button type="button" class="btn follow_button" value="${username}">Follow</button>
                         <button type="button" class="btn options_button">⋮</button>
                     </div>
                     
                     <!--Post Contents-->
                     <div class="post_content d-flex flex-column">
-                        <span><h5>${text}</h5></span>
+                        <span style="font-size:20px">${text}</span>
                         <img src="${mediaURL}" alt="dan_heng_build" class="img-fluid rounded" >
                     </div>
         
@@ -925,14 +925,14 @@ function loadFollowingPosts() {
                         <!--Post related buttons-->
                         <div class="user_info d-flex flex-row align-items-center">
                             <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                            <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                            <span class="username" style="position: relative; left: 1.5em;">${username}</span>
                             <button type="button" class="btn follow_button" value="${username}">Follow</button>
                             <button type="button" class="btn options_button">⋮</button>
                         </div>
                         
                         <!--Post Contents-->
                         <div class="post_content d-flex flex-column">
-                            <span><h5>${text}</h5></span>
+                            <span style="font-size:20px">${text}</span>
                             <video class="img-fluid" controls>
                                 <source src="${mediaURL}" type="video/mp4">
                             </video>
@@ -963,14 +963,14 @@ function loadFollowingPosts() {
                         <!--Post related buttons-->
                         <div class="user_info d-flex flex-row align-items-center">
                             <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
-                            <span id="username" style="position: relative; left: 1.5em;">${username}</span>
+                            <span class="username" style="position: relative; left: 1.5em;">${username}</span>
                             <button type="button" class="btn follow_button" value="${username}">Follow</button>
                             <button type="button" class="btn options_button">⋮</button>
                         </div>
                         
                         <!--Post Contents-->
                         <div class="post_content d-flex flex-column">
-                            <span><h5>${text}</h5></span>
+                            <span style="font-size:20px">${text}</span>
                         </div>
             
                         <hr>
@@ -1005,7 +1005,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target.classList.contains('follow_button')) {
             const username = event.target.value;
             // console.log(username);
-
+            //uploads/1711549258421-doge.jpg
             fetch('/M00934333/follow-user', {
                 method:'POST',
                 credentials:"include",

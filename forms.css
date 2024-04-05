@@ -63,7 +63,7 @@ form {
 
 .submit_button:hover {
   background-color: #b8bbd6;
-  scale: 1.2;
+  transform:scale(1.2);
   border: 2px solid black;
 }
 .login_box {

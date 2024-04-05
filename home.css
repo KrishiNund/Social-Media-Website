@@ -63,7 +63,7 @@ body {
 }
 
 .result button:hover{
-  scale: 1.1;
+  transform:scale(1.1);
 }
 
 /*Customising page redirection links to signup and login pages*/
@@ -318,7 +318,7 @@ body {
 
 .settings_box button:hover {
   background-color: #f2f4ff;
-  scale: 1.1;
+  transform:scale(1.1);
 }
 
 /*Styling Post box/composer*/
@@ -401,7 +401,7 @@ body {
 
 .post_button:hover {
   background-color: #b8bbd6;
-  scale: 1.1;
+  transform:scale(1.1);
 }
 
 /*Styling Comment Box and adjusting position*/
@@ -478,7 +478,7 @@ body {
 .postCommentButton:hover{
   background-color: white;
   border: 2px solid black;
-  scale: 1.1;
+  transform:scale(1.1);
 }
 
 .comment_content{

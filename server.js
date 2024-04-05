@@ -73,9 +73,10 @@ async function connectToMongoDB() {
   try {
     await client.connect();
     console.log("Sucessfully connected to MongoDB");
+    return client;
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
-    return;
+    return null;
   }
 }
 
@@ -214,7 +215,7 @@ async function getAllPosts(req,res){
   const collection = database.collection("Posts");
   const posts = await collection.find({}).toArray();
   // console.log(posts);
-  res.status(201).send({message:"Posts Successfully Retrieved",data:posts});
+  res.send({message:"Posts Successfully Retrieved",data:posts});
 }
 
 //get following posts
@@ -257,8 +258,10 @@ async function getUserStatus(req,res){
   const username = req.session.username;
   if (!username){
     res.send({message:"Logged Out",data:"None"});
+    // return "Logged Out";
   } else {
     res.send({message:"Logged In",data:username});
+    // return "Logged In";
   }
   
 }
@@ -288,6 +291,7 @@ async function followUser(req,res){
   } catch(error){
     res.status(404).send({message:"Couldn't follow user"});
   }
+
 }
 
 //return list of following users
@@ -448,4 +452,9 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-
+module.exports = {
+  connectToMongoDB,
+  signup,
+  app,
+  getUserStatus
+}
