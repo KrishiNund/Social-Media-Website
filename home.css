@@ -104,7 +104,7 @@ body {
   border: none;
 }
 
-.settings_button {
+.logout_button {
   position: relative;
   left: 10em;
   border: none;
@@ -155,22 +155,17 @@ body {
 .follow_button {
   position: absolute;
   left: 85%;
+  width: 6em;
   background-color: #6969b3;
-  border-radius: 20px;
-  border: none;
-}
-
-.options_button{
-  position: absolute;
-  left: 95%;
-  margin-right: 5px;
   border-radius: 20px;
   border: none;
 }
 
 .follow_button:hover {
   background-color: white;
+  transform: scale(1.1);
 }
+
 .post_content {
   position: relative;
   width: 820px;
@@ -283,42 +278,34 @@ body {
   color: #02111b;
 }
 
-/*Styling settings box*/
-.settings_box {
-  display: none;
-  background-color: #b8bbd6;
-  position: fixed;
-  width: 30%;
-  height: 10em;
-  top: 50%;
-  left: 50%;
-  transform: translate(-55%, -50%);
-  border: 2px solid black;
-  border-radius: 20px;
-}
-
-.settings_header {
+/*star rating styling*/
+.star_rating{
+  display: block;
   position: relative;
-  padding-top: 0.3em;
-  font-size: 30px;
-  width: 14.25em;
-  height: 2.16em;
-  right: 0.41em;
-  background-color: #02111b;
-  border-top-left-radius: 18px;
-  border-top-right-radius: 18px;
-  color: #f2f4ff;
+  margin-top: 2em;
+  background:  #CCCCCC;
+  width: 18em;
+  border-radius: 20px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
-.settings_box button {
-  background-color: #02111b;
-  color: #f2f4ff;
-  margin-left: 4.5em;
+.star_rating i{
+  color: gold;
 }
 
-.settings_box button:hover {
-  background-color: #f2f4ff;
-  transform:scale(1.1);
+/* .star_rating i:hover{
+  color: white;
+} */
+
+.star_rating button{
+  border: none;
+  background: transparent;
+}
+
+.star_rating button:hover{
+ cursor: pointer;
+ transform:scale(1.3);
 }
 
 /*Styling Post box/composer*/

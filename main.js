@@ -33,6 +33,7 @@ function loadPageContent(content, type) {
     getUserStatus();
     loadExplorePosts();
     loadFollowing(); 
+    loadTrendingTopics();
   } else {
     app.innerHTML = content + createFooter();
   }
@@ -90,10 +91,10 @@ function createHeader() {
                             </ul>
                         </div>
 
-                        <!--Settings Button-->
+                        <!--Logout Button-->
                         <div class="flex-grow-1">
-                            <button type="button" class="btn settings_button" onclick="ClickSettingsButton()">
-                                <i class="fa fa-gear fa-2x" style="color:#b8bbd6;"></i>
+                            <button type="button" class="btn logout_button" onclick="logOut()">
+                                <i class="fa fa-arrow-right-from-bracket fa-2xl" style="color:#b8bbd6;"></i>
                             </button>
                         </div>
                     </div>
@@ -137,11 +138,13 @@ function loadHomePage() {
         
                 <!--Trending Hashtags Widget-->
                 <div class="trending_hashtags text-center">
-                    <div class="widget_header"><h4>Trending</h4></div>
-                    <span>#PenaconyUpdate</span>
-                    <span>#Version2.0</span>
-                    <span>#Firefly</span>
-                    <span>#HSR</span>
+                    <div class="widget_header">
+                        <h4>Trending</h4>
+                    </div>
+
+                    <div class="trending_posts_area">
+                        
+                    </div>
                 </div>
         
                 <!--Post Panel: Post Text, Images and Videos-->
@@ -172,14 +175,17 @@ function loadHomePage() {
                 <!--Contact Box containing essential pages redirection and copyright mark-->
                 <div class="contact_box text-center">
                     <div class="widget_header"><h4>Contact</h4></div>
+
+                    <span style="font-size:18px;">How was your experience?</span>
+                    <div class="star_rating">
+                        <button class="star"><i class="fa-regular fa-star fa-2x"></i></button>
+                        <button class="star"><i class="fa-regular fa-star fa-2x"></i></button>
+                        <button class="star"><i class="fa-regular fa-star fa-2x"></i></button>
+                        <button class="star"><i class="fa-regular fa-star fa-2x"></i></button>
+                        <button class="star"><i class="fa-regular fa-star fa-2x"></i></button>
+                    </div>
         
                     <span>
-                        <a href="#">About Us</a>
-                        <br>
-                        <a href="#">Terms of Use</a>
-                        <br>
-                        <a href="#">Privacy Policy</a>
-                        <br>
                         Email Address: ON144@live.mdx.ac.uk 
                         <br>
                         Copyright &copy; 2024 Trailblazers' Hangout 
@@ -189,22 +195,7 @@ function loadHomePage() {
         </div>`;
     
     //loading pop up elements
-    const popupContent = `<!--Settings Pop Up-->
-        <div class="container settings_box mx-auto text-center">
-        
-            <div class="settings_header">
-                <h2>Settings Box</h2>   
-            </div>
-            
-            <p>Account Creation Date:XX-XX-XXXX</p>
-            
-            <div class="d-flex flex-row mx-auto">
-                <button type="button" class="btn" onclick="logOut()">Log Out</button>
-                <button type="button" class="btn">Delete account</button>
-            </div>
-        
-        </div>
-        
+    const popupContent = `
         <!--Post Composer Pop Up-->
         <div class="container post_box mx-auto">
             <div class="post_box_header d-flex flex-row">
@@ -750,8 +741,7 @@ function loadExplorePosts(){
                     <div class="user_info d-flex flex-row align-items-center">
                         <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
                         <span class="username" style="position: relative; left: 1.5em;">${username}</span>
-                        <button type="button" class="btn follow_button" value="${username}">Follow</button>
-                        <button type="button" class="btn options_button">⋮</button>
+                        <button type="button" class="btn follow_button" value="${username}">Follow+</button>
                     </div>
                     
                     <!--Post Contents-->
@@ -787,8 +777,7 @@ function loadExplorePosts(){
                         <div class="user_info d-flex flex-row align-items-center">
                             <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
                             <span class="username" style="position: relative; left: 1.5em;">${username}</span>
-                            <button type="button" class="btn follow_button" value="${username}">Follow</button>
-                            <button type="button" class="btn options_button">⋮</button>
+                            <button type="button" class="btn follow_button" value="${username}">Follow+</button>
                         </div>
                         
                         <!--Post Contents-->
@@ -825,8 +814,7 @@ function loadExplorePosts(){
                         <div class="user_info d-flex flex-row align-items-center">
                             <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
                             <span class="username" style="position: relative; left: 1.5em;">${username}</span>
-                            <button type="button" class="btn follow_button" value="${username}">Follow</button>
-                            <button type="button" class="btn options_button">⋮</button>
+                            <button type="button" class="btn follow_button" value="${username}">Follow+</button>
                         </div>
                         
                         <!--Post Contents-->
@@ -889,8 +877,7 @@ function loadFollowingPosts() {
                     <div class="user_info d-flex flex-row align-items-center">
                         <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
                         <span class="username" style="position: relative; left: 1.5em;">${username}</span>
-                        <button type="button" class="btn follow_button" value="${username}">Follow</button>
-                        <button type="button" class="btn options_button">⋮</button>
+                        <button type="button" class="btn follow_button" value="${username}">Follow+</button>
                     </div>
                     
                     <!--Post Contents-->
@@ -926,8 +913,7 @@ function loadFollowingPosts() {
                         <div class="user_info d-flex flex-row align-items-center">
                             <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
                             <span class="username" style="position: relative; left: 1.5em;">${username}</span>
-                            <button type="button" class="btn follow_button" value="${username}">Follow</button>
-                            <button type="button" class="btn options_button">⋮</button>
+                            <button type="button" class="btn follow_button" value="${username}">Follow+</button>
                         </div>
                         
                         <!--Post Contents-->
@@ -964,8 +950,7 @@ function loadFollowingPosts() {
                         <div class="user_info d-flex flex-row align-items-center">
                             <img src="images/icons8-user-profile-48.png" class="user_profile img-fluid" alt="user profile">
                             <span class="username" style="position: relative; left: 1.5em;">${username}</span>
-                            <button type="button" class="btn follow_button" value="${username}">Follow</button>
-                            <button type="button" class="btn options_button">⋮</button>
+                            <button type="button" class="btn follow_button" value="${username}">Follow+</button>
                         </div>
                         
                         <!--Post Contents-->
@@ -1409,4 +1394,45 @@ document.addEventListener('DOMContentLoaded', function() {
     
 });
 
+//load trending topics 
+function loadTrendingTopics(){
+    const trendingTopicsWidget = document.querySelector(".trending_posts_area");
 
+    fetch('/M00934333/get-trending-topics',{
+        method:'GET',
+        credentials:"include",
+        headers:{
+            'Content-Type':'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data =>{
+        const trendingTopics = data.data;
+        console.log(trendingTopics);
+        for (let i = 0; i < trendingTopics.length; i++){
+            if (i===3){
+                trendingTopicsWidget.innerHTML += `<span>#${trendingTopics[i].title}</span>`;
+            } else {
+                trendingTopicsWidget.innerHTML += `<span>#${trendingTopics[i].title}</span><hr>`;
+            }
+        }
+    })
+}
+
+//star rating
+document.addEventListener('DOMContentLoaded',function(){
+    const stars = document.querySelectorAll('.star');
+    stars.forEach((star, i) => {
+        star.addEventListener('click',function(){
+            let current_star_rating = i+1;
+            stars.forEach((star,j)=>{
+                if (current_star_rating >= j+1){
+                    star.innerHTML = `<i class="fa fa-star fa-2x"></i>`;
+                } else {
+                    star.innerHTML = `<i class="fa-regular fa-star fa-2x"></i>`;
+                }
+            });
+
+        });
+    });
+});

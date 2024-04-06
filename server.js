@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const session = require('express-session');
 const {check, validationResult} = require('express-validator');
 const multer = require('multer');
+const googleTrends = require('google-trends-api');
 // const { sign } = require("crypto");
 
 
@@ -360,11 +361,10 @@ async function getComments(req,res){
   try{
     const collection = database.collection("Posts");
     const postID = req.body.postID;
-    console.log(postID);
+    //console.log(postID);
     const query = {_id:new ObjectId(postID)};
 
     const result = await collection.findOne(query);
-    // console.log(result);
 
     const commentsArray = result.comments;
     console.log("comments:",commentsArray);
@@ -437,8 +437,6 @@ async function dislikePost(req,res){
     const postID = req.body.postID;
     const value = req.body.change;
 
-    // console.log(postID,value);
-
     const collection = database.collection("Posts");
 
     const result = await collection.updateOne({_id:new ObjectId(postID)},{$inc:{dislikes:value}});
@@ -446,6 +444,57 @@ async function dislikePost(req,res){
     res.status(201).send({message:"Successful",data:result});
   }
 }
+
+//get trending topics surrounding the game from google trends api
+googleTrends.relatedTopics({
+  keyword:'Honkai Star Rail', 
+  startTime: new Date('2024-03-20'), 
+  endTime: new Date('2024-03-25'),
+  category:8,
+  geo:'US'
+})
+.then(async (res)=>{
+  try{
+    resultsJSON = JSON.parse(res);
+  } catch(error){
+    // console.log(error);
+    return;
+  }
+  
+  const data = resultsJSON["default"];
+  const trendingDataList = data["rankedList"][0]["rankedKeyword"];
+  const filteredDataList = trendingDataList.filter(
+    topic => topic.topic.type.toLowerCase().includes('video game') || topic.topic.type.toLowerCase().includes('topic') 
+  );
+  
+  const titles = filteredDataList.map(topic => topic.topic.title);
+  const trendingTopics = titles.slice(0,4);
+  const collection = database.collection("Trending Topics");
+
+  //delete all documents in the collection before adding new ones
+  await collection.deleteMany({});
+  for (let i =0; i<trendingTopics.length; i++){
+    const topicTitle = {
+      title:trendingTopics[i]
+    }
+    await collection.insertOne(topicTitle);
+  }
+})
+.catch((error)=>{
+  console.log(error);
+})
+
+//get trending topics
+app.get('/M00934333/get-trending-topics',getTrendingTopics);
+
+async function getTrendingTopics(req,res){
+  const collection = database.collection("Trending Topics");
+
+  const result = await collection.find({}).toArray();
+
+  res.send({message:"Trending Topics:",data:result});
+}
+
 
 //starting server
 app.listen(PORT, () => {
