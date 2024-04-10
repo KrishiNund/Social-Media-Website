@@ -1,5 +1,3 @@
-// const { default: Swal } = require("sweetalert2");
-
 //after webpage has loaded, execute the awaiting javascript
 document.addEventListener("DOMContentLoaded", () => {
   goTo(window.location.hash);
@@ -9,6 +7,7 @@ window.addEventListener("hashchange", () => {
   goTo(window.location.hash);
 });
 
+//load different pages depending on the hash change
 function goTo(hash) {
   switch (hash) {
     case "#/signup":
@@ -59,7 +58,8 @@ function createHeader() {
                             <i class="fa fa-search" onclick="searchUser()"></i>
                             <input id="search" name="search" type="text" class="form-control form-input" placeholder="Search Anything...">
                         </div>
-
+                        
+                        <!--Search Bar's Results Box-->
                         <div class="results_box">
 
                         </div>
@@ -70,6 +70,7 @@ function createHeader() {
                         <div class="flex-grow-1">
                             <a href="#/signup" class="go_to_signup_page">Sign Up</a>
                         </div>
+
                         <!--Login-->
                         <div class="flex-grow-1">
                             <a href="#/login" class="go_to_login_page">Login</a>
@@ -78,7 +79,7 @@ function createHeader() {
                         <!--User profile button/dropdown-->
                         <div class="dropdown user_profile_button flex-grow-1">
                             <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="fa fa-circle-user fa-2x" style="color:#b8bbd6"></i>
+                                <i class="fa fa-circle-user fa-2x" style="color:#b8bbd6;"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
@@ -150,10 +151,10 @@ function loadHomePage() {
                 <!--Post Panel: Post Text, Images and Videos-->
                 <div class="post_panel text-center">
                     <div class="widget_header d-flex flex-row">
-                    <h4>Post Area</h4>
-                    <button type="button" class="btn mt-4" style="border:none;" onclick="showPostBox()">
-                        <i class="fa fa-square-plus fa-2x"></i>
-                    </button>
+                        <h4>Post Area</h4>
+                        <button type="button" class="btn mt-4" style="border:none;" onclick="showPostBox()">
+                            <i class="fa fa-square-plus fa-2x"></i>
+                        </button>
                     </div>
         
                     <div class="d-flex flex-row post_options">
@@ -172,7 +173,7 @@ function loadHomePage() {
         
                 </div>
         
-                <!--Contact Box containing essential pages redirection and copyright mark-->
+                <!--Contact Box containing copyright mark and star rating-->
                 <div class="contact_box text-center">
                     <div class="widget_header"><h4>Contact</h4></div>
 
@@ -271,7 +272,7 @@ function loadSignUpPage() {
         <!--sign up form with different data fields-->
         <form id="signupForm" class="mx-auto text-center d-flex flex-column" method = "post" onsubmit="validateSignup(event)">
             <div class="form_header">
-                <h4>Sign up<hr></h4>
+                <span>Sign up</span>
             </div>
 
             <div class="mb-3">
@@ -292,21 +293,21 @@ function loadSignUpPage() {
             </div>
             
             <div class="form-group mb-3">
-                <label for="gender">Gender: </label>
+                <label>Gender: </label>
 
                 <input type="radio" class="radio" name="gender" value="male" required>
-                <label for="gender" class="label">Male</label>
+                <label class="label">Male</label>
 
                 <input type="radio" class="radio" name="gender" value="female" required>
-                <label for="gender" class="label">Female</label>
+                <label class="label">Female</label>
 
                 <input type="radio" class="radio" name="gender" value="other" required>
-                <label for="gender" class="label">Rather not disclose</label>
+                <label class="label">Rather not disclose</label>
             </div>
 
             <div class="form-group mb-3">
                 <label for="dob">Date of Birth: </label>
-                <input type="date" name = "dob" style="border-radius: 20px; border: 2px solid black" id="dob" name="dob" required>
+                <input type="date" name="dob" id="dob" style="border-radius: 20px; border: 2px solid black" required>
             </div>
 
             <button type="submit" class="btn submit_button mx-auto">Submit</button>
@@ -315,7 +316,9 @@ function loadSignUpPage() {
 
         <!--Redirection to login page if user already has an account-->
         <div class="mx-auto login_box text-center">
-            <p class="mt-3">Have an account? <a href="#/login" style="text-decoration: none;">Log in</a></p>
+            <p class="mt-3">Have an account? 
+                <a href="#/login" style="text-decoration: none;">Log in</a>
+            </p>
         </div>
 
     </div>`;
@@ -336,7 +339,7 @@ function loadLoginPage() {
         <!--Login Form with username and password fields-->
         <form id="loginForm" name="loginForm" class="mx-auto text-center d-flex flex-column" method = "post" onsubmit="validateLogin(event)">
             <div class="form_header">
-                <h4>Login<hr></h4>
+                <span>Login</span>
             </div>
 
             <div class="mb-3">
@@ -354,13 +357,15 @@ function loadLoginPage() {
 
         <!--Redirection to signup page if user does not have an account already-->
         <div class="mx-auto login_box text-center">
-            <p class="mt-3">Don't have an account? <a href="#/signup" style="text-decoration: none;">Sign Up</a></p>
+            <p class="mt-3">Don't have an account? 
+                <a href="#/signup" style="text-decoration: none;">Sign Up</a>
+            </p>
         </div>
     </div>`;
   loadPageContent(content, "login");
 }
 
-//get user status from session
+//get user status from server and set user status in user profile dropdown
 function getUserStatus(){
     fetch('/M00934333/get-status', {
         method:'GET',
@@ -382,17 +387,6 @@ function getUserStatus(){
     }); 
 }
 
-//opens and closes settings box
-function ClickSettingsButton() {
-  settingsBox = document.querySelector(".settings_box");
-  console.log(settingsBox.style.display);
-  if (settingsBox.style.display == "block") {
-    settingsBox.style.display = "none";
-  } else {
-    settingsBox.style.display = "block";
-  }
-}
-
 //closes post box/composer on clicking close button
 function closePostBox() {
   postBox = document.querySelector(".post_box");
@@ -401,7 +395,7 @@ function closePostBox() {
   }
 }
 
-//opens post box/composer on clicking on post panel's icons
+//opens post box/composer on clicking on post panel's + icon
 function showPostBox() {
   postBox = document.querySelector(".post_box");
   if (postBox.style.display == "block") {
@@ -451,11 +445,13 @@ function showCommentBox() {
   }
 }
 
+//open following list pop up
 function openFollowingList(){
     following_list = document.getElementById("following_list");
     following_list.style.display = "block";
 }
 
+//close following list pop up
 function closeFollowingList(){
     following_list = document.getElementById("following_list");
     if (following_list.style.display == "block") {
@@ -463,18 +459,18 @@ function closeFollowingList(){
     }
 }
 
-/*if show is pressed, show actual password else if hide is pressed, hide password
-by default, password is hidden*/
+//show and hide password by pressing on eye icon
 function showHidePassword() {
-    //show/hide password
     let showHideButton = document.querySelector(".show_hide_password");
     let password = document.getElementById("password");
     
     if (password.type === "password"){
+        //show password
         password.type = "text";
         showHideButton.classList.remove("fa-eye-slash");
         showHideButton.classList.add("fa-eye");
     } else {
+        //hide password
         password.type = "password";
         showHideButton.classList.remove("fa-eye");
         showHideButton.classList.add("fa-eye-slash");
@@ -501,7 +497,6 @@ function validateSignup(event){
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         if (data.message === "Username already taken"){
             Swal.fire({
                 title: "Username already taken!",
@@ -519,6 +514,7 @@ function validateSignup(event){
             })
             form.reset();
         } else {
+            //success notification and redirect to login page
             Swal.fire({
                 title: "Sign Up Successfully",
                 text:"You've successfully created an account!",
@@ -533,10 +529,9 @@ function validateSignup(event){
         }
     })
     .catch(error => {
-        console.log('Error',error);
         Swal.fire({
             title:'Oops...',
-            text:'Something went wrong!',
+            html:`Something went wrong!<br>${error}`,
             icon:'error',
             showCloseButton:true
         });
@@ -563,8 +558,7 @@ function validateLogin(event){
     .then(response => response.json())
     .then(data => {
         if (data.message === "User found"){
-            const username = data.data;
-            // console.log("here as well");
+            //display success notification and load home page
             Swal.fire({
                 title: "Authentication Successful",
                 text:"You've successfully logged in",
@@ -589,10 +583,9 @@ function validateLogin(event){
         }
     })
     .catch(error => {
-        console.log('Error',error);
         Swal.fire({
             title:'Oops...',
-            text:'Something went wrong!',
+            html:`Something went wrong!<br>${error}`,
             icon:'error',
             showCloseButton:true
         });
@@ -602,7 +595,6 @@ function validateLogin(event){
 
 //logout function 
 function logOut(){
-
     fetch('/M00934333/logout', {
         method:'GET',
         credentials:"include",
@@ -619,7 +611,6 @@ function logOut(){
                 icon:"success", 
                 showCloseButton: true,
                 willClose: function(){
-                    ClickSettingsButton();
                     window.location.reload();
                     loadHomePage();
                 }
@@ -662,7 +653,6 @@ function createPost(){
         .then(response => response.json())
         .then(data =>{
             if(data.message === "Post Created Successfully"){
-                //if there is a media file
                 Swal.fire({
                     title: "Post Created",
                     text:"Post has been created successfully!",
@@ -687,7 +677,7 @@ function createPost(){
     }
 }
 
-//check media type
+//check media type - whether image or video file
 function checkIfImage(url){
     const imageExtensions = ['.jpg','.png','.jpeg','.gif'];
     try{
@@ -722,7 +712,6 @@ function loadExplorePosts(){
     .then(response => response.json())
     .then(data =>{
         const postsArray = data.data;
-        console.log("postarray:",postsArray);
         //clear post area first
         postArea.innerHTML = "";
         for (let i =0; i<postsArray.length; i++){
@@ -732,10 +721,9 @@ function loadExplorePosts(){
             postID = postsArray[i]._id;
             likes = postsArray[i].likes;
             dislikes = postsArray[i].dislikes;
-            //console.log(postID);
             
+            //check media type
             if(checkIfImage(mediaURL) == true){
-                // console.log("image");
                 postArea.innerHTML+=`<div class="post">
                     <!--Post related buttons-->
                     <div class="user_info d-flex flex-row align-items-center">
@@ -771,7 +759,6 @@ function loadExplorePosts(){
                     </div>
                 </div>`;
             } else if (checkIfVideo(mediaURL) == true){
-                // console.log("video");
                 postArea.innerHTML += `<div class="post">
                         <!--Post related buttons-->
                         <div class="user_info d-flex flex-row align-items-center">
@@ -809,6 +796,7 @@ function loadExplorePosts(){
                         </div>
                     </div>`;
             } else {
+                //no image or video files. Only text
                 postArea.innerHTML += `<div class="post">
                         <!--Post related buttons-->
                         <div class="user_info d-flex flex-row align-items-center">
@@ -869,9 +857,9 @@ function loadFollowingPosts() {
             postID = followingPostsArray[i]._id;
             likes = followingPostsArray[i].likes;
             dislikes = followingPostsArray[i].dislikes;
-            // console.log("here1");
+
+            //check media type
             if(checkIfImage(mediaURL) == true){
-                // console.log("image");
                 postArea.innerHTML+=`<div class="post">
                     <!--Post related buttons-->
                     <div class="user_info d-flex flex-row align-items-center">
@@ -907,7 +895,6 @@ function loadFollowingPosts() {
                     </div>
                 </div>`;
             } else if (checkIfVideo(mediaURL) == true){
-                // console.log("video");
                 postArea.innerHTML += `<div class="post">
                         <!--Post related buttons-->
                         <div class="user_info d-flex flex-row align-items-center">
@@ -988,9 +975,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let postArea = document.querySelector(".post_area");
     postArea.addEventListener('click', function(event) {
         if (event.target.classList.contains('follow_button')) {
+            //stores username of user you want to follow
             const username = event.target.value;
-            // console.log(username);
-            //uploads/1711549258421-doge.jpg
+        
             fetch('/M00934333/follow-user', {
                 method:'POST',
                 credentials:"include",
@@ -1001,7 +988,6 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if (data.message === "Successfully followed user"){
                     Swal.fire({
                         title: "Followed Successfully",
@@ -1058,7 +1044,7 @@ function loadFollowing(){
                     <hr> `;
             }
         } catch(error){
-            console.log(error);
+            console.error(error);
         }
        
     })
@@ -1069,9 +1055,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let followingListBox = document.querySelector(".following_list_box");
     followingListBox.addEventListener('click', function(event) {
         if (event.target.classList.contains('unfollow_button')) {
+            //stores username of user you want to unfollow
             const username = event.target.value;
-            // console.log(username);
-
+    
             fetch('/M00934333/unfollow-user', {
                 method:'POST',
                 credentials:"include",
@@ -1082,7 +1068,6 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if (data.message === "Successfully unfollowed user"){
                     Swal.fire({
                         title: "Unfollowed Successfully",
@@ -1114,7 +1099,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-//search bar function - search user
+//search bar function - search and follow user
 function searchUser(){
     const usernameEntered = document.getElementById('search').value;
     const resultsBox = document.querySelector(".results_box");
@@ -1193,19 +1178,16 @@ function followUser(){
 
 //load comments when comments box is opened
 document.addEventListener('DOMContentLoaded', function() {
-    //console.log("works");
     try{
         let postArea = document.querySelector(".post_area");
         let commentBox = document.querySelector(".comment_box");
         postArea.addEventListener('click', function(event) {
             if (event.target.classList.contains('commentsButton')) {
                 showCommentBox();
+                //stores postID of post on which comments button was pressed
                 const postID = event.target.value;
-                console.log(postID);
-
                 const postCommentButton = document.querySelector(".postCommentButton");
                 postCommentButton.value = postID;
-                // console.log(postCommentButton.value);
             
                 fetch('/M00934333/get-comments', {
                     method:'POST',
@@ -1218,12 +1200,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     const commentsArray = data.data;
-                    console.log(commentsArray);
                     commentBox.innerHTML = "";
+
+                    //load comments for that specific post
                     for (i = 0; i<commentsArray.length; i++){
                         const user = commentsArray[i].user;
                         const text = commentsArray[i].text;
-                        console.log(user,text);
                         commentBox.innerHTML += `
                         <div class="comment d-flex flex-column mt-2">
                             <div class="commenter_profile d-flex flex-row">
@@ -1241,7 +1223,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     } catch(error){
-        console.log(error);
+        console.error(error);
     }
     
 });
@@ -1250,9 +1232,6 @@ document.addEventListener('DOMContentLoaded', function() {
 function addComment(){
     const postID = document.querySelector(".postCommentButton").value;
     const text = document.getElementById("comment_text").value;
-
-    console.log(postID);
-    console.log(text);
 
     fetch('/M00934333/add-comment', {
         method:'POST',
@@ -1287,10 +1266,9 @@ function addComment(){
             });
         }
     })
-
 }
 
-//like post
+//like a post
 document.addEventListener('DOMContentLoaded', function() {
     try{
         let postArea = document.querySelector(".post_area");
@@ -1298,11 +1276,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (event.target.classList.contains('likeButton')) {
                 const likeButton = event.target;
                 const likeIcon = likeButton.querySelector('i');
+                //stores postID of post on which like button was pressed
                 const postID = event.target.value;
-                // console.log(values);
                 let likeCounter = 0;
-                console.log(likeCounter,postID);
                
+                //like post
                 if (likeIcon.classList.contains('fa-heart-o')){
                     likeCounter = 1;
                     likeIcon.classList.replace('fa-heart-o','fa-heart');
@@ -1337,9 +1315,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     } catch(error){
-        console.log(error);
+        console.error(error);
     }
-    
 });
 
 //dislike post
@@ -1351,10 +1328,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dislikeButton = event.target;
                 const dislikeIcon = dislikeButton.querySelector('i');
                 const postID = event.target.value;
-                
                 let dislikeCounter = 0;
-                // console.log(dislikeCounter,postID);
                
+                //dislike post
                 if (dislikeIcon.classList.contains('fa-thumbs-o-down')){
                     dislikeCounter = 1;
                     dislikeIcon.classList.replace('fa-thumbs-o-down','fa-thumbs-down');
@@ -1384,17 +1360,16 @@ document.addEventListener('DOMContentLoaded', function() {
             
                         });
                     }
-                })
-                    
+                })       
             }
         });
     } catch(error){
-        console.log(error);
+        console.error(error);
     }
     
 });
 
-//load trending topics 
+//load trending topics/hashtags 
 function loadTrendingTopics(){
     const trendingTopicsWidget = document.querySelector(".trending_posts_area");
 
@@ -1408,7 +1383,6 @@ function loadTrendingTopics(){
     .then(response => response.json())
     .then(data =>{
         const trendingTopics = data.data;
-        console.log(trendingTopics);
         for (let i = 0; i < trendingTopics.length; i++){
             if (i===3){
                 trendingTopicsWidget.innerHTML += `<span>#${trendingTopics[i].title}</span>`;
@@ -1419,7 +1393,7 @@ function loadTrendingTopics(){
     })
 }
 
-//star rating
+//star rating - fill stars according to the number of the star clicked
 document.addEventListener('DOMContentLoaded',function(){
     const stars = document.querySelectorAll('.star');
     stars.forEach((star, i) => {

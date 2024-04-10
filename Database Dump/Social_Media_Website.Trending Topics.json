@@ -1,0 +1,24 @@
+[{
+  "_id": {
+    "$oid": "6616e9175b806ed264b6c08b"
+  },
+  "title": "Honkai: Star Rail"
+},
+{
+  "_id": {
+    "$oid": "6616e9175b806ed264b6c08c"
+  },
+  "title": "Honkai"
+},
+{
+  "_id": {
+    "$oid": "6616e9175b806ed264b6c08d"
+  },
+  "title": "Genshin Impact"
+},
+{
+  "_id": {
+    "$oid": "6616e9175b806ed264b6c08e"
+  },
+  "title": "miHoYo"
+}]

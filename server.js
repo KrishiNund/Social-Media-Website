@@ -8,7 +8,6 @@ const session = require('express-session');
 const {check, validationResult} = require('express-validator');
 const multer = require('multer');
 const googleTrends = require('google-trends-api');
-// const { sign } = require("crypto");
 
 
 //creating express application
@@ -138,7 +137,6 @@ async function validateSignup(req, res){
   }
   else {
     const result = await signup(req.body);
-    console.log("Added successfully");
     res.status(201).send({message:"Signup successful!", data:result});
   }
 }
@@ -154,12 +152,10 @@ async function validateLogin(req, res){
   //checking if username and password match a user in database
   const query = {username:username,password:password};
   const user = await collection.findOne(query);
-  // console.log(user);
 
   //if there is a user with those credentials
   if (user) {
     req.session.username = username;
-    // req.session.save();
     res.status(201).send({message:"User found",data:req.session.username});
   }
   else{
@@ -171,7 +167,6 @@ app.post('/M00934333/create-post',mediaUpload, storePost);
 
 //store details of post
 async function storePost(req,res){
-  // console.log(req.file.path);
   if (!req.session.username){
     res.status(404).send({message:"User is not logged in"});
   } else {
@@ -191,7 +186,6 @@ async function storePost(req,res){
 
       res.status(201).send({message:"Post Created Successfully", data: result});
     } catch (err){
-      console.log(err);
       res.status(500).send({message:"Internal Server error"});
 
     } 
@@ -215,7 +209,6 @@ app.get('/M00934333/get-all-posts', getAllPosts);
 async function getAllPosts(req,res){
   const collection = database.collection("Posts");
   const posts = await collection.find({}).toArray();
-  // console.log(posts);
   res.send({message:"Posts Successfully Retrieved",data:posts});
 }
 
@@ -232,7 +225,6 @@ async function getFollowingPosts(req,res){
     //get list of people user follows
     let result = await collection.findOne(query);
     let followingUsersArray = result.following.map(user => user.username);
-    // console.log(followingUsersArray);
 
     //get posts from people user follows
     collection = database.collection("Posts");
@@ -240,8 +232,6 @@ async function getFollowingPosts(req,res){
     query = {user:{$in: followingUsersArray}};
     
     const followingPosts = await collection.find(query).toArray();
-
-    // console.log(followingPosts);
 
     res.status(201).send({message:"Following Posts",data:followingPosts}); 
 
@@ -259,10 +249,8 @@ async function getUserStatus(req,res){
   const username = req.session.username;
   if (!username){
     res.send({message:"Logged Out",data:"None"});
-    // return "Logged Out";
   } else {
     res.send({message:"Logged In",data:username});
-    // return "Logged In";
   }
   
 }
@@ -274,8 +262,6 @@ async function followUser(req,res){
 
   try{
     const username = req.body.username;
-    console.log("username:",username);
-    console.log("session:",req.session.username);
     if (!req.session.username){
       res.status(404).send({message:"Not logged in"});
 
@@ -303,10 +289,8 @@ async function getFollowing(req,res){
     const collection = database.collection("Users");
     const loggedInUser = req.session.username;
     const query = {username:loggedInUser};
-    // const projection = {following:1};
   
     const result = await collection.findOne(query);
-    // console.log(result.following);
     res.status(201).send({message:"Following list",data:result.following}); 
   } catch(error){
     res.status(404).send({message:"Not logged in"}); 
@@ -320,8 +304,6 @@ app.post('/M00934333/unfollow-user',unfollowUser);
 async function unfollowUser(req,res){
   try{
     const username = req.body.username;
-    console.log("username:",username);
-    console.log("session:",req.session.username);
     
     const collection = database.collection("Users");
 
@@ -346,8 +328,6 @@ async function searchUser(req,res){
 
     const result = await collection.findOne(query);
 
-    // console.log(result);
-
     res.status(201).send({message:"User found",data:result});
   } catch(error){
     res.status(404).send({message:"User not found",data:result});
@@ -361,13 +341,11 @@ async function getComments(req,res){
   try{
     const collection = database.collection("Posts");
     const postID = req.body.postID;
-    //console.log(postID);
     const query = {_id:new ObjectId(postID)};
 
     const result = await collection.findOne(query);
 
     const commentsArray = result.comments;
-    console.log("comments:",commentsArray);
 
     res.status(201).send({message:"List of Comments:", data: commentsArray});
   } catch(error){
@@ -387,8 +365,6 @@ async function storeComment(req,res){
       const postID = req.body.postID;
       const text = req.body.text;
       const loggedInUser = req.session.username;
-      
-      console.log(postID,text);
 
       const commentDetails = {
         user:loggedInUser,
@@ -403,7 +379,6 @@ async function storeComment(req,res){
 
     } catch(error){
       res.status(404).send({message:"Something went wrong",data:error});
-      console.log(error);
     }
 
   }
@@ -457,16 +432,17 @@ googleTrends.relatedTopics({
   try{
     resultsJSON = JSON.parse(res);
   } catch(error){
-    // console.log(error);
     return;
   }
   
+  //filter topics to only include those containing type "video game" or "topic"
   const data = resultsJSON["default"];
   const trendingDataList = data["rankedList"][0]["rankedKeyword"];
   const filteredDataList = trendingDataList.filter(
     topic => topic.topic.type.toLowerCase().includes('video game') || topic.topic.type.toLowerCase().includes('topic') 
   );
   
+  //take only the first 4 topics
   const titles = filteredDataList.map(topic => topic.topic.title);
   const trendingTopics = titles.slice(0,4);
   const collection = database.collection("Trending Topics");
@@ -501,6 +477,7 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
+//export these modules for testing
 module.exports = {
   connectToMongoDB,
   signup,

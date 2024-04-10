@@ -19,6 +19,7 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #b8bbd6;
 }
+
 .navigation_bar {
   background-color: #02111b !important;
 }
@@ -31,7 +32,7 @@ body {
 }
 
 /*customising width and position of search bar*/
-.search_bar {
+.search_bar{
   position: relative;
   left: 7em;
   bottom: 1em;
@@ -201,9 +202,11 @@ body {
   position: relative;
   z-index: 0;
 }
+
 .engagement_buttons button i{
   pointer-events: none;
 }
+
 /*Customising widgets on right sidebar*/
 .trending_hashtags {
   background-color: #b8bbd6;
@@ -269,10 +272,12 @@ body {
   height: 14em;
   border-radius: 20px;
 }
+
 .contact_box span {
   position: relative;
   top: 1em;
 }
+
 .contact_box a {
   text-decoration: none;
   color: #02111b;
@@ -294,9 +299,9 @@ body {
   color: gold;
 }
 
-/* .star_rating i:hover{
+.star_rating i:hover{
   color: white;
-} */
+}
 
 .star_rating button{
   border: none;
@@ -392,7 +397,6 @@ body {
 }
 
 /*Styling Comment Box and adjusting position*/
-
 .comment_section{
   display: none;
   width: 30em;

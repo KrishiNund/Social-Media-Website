@@ -32,6 +32,7 @@ form {
 
 .form_header {
   position: relative;
+  height: 1.9em;
   font-size: 30px;
   background-color: #02111b;
   border-top-left-radius: 18px;
@@ -40,9 +41,10 @@ form {
   margin-bottom: 1em;
 }
 
-.form_header h4 {
-  position: inherit;
-  top: 0.7em;
+.form_header span{
+  font-size:30px;
+  position:relative;
+  top:0.2em;
 }
 
 .entry_field {

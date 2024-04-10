@@ -1,0 +1,48 @@
+[{
+  "_id": {
+    "$oid": "65eb5790f7670fbf6a0edefa"
+  },
+  "fullName": "sam",
+  "username": "sam12",
+  "email": "sam@gmail.com",
+  "password": "hello1234",
+  "gender": "male",
+  "dob": "2004-03-07",
+  "following": [
+    {
+      "username": "sara11"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "65f1b2a2a7138cedc03affed"
+  },
+  "fullName": "sara",
+  "username": "sara11",
+  "email": "sara@gmail.com",
+  "password": "sara1234",
+  "gender": "female",
+  "dob": "2003-03-21",
+  "following": [
+    {
+      "username": "sam12"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6616eb01d9fc37d8c29035d2"
+  },
+  "fullName": "john",
+  "username": "john11",
+  "email": "john11@gmail.com",
+  "password": "hello1234",
+  "gender": "male",
+  "dob": "2002-06-06",
+  "following": [
+    {
+      "username": "sara11"
+    }
+  ]
+}]
